@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import {
   LayoutDashboard,
   Ticket,
@@ -8,19 +9,23 @@ import {
   User,
   Shield,
 } from 'lucide-react';
-import { getCurrentSessionUser } from '@/lib/security/auth';
+import { getSessionUser } from '@/lib/auth/session';
 
 export default async function AccountLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getCurrentSessionUser();
+  const user = await getSessionUser();
+
+  if (!user) {
+    redirect('/login?next=/account');
+  }
 
   const navItems = [
     { href: '/account', label: 'Overview', icon: LayoutDashboard },
     { href: '/account/bookings', label: 'My Bookings', icon: Ticket },
-    { href: '/account/tickets', label: 'Sample Tickets & PDFs', icon: FileText },
+    { href: '/account/tickets', label: 'Tickets & PDFs', icon: FileText },
     { href: '/account/notifications', label: 'Notifications', icon: Bell },
     { href: '/account/profile', label: 'Profile & Preferences', icon: User },
     { href: '/account/security', label: 'Security & Privacy', icon: Shield },

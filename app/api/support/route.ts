@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { recordAuditLog } from '@/lib/booking/store';
+import { insertSupportRequest, recordAuditLog } from '@/lib/booking/store';
+import { getSessionUser } from '@/lib/auth/session';
 
 export async function POST(request: Request) {
   try {
@@ -30,14 +31,29 @@ export async function POST(request: Request) {
       );
     }
 
+    const user = await getSessionUser();
     const ticketId = `SUP-${Date.now().toString(36).toUpperCase()}`;
-    recordAuditLog({
+
+    if (body.type !== 'newsletter') {
+      await insertSupportRequest({
+        userId: user?.id,
+        name: body.name?.trim() || user?.fullName || 'Website Visitor',
+        email: body.email,
+        subject: body.subject?.trim() || 'General Support Inquiry',
+        message: body.message?.trim() || 'No additional details provided.',
+        bookingReference: body.bookingReference,
+      });
+    }
+
+    await recordAuditLog({
+      actorId: user?.id,
       actorEmail: body.email,
       action:
         body.type === 'newsletter'
           ? 'NEWSLETTER_CONSENT_RECORDED'
           : 'SUPPORT_REQUEST_CREATED',
-      resourceType: body.type === 'newsletter' ? 'newsletter' : 'support_request',
+      resourceType:
+        body.type === 'newsletter' ? 'newsletter' : 'support_request',
       resourceId: ticketId,
       afterState: {
         subject: body.subject ?? 'Newsletter Opt-In',

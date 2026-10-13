@@ -1,21 +1,35 @@
 import { NextResponse } from 'next/server';
 import {
+  canTransitionBookingStatus,
+} from '@/lib/booking/state-machine';
+import {
   getBookingByIdOrReference,
-  getPlatformStore,
+  getLatestPaymentForBooking,
+  insertNotification,
+  insertRefund,
+  persistEmailLog,
   recordAuditLog,
+  updateBookingRecord,
 } from '@/lib/booking/store';
-import { canTransitionBookingStatus } from '@/lib/booking/state-machine';
 import { sendTransactionalEmailWithRetry } from '@/lib/email/service';
+import { getSessionUser } from '@/lib/auth/session';
 
 export async function POST(
   request: Request,
   context: { params: Promise<{ bookingId: string }> }
 ) {
   const { bookingId } = await context.params;
-  const booking = getBookingByIdOrReference(bookingId);
+  const user = await getSessionUser();
+  const booking = await getBookingByIdOrReference(bookingId);
 
   if (!booking) {
     return NextResponse.json({ error: 'Booking not found.' }, { status: 404 });
+  }
+  if (!user || (booking.userId && booking.userId !== user.id && user.role !== 'admin')) {
+    return NextResponse.json(
+      { error: 'You do not have permission to cancel this booking.' },
+      { status: 403 }
+    );
   }
 
   const body = (await request.json().catch(() => ({}))) as { reason?: string };
@@ -33,42 +47,40 @@ export async function POST(
     );
   }
 
-  const previousStatus = booking.status;
-  booking.status = targetStatus;
-  booking.cancellationReason = reason;
-  booking.updatedAt = new Date().toISOString();
+  const updated = await updateBookingRecord(booking.id, {
+    status: targetStatus,
+    paymentStatus:
+      booking.paymentStatus === 'captured' ? 'refund_pending' : undefined,
+    cancellationReason: reason,
+  });
 
-  const store = getPlatformStore();
   if (booking.paymentStatus === 'captured') {
-    booking.paymentStatus = 'refund_pending';
-    store.refunds.unshift({
-      id: `ref-${Date.now().toString(36)}`,
+    const payment = await getLatestPaymentForBooking(booking.id);
+    await insertRefund({
+      bookingId: booking.id,
       bookingReference: booking.bookingReference,
-      paymentId: `pay-${booking.bookingReference}`,
+      paymentId: payment?.id ?? booking.id,
       amountInr: Math.max(
         500,
         booking.totalAmount - booking.flightOffer.fareRule.cancellationFeeInr
       ),
       reason,
-      status: 'requested',
-      createdAt: new Date().toISOString(),
     });
   }
 
-  store.notifications.unshift({
-    id: `notif-${Date.now().toString(36)}`,
-    userId: booking.userId ?? 'usr-customer-1',
-    bookingId: booking.id,
-    bookingReference: booking.bookingReference,
-    eventType: 'cancellation_requested',
-    title: `Cancellation ${
-      targetStatus === 'cancelled' ? 'Completed' : 'Requested'
-    } (${booking.bookingReference})`,
-    message: `Reason: ${reason}`,
-    actionUrl: `/booking/${booking.bookingReference}`,
-    isRead: false,
-    createdAt: new Date().toISOString(),
-  });
+  if (user.id) {
+    await insertNotification({
+      userId: user.id,
+      bookingId: booking.id,
+      bookingReference: booking.bookingReference,
+      eventType: 'cancellation_requested',
+      title: `Cancellation ${
+        targetStatus === 'cancelled' ? 'Completed' : 'Requested'
+      } (${booking.bookingReference})`,
+      message: `Reason: ${reason}`,
+      actionUrl: `/booking/${booking.bookingReference}`,
+    });
+  }
 
   const emailLog = await sendTransactionalEmailWithRetry({
     bookingId: booking.id,
@@ -76,27 +88,28 @@ export async function POST(
     recipientEmail: booking.contactEmail,
     templateName: 'booking_cancelled',
     variables: {
-      passengerName: booking.passengers[0]?.firstName ?? 'Traveler',
-      originIata: booking.originIata,
-      destinationIata: booking.destinationIata,
-      departureDate: booking.departureDate,
-      totalAmountInr: booking.totalAmount,
-      paymentStatus: booking.paymentStatus,
+      passengerName: updated.passengers[0]?.firstName ?? 'Traveler',
+      originIata: updated.originIata,
+      destinationIata: updated.destinationIata,
+      departureDate: updated.departureDate,
+      totalAmountInr: updated.totalAmount,
+      paymentStatus: updated.paymentStatus,
     },
   });
-  store.emailLogs.unshift(emailLog);
+  await persistEmailLog(emailLog);
 
-  recordAuditLog({
-    actorEmail: booking.contactEmail,
+  await recordAuditLog({
+    actorId: user.id,
+    actorEmail: user.email,
     action: 'BOOKING_CANCELLATION_WORKFLOW',
     resourceType: 'booking',
-    resourceId: booking.bookingReference,
-    beforeState: { status: previousStatus },
-    afterState: { status: booking.status, reason },
+    resourceId: updated.bookingReference,
+    beforeState: { status: booking.status },
+    afterState: { status: updated.status, reason },
   });
 
   return NextResponse.json({
-    booking,
+    booking: updated,
     message:
       targetStatus === 'cancel_requested'
         ? 'Cancellation request submitted and refund calculation initiated.'

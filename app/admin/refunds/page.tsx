@@ -1,10 +1,12 @@
 import React from 'react';
-import { getPlatformStore } from '@/lib/booking/store';
+import { listAllRefunds } from '@/lib/booking/store';
 import { formatInr } from '@/lib/config/brand';
 import { AdminActionTrigger } from '@/components/admin/AdminActionTrigger';
 
-export default function AdminRefundsPage() {
-  const store = getPlatformStore();
+export const dynamic = 'force-dynamic';
+
+export default async function AdminRefundsPage() {
+  const refunds = await listAllRefunds();
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-5">
@@ -17,7 +19,7 @@ export default function AdminRefundsPage() {
         </p>
       </div>
 
-      {store.refunds.length === 0 ? (
+      {refunds.length === 0 ? (
         <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/50 p-8 text-center text-xs">
           <p className="font-bold text-navy-900">No refund requests pending</p>
           <p className="mt-1 text-slate-500">
@@ -38,9 +40,11 @@ export default function AdminRefundsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {store.refunds.map((r) => (
+              {refunds.map((r) => (
                 <tr key={r.id}>
-                  <td className="px-4 py-3 font-mono">{r.id}</td>
+                  <td className="px-4 py-3 font-mono text-[11px]">
+                    {r.id.slice(0, 8)}…
+                  </td>
                   <td className="px-4 py-3 font-mono font-bold text-brand-700">
                     {r.bookingReference}
                   </td>

@@ -1,16 +1,21 @@
 import React from 'react';
 import Link from 'next/link';
 import {
-  listUniqueBookings,
-  getPlatformStore,
+  listUserBookings,
+  listUserNotifications,
 } from '@/lib/booking/store';
+import { getSessionUser } from '@/lib/auth/session';
 import { formatInr } from '@/lib/config/brand';
 import { ArrowRight, Download, Plane, Bell } from 'lucide-react';
 
-export default function AccountOverviewPage() {
-  const bookings = listUniqueBookings();
-  const store = getPlatformStore();
-  const confirmedCount = bookings.filter((b) => b.status === 'confirmed').length;
+export default async function AccountOverviewPage() {
+  const user = await getSessionUser();
+  const bookings = user ? await listUserBookings(user.id) : [];
+  const notifications = user ? await listUserNotifications(user.id) : [];
+
+  const confirmedCount = bookings.filter(
+    (b) => b.status === 'confirmed' || b.status === 'ticketed'
+  ).length;
   const pendingCount = bookings.filter(
     (b) => b.status === 'awaiting_payment' || b.status === 'pending'
   ).length;
@@ -45,7 +50,7 @@ export default function AccountOverviewPage() {
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card">
           <p className="text-xs font-semibold text-slate-500">
-            Confirmed / Sample Ready
+            Confirmed / Ticketed
           </p>
           <p className="mt-2 text-3xl font-extrabold text-verified-600">
             {confirmedCount}
@@ -81,7 +86,7 @@ export default function AccountOverviewPage() {
               No bookings created yet
             </p>
             <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              Search available routes to generate your verified DummyTicket itinerary.
+              Search available routes to generate your verified itinerary.
             </p>
             <Link
               href="/flights"
@@ -92,7 +97,7 @@ export default function AccountOverviewPage() {
           </div>
         ) : (
           <div className="divide-y divide-slate-100">
-            {bookings.map((b) => (
+            {bookings.slice(0, 5).map((b) => (
               <div
                 key={b.id}
                 className="py-4 flex flex-wrap items-center justify-between gap-4 text-xs"
@@ -141,13 +146,13 @@ export default function AccountOverviewPage() {
           <Bell className="h-4 w-4 text-brand-600" />
           Latest Account Notifications
         </h2>
-        {store.notifications.length === 0 ? (
+        {notifications.length === 0 ? (
           <p className="text-xs text-slate-500 py-3">
             No notifications yet. Alerts about booking milestones and payments will appear here.
           </p>
         ) : (
           <div className="space-y-2">
-            {store.notifications.slice(0, 3).map((n) => (
+            {notifications.slice(0, 3).map((n) => (
               <div
                 key={n.id}
                 className="rounded-xl border border-slate-100 bg-slate-50 p-3 text-xs flex items-center justify-between"

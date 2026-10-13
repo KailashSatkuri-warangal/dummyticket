@@ -1,22 +1,27 @@
 import React from 'react';
 import Link from 'next/link';
 import {
-  getPlatformStore,
-  listUniqueBookings,
+  listAllBookings,
+  listAllEmailLogs,
+  listAllProfiles,
+  listAuditLogs,
 } from '@/lib/booking/store';
 import { formatInr } from '@/lib/config/brand';
 
-export default function AdminOverviewPage() {
-  const store = getPlatformStore();
-  const bookings = listUniqueBookings();
+export const dynamic = 'force-dynamic';
+
+export default async function AdminOverviewPage() {
+  const [bookings, users, emailLogs, auditLogs] = await Promise.all([
+    listAllBookings(),
+    listAllProfiles(),
+    listAllEmailLogs(),
+    listAuditLogs(10),
+  ]);
 
   const totalCollectedInr = bookings
     .filter((b) => b.paymentStatus === 'captured')
     .reduce((sum, b) => sum + b.totalAmount, 0);
 
-  const sampleBookingsCount = bookings.filter(
-    (b) => b.fulfillmentMode === 'sample_demo'
-  ).length;
   const liveBookingsCount = bookings.filter(
     (b) => b.fulfillmentMode === 'live_provider'
   ).length;
@@ -34,7 +39,7 @@ export default function AdminOverviewPage() {
           Admin Dashboard Overview
         </h1>
         <p className="text-xs text-slate-600 mt-1">
-          Real-time metrics across users, sample vs. live bookings, Razorpay collections, email delivery logs, and audit events.
+          Real-time metrics across users, live bookings, Razorpay collections, email delivery logs, and audit events.
         </p>
       </div>
 
@@ -45,15 +50,15 @@ export default function AdminOverviewPage() {
             Total Registered Users
           </p>
           <p className="mt-2 text-2xl font-extrabold text-navy-900">
-            {store.users.length}
+            {users.length}
           </p>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card">
           <p className="text-xs font-semibold text-slate-500">
-            Bookings (Sample / Live)
+            Total Bookings
           </p>
           <p className="mt-2 text-2xl font-extrabold text-brand-700">
-            {sampleBookingsCount} Sample · {liveBookingsCount} Live
+            {bookings.length} · {liveBookingsCount} Provider-Confirmed
           </p>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card">
@@ -69,7 +74,7 @@ export default function AdminOverviewPage() {
             Pending / Email Logs
           </p>
           <p className="mt-2 text-2xl font-extrabold text-amber-600">
-            {pendingBookingsCount} Pending · {store.emailLogs.length} Emails
+            {pendingBookingsCount} Pending · {emailLogs.length} Emails
           </p>
         </div>
       </div>
@@ -89,26 +94,32 @@ export default function AdminOverviewPage() {
             </Link>
           </div>
           <div className="divide-y divide-slate-100 text-xs">
-            {bookings.slice(0, 5).map((b) => (
-              <div key={b.id} className="py-3 flex justify-between">
-                <div>
-                  <p className="font-mono font-bold text-brand-700">
-                    {b.bookingReference}
-                  </p>
-                  <p className="text-slate-600">
-                    {b.originIata} → {b.destinationIata} ({b.status})
-                  </p>
+            {bookings.length === 0 ? (
+              <p className="py-3 text-slate-500">
+                No bookings recorded yet. New traveler bookings appear here instantly.
+              </p>
+            ) : (
+              bookings.slice(0, 5).map((b) => (
+                <div key={b.id} className="py-3 flex justify-between">
+                  <div>
+                    <p className="font-mono font-bold text-brand-700">
+                      {b.bookingReference}
+                    </p>
+                    <p className="text-slate-600">
+                      {b.originIata} → {b.destinationIata} ({b.status})
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold text-navy-900">
+                      {formatInr(b.totalAmount)}
+                    </p>
+                    <span className="text-[10px] uppercase text-slate-500">
+                      {b.airlinePnr ? `PNR ${b.airlinePnr}` : b.fulfillmentMode}
+                    </span>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="font-bold text-navy-900">
-                    {formatInr(b.totalAmount)}
-                  </p>
-                  <span className="text-[10px] uppercase text-slate-500">
-                    {b.fulfillmentMode}
-                  </span>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
 
@@ -125,24 +136,29 @@ export default function AdminOverviewPage() {
             </Link>
           </div>
           <div className="divide-y divide-slate-100 text-xs">
-            {store.auditLogs.slice(0, 5).map((log) => (
-              <div key={log.id} className="py-3">
-                <div className="flex justify-between font-semibold text-navy-900">
-                  <span>{log.action}</span>
-                  <span className="font-mono text-[10px] text-slate-400">
-                    {log.correlationId}
-                  </span>
+            {auditLogs.length === 0 ? (
+              <p className="py-3 text-slate-500">
+                No audit events recorded yet.
+              </p>
+            ) : (
+              auditLogs.slice(0, 5).map((log) => (
+                <div key={log.id} className="py-3">
+                  <div className="flex justify-between font-semibold text-navy-900">
+                    <span>{log.action}</span>
+                    <span className="font-mono text-[10px] text-slate-400">
+                      {log.correlationId}
+                    </span>
+                  </div>
+                  <p className="text-slate-500">
+                    Actor: {log.actorEmail} · Resource: {log.resourceType}/
+                    {log.resourceId}
+                  </p>
                 </div>
-                <p className="text-slate-500">
-                  Actor: {log.actorEmail} · Resource: {log.resourceType}/
-                  {log.resourceId}
-                </p>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </div>
     </div>
   );
 }
-

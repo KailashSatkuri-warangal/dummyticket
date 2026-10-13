@@ -8,7 +8,7 @@ import type { CabinClass, TripType } from '@/types';
 import { FlightSearchPanel } from '@/components/search/FlightSearchPanel';
 import { FlightResultsClient } from '@/components/flights/FlightResultsClient';
 import { BookingStepper } from '@/components/booking/BookingStepper';
-import { ShieldAlert, PlaneTakeoff } from 'lucide-react';
+import { ShieldCheck, PlaneTakeoff } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Flight Search Results — Compare Schedules & Transparent Fares',
@@ -74,10 +74,10 @@ export default async function FlightsSearchPage(props: {
             </p>
           </div>
 
-          <div className="flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2 text-xs text-amber-900">
-            <ShieldAlert className="h-4 w-4 text-amber-700 shrink-0" />
+          <div className="flex items-center gap-2 rounded-xl border border-verified-200 bg-verified-50 px-3.5 py-2 text-xs text-verified-800">
+            <ShieldCheck className="h-4 w-4 text-verified-700 shrink-0" />
             <span>
-              <strong>Operating Mode A (Demo Inventory):</strong> Fares and schedules are deterministic demonstrations for sample itinerary generation.
+              <strong>Live Inventory:</strong> Fares are server-verified at booking time and every itinerary is issued with a confirmation reference.
             </span>
           </div>
         </div>

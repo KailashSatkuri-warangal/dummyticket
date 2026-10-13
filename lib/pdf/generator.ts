@@ -5,10 +5,10 @@ import { formatDuration, formatInr, getBrandConfig } from '@/lib/config/brand';
 
 /**
  * Generates the Signature DummyTicket Boarding-Pass-Styled Itinerary PDF:
- * Features Royal Blue Header (#0062E0 / #004EC2), Crisp White & Ice-Blue Ticket Body,
- * Detachable Perforated Stub, QR Code, and compliant SAMPLE / CONFIRMED labels.
+ * Royal Blue Header (#0062E0 / #004EC2), Crisp White & Ice-Blue Ticket Body,
+ * Detachable Perforated Stub, QR verification code, and confirmed-status labels.
  */
-export async function generateSampleItineraryPdfBytes(
+export async function generateItineraryPdfBytes(
   booking: BookingRecord
 ): Promise<Uint8Array> {
   const brand = getBrandConfig();
@@ -18,31 +18,24 @@ export async function generateSampleItineraryPdfBytes(
     format: 'a4',
   });
 
-  const isSample = booking.fulfillmentMode === 'sample_demo';
-  const displayRef = booking.bookingReference.startsWith('DT-')
-    ? booking.bookingReference
-    : `DT-DEMO-${booking.bookingReference.replace(/^AV-/, '')}`;
+  const displayRef = booking.bookingReference;
+  const verifyUrl = `${brand.appUrl}/ticket/${booking.bookingReference}?verify=${booking.ticket?.verificationToken ?? `vfy-${booking.bookingReference.toLowerCase()}`}`;
 
-  const verifyUrl = `${brand.appUrl}/sample-ticket/${booking.bookingReference}?verify=vfy-${booking.bookingReference.toLowerCase()}`;
-
-  // 1. Prominent Sample Warning Header / Verified Notice
-  if (isSample) {
-    doc.setFillColor(235, 244, 255); // Ice Blue 50
-    doc.setDrawColor(0, 98, 224); // Royal Blue border
-    doc.rect(12, 10, 186, 13, 'FD');
-    doc.setTextColor(0, 78, 194); // Royal Blue dark
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(10.5);
-    doc.text(
-      'SAMPLE — NOT VALID FOR TRAVEL OR AIRLINE CHECK-IN',
-      105,
-      18,
-      { align: 'center' }
-    );
-  }
+  // 1. Verified Reservation Banner
+  doc.setFillColor(236, 253, 245); // Emerald 50
+  doc.setDrawColor(5, 150, 105); // Emerald 600 border
+  doc.rect(12, 10, 186, 13, 'FD');
+  doc.setTextColor(4, 120, 87);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10.5);
+  doc.text(
+    `CONFIRMED ITINERARY${booking.airlinePnr ? ` — PNR ${booking.airlinePnr}` : ''}`,
+    105,
+    18,
+    { align: 'center' }
+  );
 
   // 2. Signature Boarding Pass Card on A4 (y = 28 to 118)
-  // Crisp White Ticket Body with subtle cool border
   doc.setFillColor(255, 255, 255);
   doc.setDrawColor(219, 234, 254); // Blue 100
   doc.roundedRect(12, 28, 186, 90, 4, 4, 'FD');
@@ -62,11 +55,7 @@ export async function generateSampleItineraryPdfBytes(
   doc.setFontSize(13);
   doc.text('DummyTicket', 18, 38);
   doc.setFontSize(9);
-  doc.text(
-    isSample ? 'SAMPLE ITINERARY PASS' : 'CONFIRMED ITINERARY',
-    62,
-    38
-  );
+  doc.text('CONFIRMED ITINERARY', 62, 38);
 
   // Perforated Detachable Stub Divider (x = 144)
   doc.setDrawColor(147, 197, 253);
@@ -118,11 +107,7 @@ export async function generateSampleItineraryPdfBytes(
   );
   doc.text(`DATE: ${booking.departureDate}`, 18, 98);
   doc.text(`CABIN: ${booking.cabin.toUpperCase()}`, 68, 98);
-  doc.text(
-    `SEAT: ${isSample ? 'SAMPLE SEAT' : 'ASSIGNED'}`,
-    18,
-    106
-  );
+  doc.text(`PNR: ${booking.airlinePnr ?? 'ON REQUEST'}`, 18, 106);
   doc.text(
     `BAGGAGE: ${booking.flightOffer.fareRule.cabinBaggageKg}kg + ${booking.flightOffer.fareRule.checkedBaggageKg}kg`,
     68,
@@ -160,9 +145,7 @@ export async function generateSampleItineraryPdfBytes(
   y += 7;
 
   booking.passengers.forEach((pax, index) => {
-    const docTag = isSample
-      ? 'SAMPLE — NOT VALID FOR TRAVEL'
-      : pax.ticketNumber ?? 'Pending Issuance';
+    const docTag = pax.ticketNumber ?? 'E-Ticket Pending Issuance';
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9.5);
     doc.text(
@@ -190,14 +173,8 @@ export async function generateSampleItineraryPdfBytes(
   doc.line(14, 255, 196, 255);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(9);
-  doc.setTextColor(0, 98, 224);
-  doc.text(
-    isSample
-      ? 'SAMPLE — NOT VALID FOR TRAVEL (DUMMYTICKET DEMONSTRATION DOCUMENT)'
-      : 'CONFIRMED DUMMYTICKET RESERVATION DOCUMENT',
-    14,
-    262
-  );
+  doc.setTextColor(4, 120, 87);
+  doc.text('CONFIRMED RESERVATION DOCUMENT — VERIFIABLE ONLINE', 14, 262);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8);
   doc.setTextColor(100, 116, 139);
@@ -224,7 +201,7 @@ export async function generatePaymentReceiptPdfBytes(
     format: 'a4',
   });
 
-  const receiptNumber = `DT-RCPT-${booking.bookingReference.replace(/^DT-DEMO-|^AV-/, '')}`;
+  const receiptNumber = `DT-RCPT-${booking.bookingReference.replace(/^DT-/, '')}`;
 
   doc.setFillColor(11, 17, 32);
   doc.rect(12, 12, 186, 20, 'F');

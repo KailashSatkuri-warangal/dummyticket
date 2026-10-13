@@ -11,8 +11,6 @@ export type EmailTemplateName =
   | 'payment_pending'
   | 'payment_successful'
   | 'payment_failed'
-  | 'sample_itinerary_generated'
-  | 'real_booking_confirmed'
   | 'ticket_issued'
   | 'booking_cancelled'
   | 'refund_initiated'
@@ -49,15 +47,14 @@ export function renderEmailTemplate(payload: TransactionalEmailPayload): {
   templateVersion: string;
 } {
   const brand = getBrandConfig();
-  const ref = payload.bookingReference ?? 'DT-DEMO-REF';
+  const ref = payload.bookingReference ?? 'DT-REF';
   const payRef = payload.paymentReference ?? payload.receiptNumber ?? ref;
   const amount =
     payload.variables.totalAmountInr !== undefined
       ? formatInr(payload.variables.totalAmountInr)
       : '';
   const docLabel =
-    payload.variables.documentTypeLabel ??
-    'SAMPLE — NOT VALID FOR TRAVEL';
+    payload.variables.documentTypeLabel ?? 'CONFIRMED ITINERARY';
   const bookingUrl =
     payload.variables.bookingUrl ?? `${brand.appUrl}/booking/${ref}`;
 
@@ -71,8 +68,6 @@ export function renderEmailTemplate(payload: TransactionalEmailPayload): {
     payment_pending: `Action Required: Complete Your DummyTicket Payment — ${ref}`,
     payment_successful: `DummyTicket Payment Verified (${amount}) — ${ref}`,
     payment_failed: `DummyTicket Payment Incomplete — ${ref}`,
-    sample_itinerary_generated: `Your DummyTicket Itinerary — ${ref} (Sample Document)`,
-    real_booking_confirmed: `DummyTicket Reservation Confirmed — ${ref}`,
     ticket_issued: `Official Airline E-Ticket Issued — ${ref}`,
     booking_cancelled: `DummyTicket Booking Cancellation — ${ref}`,
     refund_initiated: `DummyTicket Refund Initiated (${amount}) — ${ref}`,

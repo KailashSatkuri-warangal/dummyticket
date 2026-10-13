@@ -3,9 +3,9 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Help Center — Booking Lookup, Sample Tickets & Refunds',
+  title: 'Help Center — Booking Lookup, Tickets & Refunds',
   description:
-    'Find step-by-step help for flight searches, sample itinerary downloads, Razorpay payment verification, and cancellations.',
+    'Find step-by-step help for flight searches, itinerary downloads, Razorpay payment verification, and cancellations.',
 };
 
 export default function HelpPage() {
@@ -37,7 +37,7 @@ export default function HelpPage() {
               Frequently Asked Questions
             </h2>
             <p className="mt-1 text-slate-600">
-              Answers on Demo Mode vs. Live Mode, fare snapshots, and baggage rules.
+              Answers on itineraries, PNRs, fare snapshots, and baggage rules.
             </p>
           </Link>
           <Link

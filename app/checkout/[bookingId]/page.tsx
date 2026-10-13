@@ -11,7 +11,6 @@ import {
   Tag,
   CheckCircle2,
   ArrowRight,
-  RefreshCw,
 } from 'lucide-react';
 import { getFlightOfferById } from '@/lib/flights/dataset';
 import { calculateCompleteFare } from '@/lib/pricing/engine';
@@ -90,7 +89,7 @@ export default function CheckoutPage() {
   const [couponInput, setCouponInput] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState<string | undefined>();
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const [sampleNoticeAccepted, setSampleNoticeAccepted] = useState(false);
+  const [fareDisclosureAccepted, setFareDisclosureAccepted] = useState(false);
 
   // Dynamic Fare Change Alert State
   const [fareChangeAlert, setFareChangeAlert] = useState<{
@@ -155,37 +154,13 @@ export default function CheckoutPage() {
     }
   }
 
-  async function triggerDemoFareIncreaseTest() {
-    if (!offer) return;
-    await fetch('/api/admin/actions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'SET_FARE_ADJUSTMENT',
-        flightOfferId: offer.id,
-        deltaInr: 1200,
-      }),
-    });
-    const oldTotal = computedSnapshot?.grandTotal ?? offer.totalFareInr;
-    const newTotal = oldTotal + Math.round(1200 * 1.18) * adultsCount;
-    setFareChangeAlert({
-      message: `Your selected fare has changed from ${formatInr(
-        oldTotal
-      )} to ${formatInr(
-        newTotal
-      )}. Review the updated total before continuing.`,
-      oldAmountInr: oldTotal,
-      newAmountInr: newTotal,
-    });
-  }
-
   async function handleProceedToPayment(e: React.FormEvent) {
     e.preventDefault();
     setErrorBanner(null);
 
-    if (!termsAccepted || !sampleNoticeAccepted) {
+    if (!termsAccepted || !fareDisclosureAccepted) {
       setErrorBanner(
-        'Please accept both the Booking Terms & Conditions and the Sample Itinerary Disclosure before paying.'
+        'Please accept both the Booking Terms & Conditions and the Itinerary Delivery Disclosure before paying.'
       );
       return;
     }
@@ -217,7 +192,7 @@ export default function CheckoutPage() {
           passengers,
           couponCode: appliedCoupon,
           termsAccepted: true,
-          sampleNoticeAccepted: true,
+          fareDisclosureAccepted: true,
           acceptedUpdatedFareInr,
           idempotencyKey,
           isInternational,
@@ -378,14 +353,6 @@ export default function CheckoutPage() {
             Passenger Details & Razorpay Verification
           </h1>
         </div>
-        <button
-          type="button"
-          onClick={triggerDemoFareIncreaseTest}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-amber-300 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-900 hover:bg-amber-100"
-        >
-          <RefreshCw className="h-3.5 w-3.5" />
-          Simulate Fare Change Alert
-        </button>
       </div>
 
       {/* Fare Change Revalidation Banner */}
@@ -585,7 +552,7 @@ export default function CheckoutPage() {
             </p>
           </div>
 
-          {/* Explicit Terms & Sample Disclosure Consent */}
+          {/* Explicit Terms & Itinerary Delivery Consent */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-3">
             <h2 className="text-base font-bold text-navy-900">
               3. Mandatory Disclosures & Consent
@@ -594,14 +561,15 @@ export default function CheckoutPage() {
             <label className="flex items-start gap-2.5 text-xs text-slate-700 cursor-pointer">
               <input
                 type="checkbox"
-                checked={sampleNoticeAccepted}
-                onChange={(e) => setSampleNoticeAccepted(e.target.checked)}
+                checked={fareDisclosureAccepted}
+                onChange={(e) => setFareDisclosureAccepted(e.target.checked)}
                 className="mt-0.5 rounded border-slate-300 text-brand-600"
               />
               <span>
-                <strong>Sample Itinerary Service Disclosure:</strong> I understand this booking is operating in{' '}
-                <strong>Demo / Sample Itinerary Mode</strong> and will generate a clearly marked{' '}
-                <code>SAMPLE ITINERARY — NOT VALID FOR TRAVEL</code> document rather than a live airline boarding ticket.
+                <strong>Itinerary Delivery Disclosure:</strong> I understand my confirmed
+                itinerary and e-ticket document will be delivered digitally to the contact
+                email above, and that fares are re-validated on the server before payment
+                capture.
               </span>
             </label>
 

@@ -1,10 +1,11 @@
 import React from 'react';
-import { getPlatformStore } from '@/lib/booking/store';
+import { listAllPayments } from '@/lib/booking/store';
 import { formatInr } from '@/lib/config/brand';
 
-export default function AdminPaymentsPage() {
-  const store = getPlatformStore();
-  const payments = Array.from(store.payments.values());
+export const dynamic = 'force-dynamic';
+
+export default async function AdminPaymentsPage() {
+  const payments = await listAllPayments();
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-5">

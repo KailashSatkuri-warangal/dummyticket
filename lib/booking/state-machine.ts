@@ -51,8 +51,8 @@ export function canTransitionPaymentStatus(
 }
 
 /**
- * Enforces strict separation between sample itinerary documents and live airline tickets.
- * Never allows a sample booking or unconfirmed provider booking to be marked 'ticketed' or 'issued'.
+ * Guards ticket issuance: a booking can only be marked 'ticketed'/'issued'
+ * once the provider reference and airline PNR are confirmed.
  */
 export function validateTicketFulfillment(params: {
   fulfillmentMode: FulfillmentMode;
@@ -61,35 +61,16 @@ export function validateTicketFulfillment(params: {
   providerBookingRef?: string;
   airlinePnr?: string;
 }): { valid: boolean; reason?: string } {
-  if (params.fulfillmentMode === 'sample_demo') {
-    if (params.targetBookingStatus === 'ticketed') {
-      return {
-        valid: false,
-        reason:
-          'Sample demo bookings cannot be marked as airline-ticketed. Use "confirmed" with ticketStatus "sample_generated".',
-      };
-    }
-    if (params.targetTicketStatus === 'issued') {
-      return {
-        valid: false,
-        reason:
-          'Sample itinerary documents must use status "sample_generated", never "issued".',
-      };
-    }
-  }
-
-  if (params.fulfillmentMode === 'live_provider') {
-    if (
-      (params.targetBookingStatus === 'ticketed' ||
-        params.targetTicketStatus === 'issued') &&
-      (!params.providerBookingRef || !params.airlinePnr)
-    ) {
-      return {
-        valid: false,
-        reason:
-          'Live bookings require both providerBookingRef and airlinePnr confirmation before marking as ticketed/issued.',
-      };
-    }
+  if (
+    (params.targetBookingStatus === 'ticketed' ||
+      params.targetTicketStatus === 'issued') &&
+    (!params.providerBookingRef || !params.airlinePnr)
+  ) {
+    return {
+      valid: false,
+      reason:
+        'Bookings require both providerBookingRef and airlinePnr confirmation before marking as ticketed/issued.',
+    };
   }
 
   return { valid: true };

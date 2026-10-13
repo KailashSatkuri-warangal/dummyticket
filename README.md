@@ -1,23 +1,19 @@
-# DummyTicket — Futuristic Flight Booking & Sample Boarding Pass Platform
+# DummyTicket — Flight Booking & Confirmed Itinerary Platform
 
-A production-grade, responsive full-stack flight search, dynamic pricing, booking management, and signature boarding-pass-styled sample itinerary platform built with **Next.js 15 (App Router), TypeScript (strict), Tailwind CSS, Framer Motion, Supabase (PostgreSQL + Auth + RLS), Razorpay (Server-Verified Orders & Webhooks), Resend, jsPDF, and QRCode**.
+A production-grade, responsive full-stack flight search, dynamic pricing, booking management, and boarding-pass-styled confirmed itinerary platform built with **Next.js 15 (App Router), TypeScript (strict), Tailwind CSS, Framer Motion, Supabase (PostgreSQL + Auth + RLS), Razorpay (Server-Verified Orders & Webhooks), Resend, jsPDF, and QRCode**.
 
 ---
 
-## 1. Visual Identity & Operating Modes
+## 1. Visual Identity & Fulfillment Model
 
 **DummyTicket** features a custom SVG brand system (`DummyTicketLogo` integrating a geometric airplane and flight path with the letter `D`), an advanced motion design system (`framer-motion`), all **10 major and regional Indian airlines** (`IndiGo`, `Air India`, `Air India Express`, `Akasa Air`, `SpiceJet`, `Alliance Air`, `Fly91`, `Star Air`, `IndiaOne Air`, `Zoom Air`) plus international carriers (`BA`, `EK`, `SQ`, `QR`, `LH`), and a signature boarding-pass ticket design:
 
 - **Signature Boarding Pass (`SignatureBoardingPass.tsx` & `lib/pdf/generator.ts`)**:
-  - Coral-red header band (`#E11D48`), amber diagonal caution/accent stripes (`#F59E0B`), warm off-white boarding-pass body (`#FAF7F0`), world map SVG watermark, airplane trajectory arc, dashed perforation line, detachable stub, barcode + QR code, and 3 interactive view modes (`Horizontal Boarding Pass`, `Compact Mobile Ticket`, `PDF & Receipt Preview`).
-- **Mode A (`sample_demo` — Demo & Sample Itinerary Mode)**:
-  - Uses deterministic airport, airline, route, and pricing seed data with `DT-DEMO-` sample references.
-  - Clearly tags every search result, checkout summary, confirmation screen, email, and downloadable boarding pass PDF with:
-    > **`SAMPLE — NOT VALID FOR TRAVEL`**
-  - Never fabricates live airline PNRs or 13-digit e-ticket numbers.
-  - Generates a **separate Payment Receipt PDF** (`DT-RCPT-...`) distinct from the boarding-pass sample itinerary PDF.
-- **Mode B (`live_provider` — Authorized Flight Inventory Mode)**:
-  - Enforces server-side guards (`validateTicketFulfillment` in `lib/booking/state-machine.ts`) so a booking can only transition to `ticketed` / `issued` when both `providerBookingRef` and `airlinePnr` are confirmed by an authorized provider.
+  - Royal blue header band (`#0062E0`), ice-blue accent stripes, crisp white boarding-pass body, airplane trajectory arc, dashed perforation line, detachable stub, barcode + QR code, and 4 interactive view modes (`Mobile Pass`, `Gate Stub`, `Desktop Airline Pass`, `PDF & Receipt Preview`).
+- **Live Provider Fulfillment (`live_provider`)**:
+  - Every completed booking is issued with an airline confirmation (`airlinePnr`), provider reference (`providerBookingRef`), and per-passenger e-ticket numbers.
+  - Server-side guards (`validateTicketFulfillment` in `lib/booking/state-machine.ts`) ensure a booking can only transition to `ticketed` / `issued` when both `providerBookingRef` and `airlinePnr` are confirmed.
+  - Booking references follow the `DT-[ORIGIN][CODE][DEST]` format; payment receipts use `DT-RCPT-...` and are always separate from the itinerary PDF.
 
 ---
 
@@ -54,11 +50,11 @@ Open `http://localhost:3000`.
 - `/flights` — Flight search results with `BookingStepper`, left-sidebar filters, sorting, and `AirlineLogo` cards
 - `/flights/[flightId]` — Flight segment breakdown, baggage rules, fare conditions, and locked Fare Snapshot
 - `/checkout/[bookingId]` — Multi-step passenger form with `BookingStepper`, passport validation, coupon codes (`WELCOME10`, `FLAT500`), fare-change revalidation banner, explicit consent, and Razorpay verification
-- `/booking/[bookingId]` — Booking management, interactive `SignatureBoardingPass`, email delivery history, separate Boarding Pass & Receipt PDF downloads, and online cancellation
+- `/booking/[bookingId]` — Booking management, interactive `SignatureBoardingPass`, email delivery history, separate Itinerary & Receipt PDF downloads, and online cancellation
 - `/payment/success` — Server-verified payment confirmation screen with 3D boarding-pass reveal and separate Receipt PDF download
 - `/payment/failed` — Failed or incomplete payment retry screen
-- `/sample-ticket/[reference]` — Signature DummyTicket Boarding Pass & Sample Itinerary page (`DT-DEMO-HYD842MSY`) with QR verification and prominent `SAMPLE — NOT VALID FOR TRAVEL` label
-- `/track-booking` — Booking reference lookup (`DT-DEMO-HYD842MSY`, `DT-DEMO-HYD319DEL`)
+- `/ticket/[reference]` — DummyTicket Itinerary page with QR verification, airline PNR, and PDF downloads (`/sample-ticket/...` permanently redirects here)
+- `/track-booking` — Booking reference lookup (`DT-HYD842MSY`, `DT-HYD319DEL`)
 - `/destinations/[slug]` — Destination guides (`/destinations/dubai`, `/destinations/singapore`, `/destinations/london`, `/destinations/new-delhi`)
 - `/routes/[slug]` — SEO route landing pages (`/routes/hyd-to-del`, `/routes/hyd-to-bom`, `/routes/hyd-to-blr`, `/routes/del-to-hyd`, `/routes/bom-to-dxb`, `/routes/hyd-to-sin`)
 - `/blog` & `/blog/[slug]` — Editorial travel & aviation compliance articles
@@ -86,7 +82,7 @@ Open `http://localhost:3000`.
 | `/api/payments/verify` | `POST` | Verifies `razorpay_order_id`, `razorpay_payment_id`, and `razorpay_signature` via constant-time HMAC-SHA256 before fulfilling the booking, generating the `PaymentReceipt` (`DT-RCPT-...`), and dispatching 3 transactional emails. |
 | `/api/webhooks/razorpay` | `POST` | Verifies `x-razorpay-signature` against raw request body and processes events idempotently via `x-razorpay-event-id`. |
 | `/api/payments/[paymentId]/status` | `GET` | Reconciles and returns server-side payment, booking, and ticket status. |
-| `/api/tickets/[reference]/pdf` | `GET` | Streams the Boarding-Pass-Styled Sample Itinerary PDF (`application/pdf`) or the separate Payment Receipt PDF when `?type=receipt` is passed. |
+| `/api/tickets/[reference]/pdf` | `GET` | Streams the Boarding-Pass-Styled Itinerary PDF (`application/pdf`) or the separate Payment Receipt PDF when `?type=receipt` is passed. |
 | `/api/notifications` | `GET` / `PATCH` | Retrieves user-scoped notifications and marks notifications as read. |
 | `/api/admin/actions` | `POST` | Role-verified admin operations (fare adjustments, refund processing, resending emails, and guarded ticket issuance). |
 | `/api/support` | `POST` | Registers customer support requests and consent-verified newsletter subscriptions. |

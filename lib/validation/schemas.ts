@@ -141,7 +141,7 @@ export const createBookingRequestSchema = z
         message: 'You must accept the booking terms, fare rules, and privacy notice.',
       }),
     }),
-    sampleNoticeAccepted: z.boolean().optional(),
+    fareDisclosureAccepted: z.boolean().optional(),
     acceptedUpdatedFareInr: z.number().int().positive().optional(),
     idempotencyKey: z.string().min(6),
     isInternational: z.boolean().default(false),

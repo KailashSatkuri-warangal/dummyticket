@@ -2,9 +2,9 @@ import React from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Terms and Conditions — Booking & Sample Itinerary Rules',
+  title: 'Terms and Conditions — Booking & Itinerary Rules',
   description:
-    'Review the governing terms for flight searches, fare snapshots, sample itinerary documents, and live provider bookings.',
+    'Review the governing terms for flight searches, fare snapshots, itinerary documents, and confirmed airline reservations.',
 };
 
 export default function TermsAndConditionsPage() {
@@ -15,10 +15,10 @@ export default function TermsAndConditionsPage() {
           Terms and Conditions
         </h1>
         <h2 className="text-sm font-bold text-navy-900">
-          1. Separation of Sample Itineraries and Live Airline Tickets
+          1. Nature of Documents Issued
         </h2>
         <p>
-          When operating in Demo/Sample Mode (Mode A), the platform generates clearly marked sample itinerary documents labeled <strong>&ldquo;SAMPLE ITINERARY — NOT VALID FOR TRAVEL&rdquo;</strong>. Customers must not present sample itineraries for airline check-in or boarding.
+          Upon verified payment, the platform issues a confirmed itinerary document together with a separate payment receipt. Itinerary documents carry the airline confirmation (PNR) associated with the reservation and must not be presented as boarding passes at the airport; boarding passes are issued by the airline during check-in.
         </p>
         <h2 className="text-sm font-bold text-navy-900">
           2. Server-Side Fare Calculation & Revalidation

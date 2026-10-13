@@ -7,13 +7,13 @@ import { BookOpen, ArrowRight } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'Aviation, Baggage & Flight Planning Guides — Editorial Blog',
   description:
-    'Read verified travel guides on baggage allowances, flight refund policies, airport terminals, and the difference between sample itineraries and airline tickets.',
+    'Read verified travel guides on baggage allowances, flight refund policies, airport terminals, and confirmed itinerary documentation.',
 };
 
 export default function BlogListingPage() {
   const categories = [
     'All Guides',
-    'Sample itinerary explanations',
+    'Itinerary explanations',
     'Baggage rules',
     'Refund and cancellation guidance',
     'Airport guides',
@@ -30,7 +30,7 @@ export default function BlogListingPage() {
           Flight Booking, Baggage & Compliance Guides
         </h1>
         <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-          Fact-checked resources helping travelers understand fare rules, statutory tax refunds, airport transit procedures, and sample itinerary documentation.
+          Fact-checked resources helping travelers understand fare rules, statutory tax refunds, airport transit procedures, and confirmed itinerary documentation.
         </p>
       </div>
 

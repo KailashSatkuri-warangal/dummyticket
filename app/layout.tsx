@@ -4,6 +4,7 @@ import './globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { getBrandConfig } from '@/lib/config/brand';
+import { getSessionUser } from '@/lib/auth/session';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -26,13 +27,13 @@ export const metadata: Metadata = {
     template: `%s | ${brand.name}`,
   },
   description:
-    'Compare available flights, review transparent server-audited fares, generate clearly labeled sample itineraries, and manage your travel bookings in one place.',
+    'Compare available flights, review transparent server-audited fares, receive confirmed itineraries with airline PNR, and manage your travel bookings in one place.',
   openGraph: {
     type: 'website',
     siteName: brand.name,
     title: `${brand.name} — Find Your Flight. Plan Your Journey.`,
     description:
-      'Compare available flights, review transparent fares, and manage your booking or sample itinerary in one place.',
+      'Compare available flights, review transparent fares, and manage your booking or confirmed itinerary in one place.',
   },
   icons: {
     icon: '/icon.svg',
@@ -41,11 +42,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = await getSessionUser();
+
   return (
     <html lang="en" className={inter.variable}>
       <body className="min-h-screen flex flex-col bg-slate-50 text-navy-900 antialiased">
@@ -55,7 +58,7 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <Header brandName={brand.name} />
+        <Header brandName={brand.name} user={user} />
         <main id="main-content" className="flex-1">
           {children}
         </main>

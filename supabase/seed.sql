@@ -1,6 +1,6 @@
 -- ============================================================================
--- DUMMYTICKET — FUTURISTIC FLIGHT BOOKING & SAMPLE TICKET PLATFORM
--- Deterministic Seed Data (Mode A: Demo Inventory & All 10 Indian Airlines)
+-- DUMMYTICKET — FLIGHT BOOKING & CONFIRMED ITINERARY PLATFORM
+-- Deterministic Seed Data (Live Inventory & All 10 Indian Airlines)
 -- ============================================================================
 
 INSERT INTO airports (iata_code, icao_code, name, city, country, country_code, timezone) VALUES
@@ -42,10 +42,10 @@ INSERT INTO fare_rules (code, name, cabin, is_refundable, cancellation_fee_inr, 
 ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO coupons (code, description, discount_type, discount_value, min_order_amount_inr, max_discount_inr, usage_limit, valid_until, is_active) VALUES
-  ('WELCOME10', '10% off up to ₹1,500 on flight bookings or sample itineraries', 'percentage', 10, 3000, 1500, 1000, '2027-12-31T23:59:59Z', TRUE),
+  ('WELCOME10', '10% off up to ₹1,500 on flight bookings', 'percentage', 10, 3000, 1500, 1000, '2027-12-31T23:59:59Z', TRUE),
   ('FLAT500', 'Flat ₹500 instant discount on domestic & international routes', 'fixed', 500, 4000, 500, 500, '2027-12-31T23:59:59Z', TRUE)
 ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO site_settings (key, value) VALUES
-  ('brand', '{"name": "DummyTicket", "supportEmail": "support@dummyticket.example.com", "supportPhone": "+91-40-6789-1020", "inventoryMode": "DEMO", "sampleTicketServiceFeeInr": 499}'::jsonb)
+  ('brand', '{"name": "DummyTicket", "supportEmail": "support@dummyticket.example.com", "supportPhone": "+91-40-6789-1020", "inventoryMode": "LIVE", "itineraryServiceFeeInr": 499}'::jsonb)
 ON CONFLICT (key) DO NOTHING;

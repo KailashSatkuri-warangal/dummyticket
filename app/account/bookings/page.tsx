@@ -43,7 +43,7 @@ export default function AccountBookingsPage() {
               My Bookings
             </h1>
             <p className="text-xs text-slate-600">
-              Filter by booking state, view fare breakdowns, or download sample boarding passes and receipts.
+              Filter by booking state, view fare breakdowns, or download boarding-pass itineraries and receipts.
             </p>
           </div>
 

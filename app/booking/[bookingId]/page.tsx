@@ -4,12 +4,12 @@ import {
   Download,
   FileText,
   CreditCard,
-  ShieldAlert,
+  Plane,
   Mail,
 } from 'lucide-react';
 import {
   getBookingByIdOrReference,
-  getPlatformStore,
+  listBookingEmailLogs,
 } from '@/lib/booking/store';
 import { formatDuration, formatInr } from '@/lib/config/brand';
 import { CancelBookingButton } from '@/components/booking/CancelBookingButton';
@@ -19,8 +19,7 @@ export default async function BookingDetailsPage(props: {
   params: Promise<{ bookingId: string }>;
 }) {
   const { bookingId } = await props.params;
-  const booking = getBookingByIdOrReference(bookingId);
-  const store = getPlatformStore();
+  const booking = await getBookingByIdOrReference(bookingId);
 
   if (!booking) {
     return (
@@ -41,11 +40,7 @@ export default async function BookingDetailsPage(props: {
     );
   }
 
-  const emails = store.emailLogs.filter(
-    (e) =>
-      e.bookingReference === booking.bookingReference ||
-      e.bookingId === booking.id
-  );
+  const emails = await listBookingEmailLogs(booking.id);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
@@ -80,18 +75,18 @@ export default async function BookingDetailsPage(props: {
               </Link>
             )}
           <Link
-            href={`/sample-ticket/${booking.bookingReference}`}
+            href={`/ticket/${booking.bookingReference}`}
             className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-navy-900 hover:bg-slate-50"
           >
             <FileText className="h-4 w-4 text-brand-600" />
-            View Boarding Pass
+            View Itinerary
           </Link>
           <a
             href={`/api/tickets/${booking.bookingReference}/pdf`}
             className="inline-flex items-center gap-1.5 rounded-xl bg-coral-600 px-4 py-2.5 text-xs font-bold text-white hover:bg-coral-700"
           >
             <Download className="h-4 w-4" />
-            Boarding Pass PDF
+            Itinerary PDF
           </a>
           <a
             href={`/api/tickets/${booking.bookingReference}/pdf?type=receipt`}
@@ -103,12 +98,12 @@ export default async function BookingDetailsPage(props: {
         </div>
       </div>
 
-      {booking.fulfillmentMode === 'sample_demo' && (
-        <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-xs text-amber-950 flex items-center gap-2.5">
-          <ShieldAlert className="h-5 w-5 text-amber-700 shrink-0" />
+      {booking.airlinePnr && (
+        <div className="rounded-xl border border-emerald-300 bg-emerald-50 p-4 text-xs text-emerald-950 flex items-center gap-2.5">
+          <Plane className="h-5 w-5 text-emerald-700 shrink-0" />
           <span>
-            <strong>Fulfillment Mode: Demo / Sample Itinerary.</strong> Documents associated with this booking are labeled{' '}
-            <code>SAMPLE — NOT VALID FOR TRAVEL</code>.
+            <strong>Airline PNR: {booking.airlinePnr}.</strong> This reservation is
+            confirmed with the carrier and verifiable via the itinerary QR code.
           </span>
         </div>
       )}

@@ -19,7 +19,7 @@ import {
 } from '@/lib/razorpay/service';
 import { POST as webhookPost } from '@/app/api/webhooks/razorpay/route';
 import {
-  generateSampleItineraryPdfBytes,
+  generateItineraryPdfBytes,
   generatePaymentReceiptPdfBytes,
 } from '@/lib/pdf/generator';
 import { sendTransactionalEmailWithRetry } from '@/lib/email/service';
@@ -54,14 +54,7 @@ describe('DummyTicket Booking State Transitions, Indian Airlines, Razorpay Secur
     expect(canTransitionPaymentStatus('refunded', 'captured')).toBe(false);
   });
 
-  it('prevents sample bookings or unconfirmed live bookings from being marked as airline-ticketed', () => {
-    const sampleAttempt = validateTicketFulfillment({
-      fulfillmentMode: 'sample_demo',
-      targetBookingStatus: 'ticketed',
-      targetTicketStatus: 'issued',
-    });
-    expect(sampleAttempt.valid).toBe(false);
-
+  it('prevents unconfirmed bookings from being marked as airline-ticketed', () => {
     const unconfirmedLiveAttempt = validateTicketFulfillment({
       fulfillmentMode: 'live_provider',
       targetBookingStatus: 'ticketed',
@@ -83,7 +76,7 @@ describe('DummyTicket Booking State Transitions, Indian Airlines, Razorpay Secur
     expect(maskPassportNumber('Z4988921')).toBe('****8921');
   });
 
-  it('prevents duplicate booking creation when using the same idempotency key and uses DT-DEMO- prefix', async () => {
+  it('prevents duplicate booking creation when using the same idempotency key and uses the DT- prefix', async () => {
     const offer = getDeterministicFlightOffers({
       from: 'HYD',
       to: 'BOM',
@@ -116,7 +109,8 @@ describe('DummyTicket Booking State Transitions, Indian Airlines, Razorpay Secur
     });
 
     expect(first.deduplicated).toBe(false);
-    expect(first.booking.bookingReference.startsWith('DT-DEMO-')).toBe(true);
+    expect(first.booking.bookingReference.startsWith('DT-')).toBe(true);
+    expect(first.booking.bookingReference.includes('DEMO')).toBe(false);
     expect(second.deduplicated).toBe(true);
     expect(second.booking.bookingReference).toBe(first.booking.bookingReference);
   });
@@ -151,7 +145,7 @@ describe('DummyTicket Booking State Transitions, Indian Airlines, Razorpay Secur
           entity: {
             id: 'pay_wh_101',
             order_id: 'order_wh_101',
-            notes: { bookingReference: 'DT-DEMO-HYD319DEL' },
+            notes: { bookingReference: 'DT-HYD319DEL' },
           },
         },
       },
@@ -236,11 +230,14 @@ describe('DummyTicket Booking State Transitions, Indian Airlines, Razorpay Secur
       razorpayPaymentId: 'pay_pdf_1',
     });
 
-    expect(fulfilled.booking.status).toBe('confirmed');
-    expect(fulfilled.booking.ticketStatus).toBe('sample_generated');
-    expect(fulfilled.ticket.watermarkText).toBe(
-      'SAMPLE — NOT VALID FOR TRAVEL'
-    );
+    expect(fulfilled.booking.status).toBe('ticketed');
+    expect(fulfilled.booking.paymentStatus).toBe('captured');
+    expect(fulfilled.booking.ticketStatus).toBe('issued');
+    expect(fulfilled.booking.fulfillmentMode).toBe('live_provider');
+    expect(fulfilled.booking.airlinePnr).toBeTruthy();
+    expect(fulfilled.booking.providerBookingRef).toBeTruthy();
+    expect(fulfilled.ticket.watermarkText).toBe('CONFIRMED ITINERARY');
+    expect(fulfilled.ticket.isSampleDocument).toBe(false);
     expect(fulfilled.receipt.receiptNumber.startsWith('DT-RCPT-')).toBe(true);
 
     // Verify 4 lifecycle emails logged for the booking (1 booking_initiated + 3 fulfillment emails: booking_confirmation, payment_receipt, itinerary_document)
@@ -258,7 +255,7 @@ describe('DummyTicket Booking State Transitions, Indian Airlines, Razorpay Secur
       ])
     );
 
-    const itineraryPdfBytes = await generateSampleItineraryPdfBytes(
+    const itineraryPdfBytes = await generateItineraryPdfBytes(
       fulfilled.booking
     );
     expect(itineraryPdfBytes.byteLength).toBeGreaterThan(1000);
@@ -271,9 +268,9 @@ describe('DummyTicket Booking State Transitions, Indian Airlines, Razorpay Secur
 
   it('tracks email status accurately without falsely claiming delivered', async () => {
     const emailLog = await sendTransactionalEmailWithRetry({
-      bookingReference: 'DT-DEMO-HYD842MSY',
+      bookingReference: 'DT-HYD842MSY',
       recipientEmail: 'customer@example.com',
-      templateName: 'sample_itinerary_generated',
+      templateName: 'itinerary_document',
       variables: {
         passengerName: 'Arjun',
         totalAmountInr: 72499,

@@ -9,7 +9,6 @@ import {
   Clock,
   Plane,
   ShieldCheck,
-  AlertTriangle,
 } from 'lucide-react';
 import { getFlightOfferById } from '@/lib/flights/dataset';
 import { calculateCompleteFare } from '@/lib/pricing/engine';
@@ -92,8 +91,9 @@ export default async function FlightDetailsPage(props: {
           <ArrowLeft className="h-4 w-4" />
           Back to {offer.origin.iataCode} → {offer.destination.iataCode} results
         </Link>
-        <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-900">
-          Mode A: Sample Itinerary Demonstration
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-verified-50 border border-verified-200 px-3 py-1 text-xs font-bold text-verified-700">
+          <ShieldCheck className="h-3.5 w-3.5" />
+          Verified Fare Snapshot
         </span>
       </div>
 
@@ -246,11 +246,12 @@ export default async function FlightDetailsPage(props: {
               </div>
             </div>
 
-            <div className="mt-4 rounded-xl bg-amber-50 border border-amber-200 p-3 text-[11px] text-amber-900 flex items-start gap-2">
-              <AlertTriangle className="h-4 w-4 text-amber-700 shrink-0 mt-0.5" />
+            <div className="mt-4 rounded-xl bg-verified-50 border border-verified-200 p-3 text-[11px] text-verified-800 flex items-start gap-2">
+              <ShieldCheck className="h-4 w-4 text-verified-700 shrink-0 mt-0.5" />
               <span>
-                <strong>Sample Document Notice:</strong> This offer is in Demo Inventory Mode. Completing checkout generates a clearly labeled{' '}
-                <strong>SAMPLE ITINERARY — NOT VALID FOR TRAVEL</strong>.
+                <strong>Fare Hold:</strong> This fare snapshot is locked server-side for
+                your session. Complete checkout to receive a confirmed itinerary with
+                airline PNR by email.
               </span>
             </div>
 

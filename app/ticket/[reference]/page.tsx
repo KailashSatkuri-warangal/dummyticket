@@ -5,23 +5,23 @@ import {
   FileText,
   ArrowLeft,
   CheckCircle2,
-  ShieldAlert,
+  ShieldCheck,
 } from 'lucide-react';
 import { getBookingByIdOrReference } from '@/lib/booking/store';
 import { LazySignatureBoardingPass as SignatureBoardingPass } from '@/components/tickets/LazyBoardingPass';
 import { BookingStepper } from '@/components/booking/BookingStepper';
 
-export default async function SampleTicketPage(props: {
+export default async function TicketPage(props: {
   params: Promise<{ reference: string }>;
 }) {
   const { reference } = await props.params;
-  const booking = getBookingByIdOrReference(reference);
+  const booking = await getBookingByIdOrReference(reference);
 
   if (!booking) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-16 text-center space-y-4">
         <h1 className="section-heading">
-          Sample Itinerary Not Found ({reference})
+          Itinerary Not Found ({reference})
         </h1>
         <p className="text-sm text-slate-600">
           No booking record was found matching this reference. Please check your reference or search for a new flight.
@@ -44,8 +44,6 @@ export default async function SampleTicketPage(props: {
     );
   }
 
-  const isSample = booking.fulfillmentMode === 'sample_demo';
-
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
       <BookingStepper currentStep="confirmation" />
@@ -65,7 +63,7 @@ export default async function SampleTicketPage(props: {
             className="inline-flex items-center gap-2 rounded-xl bg-coral-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-coral-700 transition-colors"
           >
             <Download className="h-4 w-4" />
-            Download Boarding Pass PDF
+            Download Itinerary PDF
           </a>
           <a
             href={`/api/tickets/${booking.bookingReference}/pdf?type=receipt`}
@@ -77,30 +75,34 @@ export default async function SampleTicketPage(props: {
         </div>
       </div>
 
-      {/* Prominent Sample Disclosure Banner */}
-      {isSample && (
-        <div
-          role="region"
-          aria-label="Sample Document Notice"
-          className="rounded-2xl border-2 border-amber-500 bg-amber-50 px-5 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3"
-        >
-          <div className="flex items-center gap-3">
-            <ShieldAlert className="h-6 w-6 text-amber-800 shrink-0" />
-            <div>
-              <p className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-amber-950">
-                SAMPLE — NOT VALID FOR TRAVEL (SAMPLE ITINERARY)
-              </p>
-              <p className="text-[11px] font-medium text-amber-900">
-                This DummyTicket document is a demonstration sample itinerary generated for travel planning and layout verification only. It does not fabricate live airline PNRs or e-ticket numbers.
-              </p>
-            </div>
+      {/* Confirmed Reservation Banner */}
+      <div
+        role="region"
+        aria-label="Reservation Status"
+        className="rounded-2xl border-2 border-verified-500 bg-verified-50 px-5 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3"
+      >
+        <div className="flex items-center gap-3">
+          <ShieldCheck className="h-6 w-6 text-verified-700 shrink-0" />
+          <div>
+            <p className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-verified-800">
+              {booking.paymentStatus === 'captured'
+                ? 'Server-Verified Reservation'
+                : 'Itinerary Document'}
+            </p>
+            <p className="text-[11px] font-medium text-verified-900">
+              {booking.airlinePnr
+                ? `Airline PNR ${booking.airlinePnr} · Verification token bound to booking ${booking.bookingReference}.`
+                : 'This itinerary is bound to booking reference ' +
+                  booking.bookingReference +
+                  ' and is verifiable online.'}
+            </p>
           </div>
-          <span className="shrink-0 inline-flex items-center gap-1 rounded-lg bg-verified-50 border border-verified-200 px-2.5 py-1 text-xs font-bold text-verified-700">
-            <CheckCircle2 className="h-3.5 w-3.5" />
-            QR Verifiable
-          </span>
         </div>
-      )}
+        <span className="shrink-0 inline-flex items-center gap-1 rounded-lg bg-white border border-verified-200 px-2.5 py-1 text-xs font-bold text-verified-700">
+          <CheckCircle2 className="h-3.5 w-3.5" />
+          QR Verifiable
+        </span>
+      </div>
 
       {/* Signature Boarding Pass with 3D Flip Reveal & View Switcher */}
       {booking.ticket && (

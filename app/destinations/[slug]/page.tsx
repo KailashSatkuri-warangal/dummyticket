@@ -31,7 +31,7 @@ export default async function DestinationGuidePage(props: {
   const dest =
     DESTINATIONS.find((d) => d.slug === slug) ?? DESTINATIONS[0];
 
-  const sampleFlights = getDeterministicFlightOffers({
+  const featuredFlights = getDeterministicFlightOffers({
     from: 'HYD',
     to: dest.airportIata,
     departDate: '2026-12-15',
@@ -46,7 +46,7 @@ export default async function DestinationGuidePage(props: {
             Airport Code: {dest.airportIata} · {dest.country}
           </span>
           <span className="text-xs font-semibold text-slate-500">
-            Sample fares starting from {formatInr(dest.sampleStartingFareInr)}
+            Fares starting from {formatInr(dest.startingFareInr)}
           </span>
         </div>
 
@@ -92,7 +92,7 @@ export default async function DestinationGuidePage(props: {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold text-navy-900">
-            Sample Flight Schedules to {dest.city} ({dest.airportIata})
+            Flight Schedules to {dest.city} ({dest.airportIata})
           </h2>
           <Link
             href={`/flights?from=HYD&to=${dest.airportIata}&depart=2026-12-15&adults=1&cabin=economy`}
@@ -103,7 +103,7 @@ export default async function DestinationGuidePage(props: {
         </div>
 
         <div className="space-y-4">
-          {sampleFlights.map((offer) => (
+          {featuredFlights.map((offer) => (
             <FlightCard
               key={offer.id}
               offer={offer}

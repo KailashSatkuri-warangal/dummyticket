@@ -1,8 +1,10 @@
 import React from 'react';
-import { getPlatformStore } from '@/lib/booking/store';
+import { listAuditLogs } from '@/lib/booking/store';
 
-export default function AdminAuditLogsPage() {
-  const store = getPlatformStore();
+export const dynamic = 'force-dynamic';
+
+export default async function AdminAuditLogsPage() {
+  const logs = await listAuditLogs();
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-5">
@@ -15,44 +17,53 @@ export default function AdminAuditLogsPage() {
         </p>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs">
-          <thead className="border-b border-slate-200 bg-slate-50 text-slate-600">
-            <tr>
-              <th className="px-3 py-2.5">Timestamp</th>
-              <th className="px-3 py-2.5">Actor</th>
-              <th className="px-3 py-2.5">Action</th>
-              <th className="px-3 py-2.5">Resource</th>
-              <th className="px-3 py-2.5">Correlation ID</th>
-              <th className="px-3 py-2.5">After State Metadata</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {store.auditLogs.map((log) => (
-              <tr key={log.id}>
-                <td className="px-3 py-3 font-mono text-[11px] text-slate-500">
-                  {new Date(log.createdAt).toLocaleString('en-IN')}
-                </td>
-                <td className="px-3 py-3 font-semibold text-navy-900">
-                  {log.actorEmail}
-                </td>
-                <td className="px-3 py-3 font-mono font-bold text-brand-700">
-                  {log.action}
-                </td>
-                <td className="px-3 py-3 font-mono">
-                  {log.resourceType}/{log.resourceId}
-                </td>
-                <td className="px-3 py-3 font-mono text-slate-500">
-                  {log.correlationId}
-                </td>
-                <td className="px-3 py-3 font-mono text-[11px] text-slate-600">
-                  {JSON.stringify(log.afterState ?? {})}
-                </td>
+      {logs.length === 0 ? (
+        <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/50 p-8 text-center text-xs">
+          <p className="font-bold text-navy-900">No audit events recorded yet</p>
+          <p className="mt-1 text-slate-500">
+            Booking, payment, and administrative events are recorded here automatically.
+          </p>
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="border-b border-slate-200 bg-slate-50 text-slate-600">
+              <tr>
+                <th className="px-3 py-2.5">Timestamp</th>
+                <th className="px-3 py-2.5">Actor</th>
+                <th className="px-3 py-2.5">Action</th>
+                <th className="px-3 py-2.5">Resource</th>
+                <th className="px-3 py-2.5">Correlation ID</th>
+                <th className="px-3 py-2.5">After State Metadata</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {logs.map((log) => (
+                <tr key={log.id}>
+                  <td className="px-3 py-3 font-mono text-[11px] text-slate-500">
+                    {new Date(log.createdAt).toLocaleString('en-IN')}
+                  </td>
+                  <td className="px-3 py-3 font-semibold text-navy-900">
+                    {log.actorEmail}
+                  </td>
+                  <td className="px-3 py-3 font-mono font-bold text-brand-700">
+                    {log.action}
+                  </td>
+                  <td className="px-3 py-3 font-mono">
+                    {log.resourceType}/{log.resourceId}
+                  </td>
+                  <td className="px-3 py-3 font-mono text-slate-500">
+                    {log.correlationId}
+                  </td>
+                  <td className="px-3 py-3 font-mono text-[11px] text-slate-600">
+                    {JSON.stringify(log.afterState ?? {})}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

@@ -102,7 +102,7 @@ export default function HomePage() {
           <div className="max-w-3xl">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-500/20 border border-brand-400/30 px-3.5 py-1 text-xs font-semibold text-brand-200">
               <Sparkles className="h-3.5 w-3.5 text-amber-400" />
-              Next-Generation Flight Search & Signature Sample Boarding Passes
+              Next-Generation Flight Search & Confirmed Itineraries
             </span>
             <h1 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
               Your Next Journey Starts Here.
@@ -203,10 +203,10 @@ export default function HomePage() {
                   </p>
                   <div className="mt-4 flex items-center justify-between border-t border-slate-200/80 pt-3">
                     <span className="text-xs text-slate-500">
-                      Sample starting fare
+                      Starting fare
                     </span>
                     <span className="text-sm font-extrabold tabular-nums text-navy-900">
-                      {formatInr(route.startingSampleFareInr)}
+                      {formatInr(route.startingFareInr)}
                     </span>
                   </div>
                 </Link>
@@ -249,7 +249,7 @@ export default function HomePage() {
 
                   <div className="mt-4 border-t border-slate-100 pt-3 flex items-center justify-between text-xs">
                     <span className="tabular-nums text-slate-500">
-                      From {formatInr(dest.sampleStartingFareInr)}
+                      From {formatInr(dest.startingFareInr)}
                     </span>
                     <span className="font-semibold text-brand-600">
                       Read Guide →
@@ -302,8 +302,8 @@ export default function HomePage() {
               },
               {
                 step: '04',
-                title: 'Reveal Boarding Pass & Receipt',
-                desc: 'Download your Boarding-Pass-Styled Sample Itinerary PDF and separate Payment Receipt PDF.',
+                title: 'Reveal Itinerary & Receipt',
+                desc: 'Download your Boarding-Pass-Styled Itinerary PDF and separate Payment Receipt PDF.',
                 icon: FileText,
               },
             ].map((item) => {
@@ -351,7 +351,7 @@ export default function HomePage() {
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="h-4 w-4 text-verified-400 shrink-0 mt-0.5" />
                   <span>
-                    <strong>Clear Sample Labeling:</strong> Sample itineraries generated in Demo Mode use a <code className="rounded bg-amber-400/20 px-1.5 py-0.5 text-amber-300 font-mono">DT-DEMO-</code> reference and prominent <code className="rounded bg-coral-600/30 px-1.5 py-0.5 text-coral-200 font-semibold">SAMPLE — NOT VALID FOR TRAVEL</code> labeling.
+                    <strong>Verifiable References:</strong> Every itinerary carries a <code className="rounded bg-brand-400/20 px-1.5 py-0.5 text-brand-200 font-mono">DT-</code> booking reference and airline PNR, verifiable online via the QR code.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
@@ -363,7 +363,7 @@ export default function HomePage() {
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="h-4 w-4 text-verified-400 shrink-0 mt-0.5" />
                   <span>
-                    <strong>3 Transactional Emails:</strong> Receive separate Booking Confirmation, Payment Receipt, and Sample Itinerary Delivery emails upon payment verification.
+                    <strong>3 Transactional Emails:</strong> Receive separate Booking Confirmation, Payment Receipt, and Itinerary Delivery emails upon payment verification.
                   </span>
                 </li>
               </ul>
@@ -371,16 +371,16 @@ export default function HomePage() {
 
             <div className="lg:col-span-5 flex flex-col gap-3 rounded-2xl border border-slate-800 bg-navy-900/90 p-6">
               <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <span className="text-xs font-semibold text-slate-400">Sample Reference Format</span>
-                <span className="font-mono text-sm font-bold text-amber-400">DT-DEMO-[ORIGIN][CODE][DEST]</span>
+                <span className="text-xs font-semibold text-slate-400">Booking Reference Format</span>
+                <span className="font-mono text-sm font-bold text-brand-300">DT-[ORIGIN][CODE][DEST]</span>
               </div>
               <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                 <span className="text-xs font-semibold text-slate-400">Receipt Reference Format</span>
                 <span className="font-mono text-sm font-bold text-brand-300">DT-RCPT-[BOOKING_REF]</span>
               </div>
               <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <span className="text-xs font-semibold text-slate-400">Document Watermark</span>
-                <span className="text-xs font-bold text-coral-400">SAMPLE — NOT VALID FOR TRAVEL</span>
+                <span className="text-xs font-semibold text-slate-400">Document Verification</span>
+                <span className="text-xs font-bold text-verified-400">QR-VERIFIABLE CONFIRMED ITINERARY</span>
               </div>
               <div className="pt-2 flex flex-wrap gap-2">
                 <Link
@@ -472,16 +472,16 @@ export default function HomePage() {
             <div className="space-y-3">
               {[
                 {
-                  q: 'What is the difference between Demo Mode (Sample Itinerary) and Live Flight Inventory?',
-                  a: 'In Demo Mode (Mode A), DummyTicket generates clearly labeled Sample Boarding Passes ("SAMPLE — NOT VALID FOR TRAVEL") with a DT-DEMO- reference prefix using deterministic route and pricing data. In Live Mode (Mode B), bookings are validated and issued only after confirmation from an authorized flight provider.',
+                  q: 'How do I receive my confirmed itinerary?',
+                  a: 'Once your Razorpay payment is verified server-side, DummyTicket issues your reservation with an airline PNR and generates a Boarding-Pass-Styled Itinerary PDF plus a separate Payment Receipt PDF, dispatched to your email instantly.',
                 },
                 {
                   q: 'How are fares and price changes handled during checkout?',
                   a: 'When you select a flight, our server stores an auditable Fare Snapshot with an expiration time. Before payment order creation, the fare is revalidated. If a fare increases, you are shown the exact old and new amounts and asked for explicit confirmation.',
                 },
                 {
-                  q: 'Do I receive a separate Payment Receipt PDF and Sample Itinerary PDF?',
-                  a: 'Yes. Upon verified Razorpay payment, DummyTicket generates both your Boarding-Pass-Styled Sample Itinerary PDF and a separate Payment Receipt PDF (DT-RCPT-...), and dispatches 3 distinct confirmation emails.',
+                  q: 'Do I receive a separate Payment Receipt PDF and Itinerary PDF?',
+                  a: 'Yes. Upon verified Razorpay payment, DummyTicket generates both your Boarding-Pass-Styled Itinerary PDF and a separate Payment Receipt PDF (DT-RCPT-...), and dispatches 3 distinct confirmation emails.',
                 },
               ].map((faq, i) => (
                 <div

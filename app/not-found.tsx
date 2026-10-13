@@ -73,7 +73,7 @@ export default function NotFoundPage() {
         Route Waypoint Not Found
       </h1>
       <p className="text-sm text-slate-600 max-w-md mx-auto">
-        The flight corridor, sample ticket, or page you requested is outside our active navigation airspace.
+        The flight corridor, ticket, or page you requested is outside our active navigation airspace.
       </p>
 
       <div className="flex flex-wrap items-center justify-center gap-3 pt-2">

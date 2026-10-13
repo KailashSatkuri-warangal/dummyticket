@@ -24,7 +24,7 @@ export default function TrackBookingPage() {
           <span>Booking Reference Lookup</span>
         </div>
         <h1 className="mt-2 text-2xl font-extrabold text-navy-900">
-          Track Your Booking or Download Sample Itinerary
+          Track Your Booking & Download Documents
         </h1>
         <p className="mt-1 text-xs text-slate-600">
           Enter your DummyTicket booking reference to view real-time status and download your PDF documents.
@@ -41,7 +41,7 @@ export default function TrackBookingPage() {
                 required
                 value={reference}
                 onChange={(e) => setReference(e.target.value)}
-                placeholder="DT-DEMO-..."
+                placeholder="DT-HYD123DEL"
                 className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm font-mono uppercase font-bold text-navy-900"
               />
             </div>

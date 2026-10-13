@@ -4,7 +4,7 @@ import {
   createPendingBooking,
   getBookingByIdOrReference,
   getFareSnapshotById,
-  listUniqueBookings,
+  listUserBookings,
   recordAuditLog,
   saveFareSnapshot,
 } from '@/lib/booking/store';
@@ -14,14 +14,16 @@ import {
   revalidateFareSnapshot,
 } from '@/lib/pricing/engine';
 import { checkRateLimit } from '@/lib/security/auth';
+import { getSessionUser } from '@/lib/auth/session';
 
 export async function GET(request: Request) {
+  const user = await getSessionUser();
   const { searchParams } = new URL(request.url);
   const reference = searchParams.get('reference');
   const email = searchParams.get('email');
 
   if (reference) {
-    const booking = getBookingByIdOrReference(reference);
+    const booking = await getBookingByIdOrReference(reference);
     if (!booking) {
       return NextResponse.json(
         { error: 'No booking found with that reference.' },
@@ -40,7 +42,13 @@ export async function GET(request: Request) {
     return NextResponse.json({ booking });
   }
 
-  return NextResponse.json({ bookings: listUniqueBookings() });
+  if (!user) {
+    return NextResponse.json(
+      { error: 'Sign in to view your bookings.' },
+      { status: 401 }
+    );
+  }
+  return NextResponse.json({ bookings: await listUserBookings(user.id) });
 }
 
 export async function POST(request: Request) {
@@ -49,6 +57,14 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { error: 'Rate limit exceeded. Please wait before creating another booking.' },
       { status: 429 }
+    );
+  }
+
+  const user = await getSessionUser();
+  if (!user) {
+    return NextResponse.json(
+      { error: 'Please sign in to complete your booking.' },
+      { status: 401 }
     );
   }
 
@@ -86,7 +102,7 @@ export async function POST(request: Request) {
     ).length;
 
     const existingSnapshot =
-      getFareSnapshotById(data.fareSnapshotId) ??
+      (await getFareSnapshotById(data.fareSnapshotId)) ??
       calculateCompleteFare({
         offer,
         adults: Math.max(1, adultsCount),
@@ -131,18 +147,7 @@ export async function POST(request: Request) {
       passengers: data.passengers,
       idempotencyKey: data.idempotencyKey,
       fareChangeAccepted: revalidation.hasChanged,
-    });
-
-    recordAuditLog({
-      actorEmail: data.contactEmail,
-      action: deduplicated ? 'BOOKING_IDEMPOTENT_REUSE' : 'BOOKING_CREATED',
-      resourceType: 'booking',
-      resourceId: booking.bookingReference,
-      afterState: {
-        totalAmount: booking.totalAmount,
-        status: booking.status,
-        fulfillmentMode: booking.fulfillmentMode,
-      },
+      userId: user.id,
     });
 
     return NextResponse.json({

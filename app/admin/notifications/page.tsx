@@ -1,8 +1,10 @@
 import React from 'react';
-import { getPlatformStore } from '@/lib/booking/store';
+import { listAllNotifications } from '@/lib/booking/store';
 
-export default function AdminNotificationsPage() {
-  const store = getPlatformStore();
+export const dynamic = 'force-dynamic';
+
+export default async function AdminNotificationsPage() {
+  const notifications = await listAllNotifications();
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-5">
@@ -15,19 +17,35 @@ export default function AdminNotificationsPage() {
         </p>
       </div>
 
-      <div className="divide-y divide-slate-100 text-xs">
-        {store.notifications.map((n) => (
-          <div key={n.id} className="py-3 flex justify-between">
-            <div>
-              <p className="font-bold text-navy-900">{n.title}</p>
-              <p className="text-slate-600">{n.message}</p>
+      {notifications.length === 0 ? (
+        <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/50 p-8 text-center text-xs">
+          <p className="font-bold text-navy-900">No notifications dispatched yet</p>
+          <p className="mt-1 text-slate-500">
+            Booking, payment, and itinerary alerts appear here as customers transact.
+          </p>
+        </div>
+      ) : (
+        <div className="divide-y divide-slate-100 text-xs">
+          {notifications.map((n) => (
+            <div key={n.id} className="py-3 flex justify-between gap-4">
+              <div>
+                <p className="font-bold text-navy-900">{n.title}</p>
+                <p className="text-slate-600">
+                  {n.message}
+                  {n.bookingReference ? (
+                    <span className="ml-1 font-mono text-slate-400">
+                      · {n.bookingReference}
+                    </span>
+                  ) : null}
+                </p>
+              </div>
+              <span className="font-mono text-slate-400 shrink-0">
+                {n.isRead ? 'Read' : 'Unread'}
+              </span>
             </div>
-            <span className="font-mono text-slate-400">
-              {n.isRead ? 'Read' : 'Unread'}
-            </span>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

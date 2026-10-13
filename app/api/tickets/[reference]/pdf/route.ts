@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getBookingByIdOrReference } from '@/lib/booking/store';
 import {
+  generateItineraryPdfBytes,
   generatePaymentReceiptPdfBytes,
-  generateSampleItineraryPdfBytes,
 } from '@/lib/pdf/generator';
 
 export async function GET(
@@ -13,7 +13,7 @@ export async function GET(
   const { searchParams } = new URL(request.url);
   const docType = searchParams.get('type') === 'receipt' ? 'receipt' : 'ticket';
 
-  const booking = getBookingByIdOrReference(reference);
+  const booking = await getBookingByIdOrReference(reference);
 
   if (!booking) {
     return NextResponse.json(
@@ -35,12 +35,8 @@ export async function GET(
     });
   }
 
-  const pdfBytes = await generateSampleItineraryPdfBytes(booking);
-  const filename = `${
-    booking.fulfillmentMode === 'sample_demo'
-      ? 'DUMMYTICKET-SAMPLE'
-      : 'DUMMYTICKET-ITINERARY'
-  }-${booking.bookingReference}.pdf`;
+  const pdfBytes = await generateItineraryPdfBytes(booking);
+  const filename = `DUMMYTICKET-ITINERARY-${booking.bookingReference}.pdf`;
 
   return new NextResponse(Buffer.from(pdfBytes), {
     status: 200,

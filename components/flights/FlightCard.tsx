@@ -67,10 +67,8 @@ export function FlightCard({
       {/* Top Badges Row */}
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3 mb-4">
         <div className="flex items-center gap-2">
-          <span className="badge badge-amber">
-            {offer.inventoryMode === 'sample_demo'
-              ? 'Demo Inventory · Sample Boarding Pass Eligible'
-              : 'Authorized Live Inventory'}
+          <span className="badge badge-brand">
+            Authorized Live Inventory
           </span>
           <span
             className={`badge ${
@@ -208,7 +206,7 @@ export function FlightCard({
           </span>
         </div>
         <span className="text-[11px] font-medium tabular-nums text-slate-500">
-          {offer.seatsAvailable} demo seats configured at this tier
+          {offer.seatsAvailable} seats left at this fare
         </span>
       </div>
     </article>

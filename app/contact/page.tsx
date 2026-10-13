@@ -55,7 +55,7 @@ export default function ContactPage() {
             Contact Customer & Billing Support
           </h1>
           <p className="text-xs text-slate-600 leading-relaxed">
-            Need help with a booking reference, Razorpay refund status, or sample itinerary download? Reach our support desk directly.
+            Need help with a booking reference, Razorpay refund status, or itinerary download? Reach our support desk directly.
           </p>
 
           <div className="space-y-3 pt-2 text-xs text-slate-700">

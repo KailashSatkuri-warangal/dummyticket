@@ -7,7 +7,7 @@ export interface BrandConfig {
   headquarters: string;
   appUrl: string;
   defaultCurrency: 'INR' | 'USD';
-  inventoryMode: 'sample_demo' | 'live_provider';
+  inventoryMode: 'live_provider';
   razorpayConfigured: boolean;
   supabaseConfigured: boolean;
   resendConfigured: boolean;
@@ -27,11 +27,6 @@ export function getBrandConfig(): BrandConfig {
   const resendConfigured =
     Boolean(resendKey) && !resendKey.includes('placeholder');
 
-  const rawMode =
-    process.env.FLIGHT_PROVIDER_MODE ??
-    process.env.NEXT_PUBLIC_INVENTORY_MODE ??
-    'DEMO';
-
   return {
     name: process.env.NEXT_PUBLIC_BRAND_NAME || 'DummyTicket',
     tagline: 'Your Next Journey Starts Here.',
@@ -41,7 +36,7 @@ export function getBrandConfig(): BrandConfig {
     headquarters: 'HITEC City, Madhapur, Hyderabad, Telangana 500081, India',
     appUrl: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
     defaultCurrency: 'INR',
-    inventoryMode: rawMode === 'LIVE' ? 'live_provider' : 'sample_demo',
+    inventoryMode: 'live_provider',
     razorpayConfigured,
     supabaseConfigured,
     resendConfigured,

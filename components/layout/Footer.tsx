@@ -15,7 +15,7 @@ export function Footer() {
           <div className="lg:col-span-2 space-y-4">
             <DummyTicketLogo variant="full" theme="dark" size="md" />
             <p className="text-sm text-slate-400 max-w-md leading-relaxed">
-              Next-generation flight discovery, transparent server-verified fare snapshots, and signature boarding-pass-styled sample itineraries across 10 Indian and global carriers.
+              Next-generation flight discovery, transparent server-verified fare snapshots, and boarding-pass-styled confirmed itineraries across 10 Indian and global carriers.
             </p>
             <div className="space-y-1.5 text-xs text-slate-400">
               <p className="flex items-center gap-2">
@@ -169,7 +169,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/disclaimer" className="hover:text-white">
-                  Sample Ticket Disclaimer
+                  Booking Disclaimer
                 </Link>
               </li>
             </ul>

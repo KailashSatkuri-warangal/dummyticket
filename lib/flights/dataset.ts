@@ -602,7 +602,7 @@ export function getDeterministicFlightOffers(params: {
     totalFareInr: base1 + taxes1 + serviceFee1,
     seatsAvailable: 7,
     fareRule: rule1,
-    inventoryMode: 'sample_demo',
+    inventoryMode: 'live_provider',
     historicalAvgInr: Math.round((base1 + taxes1 + serviceFee1) * 1.06),
     segments: isLongHaulUs
       ? [
@@ -689,7 +689,7 @@ export function getDeterministicFlightOffers(params: {
     totalFareInr: base2 + taxes2 + serviceFee2,
     seatsAvailable: 9,
     fareRule: rule2,
-    inventoryMode: 'sample_demo',
+    inventoryMode: 'live_provider',
     historicalAvgInr: Math.round((base2 + taxes2 + serviceFee2) * 1.04),
     segments: [
       {
@@ -742,7 +742,7 @@ export function getDeterministicFlightOffers(params: {
     totalFareInr: base3 + taxes3 + serviceFee3,
     seatsAvailable: 5,
     fareRule: FARE_RULES.ECO_FLEX,
-    inventoryMode: 'sample_demo',
+    inventoryMode: 'live_provider',
     segments: [
       {
         id: `seg-3`,
@@ -802,7 +802,7 @@ export function getDeterministicFlightOffers(params: {
     totalFareInr: base4 + taxes4 + serviceFee4,
     seatsAvailable: 8,
     fareRule: rule1,
-    inventoryMode: 'sample_demo',
+    inventoryMode: 'live_provider',
     segments: [
       {
         id: `seg-4a`,
@@ -879,7 +879,7 @@ export const DESTINATIONS: DestinationGuide[] = [
     bestTimeToVisit: 'November to March (20°C – 28°C pleasant winter climate)',
     visaRequirementsSummary:
       'Indian passport holders require a pre-arranged UAE tourist e-Visa or qualify for a 14-day visa on arrival if holding a valid US, UK, or Schengen visa/residence permit.',
-    sampleStartingFareInr: 14800,
+    startingFareInr: 14800,
     metaTitle: 'Flights to Dubai (DXB) — Airport Guide, Baggage & Visa Requirements | DummyTicket',
     metaDescription:
       'Plan your trip to Dubai (DXB) on DummyTicket. Compare flight schedules from Mumbai, Delhi, and Hyderabad, review baggage policies, and verify visa documentation requirements.',
@@ -901,7 +901,7 @@ export const DESTINATIONS: DestinationGuide[] = [
     bestTimeToVisit: 'February to April and July to October',
     visaRequirementsSummary:
       'Indian citizens must obtain a Singapore e-Visa through an authorized visa agent prior to departure and submit the SG Arrival Card within 3 days before arrival.',
-    sampleStartingFareInr: 16200,
+    startingFareInr: 16200,
     metaTitle: 'Flights to Singapore (SIN) — Changi Guide, Schedules & Fare Rules | DummyTicket',
     metaDescription:
       'Explore direct flight options to Singapore Changi (SIN). Check flight duration, SG Arrival Card rules, and transparent fare breakdowns.',
@@ -923,7 +923,7 @@ export const DESTINATIONS: DestinationGuide[] = [
     bestTimeToVisit: 'May to September for mild weather and extended daylight',
     visaRequirementsSummary:
       'Standard Visitor Visa required prior to travel. Visa applicants must provide a verifiable flight itinerary and accommodation details.',
-    sampleStartingFareInr: 42500,
+    startingFareInr: 42500,
     metaTitle: 'Flights to London Heathrow (LHR) — Schedules, Baggage & Transit Rules | DummyTicket',
     metaDescription:
       'Compare direct and 1-stop flights to London Heathrow (LHR). Understand UK Standard Visitor Visa itinerary requirements and cabin baggage allowances.',
@@ -945,7 +945,7 @@ export const DESTINATIONS: DestinationGuide[] = [
     bestTimeToVisit: 'October to March',
     visaRequirementsSummary:
       'Domestic travelers require a valid government-issued photo ID (Aadhaar, Passport, Voter ID, or Driving Licence). DigiYatra biometric boarding is supported across all terminals.',
-    sampleStartingFareInr: 4200,
+    startingFareInr: 4200,
     metaTitle: 'Flights to New Delhi (DEL) — Terminal Guide, Schedules & Fares | DummyTicket',
     metaDescription:
       'Find domestic and international flights to New Delhi (DEL). Check IGI Airport terminal transfers, metro connectivity, and transparent fare options.',
@@ -967,7 +967,7 @@ export const ROUTE_PAGES: RouteLandingPage[] = [
     destinationCity: 'New Delhi',
     averageDurationMinutes: 135,
     airlinesOperating: ['IndiGo', 'Air India', 'Akasa Air', 'SpiceJet'],
-    startingSampleFareInr: 4499,
+    startingFareInr: 4499,
     dailyFlightsCount: 24,
     routeGuideMarkdown:
       'Direct flights between Rajiv Gandhi International Airport (HYD) and Indira Gandhi International Airport (DEL) take approximately 2 hours and 15 minutes. Morning departures between 06:00 AM and 09:00 AM are popular with business travelers.',
@@ -984,7 +984,7 @@ export const ROUTE_PAGES: RouteLandingPage[] = [
     destinationCity: 'Mumbai',
     averageDurationMinutes: 90,
     airlinesOperating: ['IndiGo', 'Air India', 'Akasa Air'],
-    startingSampleFareInr: 3699,
+    startingFareInr: 3699,
     dailyFlightsCount: 28,
     routeGuideMarkdown:
       'The Hyderabad (HYD) to Mumbai (BOM) corridor is one of India’s premier short-haul business routes, with an average non-stop airtime of 1 hour and 30 minutes arriving at Mumbai Terminal 2.',
@@ -1001,7 +1001,7 @@ export const ROUTE_PAGES: RouteLandingPage[] = [
     destinationCity: 'Bengaluru',
     averageDurationMinutes: 75,
     airlinesOperating: ['IndiGo', 'Air India', 'Air India Express', 'Star Air'],
-    startingSampleFareInr: 3199,
+    startingFareInr: 3199,
     dailyFlightsCount: 22,
     routeGuideMarkdown:
       'Connecting India’s two largest technology hubs, non-stop flights from Hyderabad (HYD) to Bengaluru Kempegowda International Airport (BLR) complete the journey in just 1 hour and 15 minutes.',
@@ -1018,7 +1018,7 @@ export const ROUTE_PAGES: RouteLandingPage[] = [
     destinationCity: 'Hyderabad',
     averageDurationMinutes: 135,
     airlinesOperating: ['IndiGo', 'Air India', 'Akasa Air', 'SpiceJet'],
-    startingSampleFareInr: 4599,
+    startingFareInr: 4599,
     dailyFlightsCount: 24,
     routeGuideMarkdown:
       'Flights departing New Delhi (DEL) for Hyderabad (HYD) operate across Terminals 1, 2, and 3. Always verify your departure terminal on your itinerary document 24 hours prior to departure.',
@@ -1035,7 +1035,7 @@ export const ROUTE_PAGES: RouteLandingPage[] = [
     destinationCity: 'Dubai',
     averageDurationMinutes: 195,
     airlinesOperating: ['Emirates', 'Air India', 'IndiGo', 'Air India Express', 'Akasa Air'],
-    startingSampleFareInr: 14800,
+    startingFareInr: 14800,
     dailyFlightsCount: 18,
     routeGuideMarkdown:
       'Non-stop international flights from Mumbai Chhatrapati Shivaji Maharaj International Airport (BOM Terminal 2) to Dubai (DXB) take approximately 3 hours and 15 minutes. Ensure your passport has at least 6 months validity.',
@@ -1052,7 +1052,7 @@ export const ROUTE_PAGES: RouteLandingPage[] = [
     destinationCity: 'Singapore',
     averageDurationMinutes: 270,
     airlinesOperating: ['Singapore Airlines', 'IndiGo'],
-    startingSampleFareInr: 16400,
+    startingFareInr: 16400,
     dailyFlightsCount: 8,
     routeGuideMarkdown:
       'Direct flights from Hyderabad (HYD) to Singapore Changi Airport (SIN) take approximately 4 hours and 30 minutes, landing at Terminal 2 or Terminal 3 in Singapore.',
@@ -1065,46 +1065,42 @@ export const ROUTE_PAGES: RouteLandingPage[] = [
 export const BLOG_POSTS: BlogPost[] = [
   {
     id: 'blog-1',
-    slug: 'understanding-sample-flight-itineraries-vs-confirmed-tickets',
-    title: 'Difference Between a Sample Flight Itinerary and an Airline-Issued Ticket',
+    slug: 'understanding-flight-itineraries-vs-confirmed-tickets',
+    title: 'Difference Between a Flight Itinerary and an Airline-Issued E-Ticket',
     excerpt:
-      'Learn what a booking reference means, how airline ticket issuance works, and why DummyTicket labels sample documents clearly.',
-    category: 'Sample itinerary explanations',
+      'Learn what a booking reference means, how airline ticket issuance works, and how to read your DummyTicket documents.',
+    category: 'Itinerary explanations',
     authorName: 'DummyTicket Aviation Compliance Team',
     readingTimeMinutes: 5,
     publishedAt: '2026-09-18T10:00:00.000Z',
     updatedAt: '2026-10-01T10:00:00.000Z',
-    metaTitle: 'Sample Flight Itinerary vs Airline E-Ticket — Complete Guide | DummyTicket',
+    metaTitle: 'Flight Itinerary vs Airline E-Ticket — Complete Guide | DummyTicket',
     metaDescription:
-      'Understand the distinction between a DummyTicket sample itinerary document (DT-DEMO-) and a confirmed airline-issued e-ticket.',
-    contentMarkdown: `## Why Transparency Matters in Flight Documentation
+      'Understand the distinction between a DummyTicket confirmed itinerary document and an airline-issued e-ticket, and how to verify both.',
+    contentMarkdown: `## Why Understanding Your Documents Matters
 
-When planning complex international journeys, coordinating group travel approvals, or estimating corporate travel budgets, travelers often need a structured itinerary document before committing to a non-refundable full-fare airline ticket.
+When planning complex international journeys, coordinating group travel approvals, or submitting visa applications, travelers receive several documents from a booking platform. Knowing what each one represents avoids confusion at the airport.
 
-### 1. What Is a DummyTicket Sample Itinerary?
-A **Sample Itinerary** is a structured travel planning document displaying realistic flight schedules, route segments, airport codes, duration, and fare breakdowns. On DummyTicket in **Demo/Sample Mode**, every generated boarding-pass-style document uses the distinct **\`DT-DEMO-\`** reference prefix and prominently carries the banner:
-
-> **SAMPLE — NOT VALID FOR TRAVEL**
-
-It does **not** fabricate airline ticket numbers, boarding passes, or fake live PNRs.
+### 1. What Is a DummyTicket Confirmed Itinerary?
+A **Confirmed Itinerary** is a structured document displaying your flight schedule, route segments, airport codes, duration, fare breakdown, and the airline confirmation (PNR) associated with your reservation. Every DummyTicket itinerary carries a **\`DT-\`** booking reference and a QR code linking to a server-verified status page.
 
 ### 2. How Airline Ticket Issuance Works
-An official airline e-ticket is issued only when a booking is fulfilled through an authorized airline or Global Distribution System (GDS) provider in **Live Inventory Mode**, and the carrier returns a verified 6-character Passenger Name Record (PNR) and a 13-digit e-ticket number.
+A reservation becomes a full e-ticket when the booking is fulfilled through an authorized airline or Global Distribution System (GDS) provider, and the carrier returns a verified 6-character Passenger Name Record (PNR) and e-ticket number. Your boarding pass is generated by the airline during check-in — present your PNR there.
 
 ### 3. How to Read Your Itinerary & Payment Receipt
 Every DummyTicket transaction generates **two separate documents**:
-- **The Itinerary Document**: Displays route segments, flight timings, cabin class, baggage allowance, and QR verification link.
+- **The Itinerary Document**: Displays route segments, flight timings, cabin class, baggage allowance, airline PNR, and QR verification link.
 - **The Payment Receipt**: Itemizes the base amount, statutory taxes, platform service fees, and verified Razorpay payment reference.`,
     faqs: [
       {
-        question: 'Can I board a flight using a DummyTicket Sample Itinerary PDF?',
+        question: 'Can I board a flight using a DummyTicket Itinerary PDF?',
         answer:
-          'No. A sample itinerary (prefixed with DT-DEMO-) is strictly for travel planning, budgeting, or itinerary visualization and is clearly labeled "SAMPLE — NOT VALID FOR TRAVEL".',
+          'No. The itinerary document confirms your reservation and displays your PNR for reference. Boarding passes are issued by the airline when you check in — present your PNR and travel ID at the counter or kiosk.',
       },
       {
         question: 'Why does DummyTicket send both an Itinerary and a Payment Receipt?',
         answer:
-          'A payment receipt proves that your payment was captured via Razorpay, whereas the itinerary document displays your selected route schedule and document classification.',
+          'A payment receipt proves that your payment was captured via Razorpay, whereas the itinerary document displays your selected route schedule and airline confirmation details.',
       },
     ],
   },

@@ -30,7 +30,7 @@ function resolveRouteSlug(slug: string) {
     destinationCity: dest?.city ?? 'New Delhi',
     averageDurationMinutes: 135,
     airlinesOperating: ['IndiGo', 'Air India', 'Vistara'],
-    startingSampleFareInr: 4499,
+    startingFareInr: 4499,
     dailyFlightsCount: 16,
     routeGuideMarkdown: `Compare flight schedules, baggage rules, and transparent fares between ${
       orig?.city ?? fromCode
@@ -96,9 +96,9 @@ export default async function RouteLandingPageView(props: {
             </p>
           </div>
           <div className="rounded-xl bg-slate-50 p-3.5">
-            <span className="text-slate-500">Sample Starting Fare</span>
+            <span className="text-slate-500">Starting Fare</span>
             <p className="mt-1 text-base font-bold text-brand-700">
-              {formatInr(route.startingSampleFareInr)}
+              {formatInr(route.startingFareInr)}
             </p>
           </div>
         </div>
@@ -115,7 +115,7 @@ export default async function RouteLandingPageView(props: {
 
       <div className="space-y-4">
         <h2 className="text-xl font-bold text-navy-900">
-          Available Sample Flights: {route.originIata} → {route.destinationIata}
+          Available Flights: {route.originIata} → {route.destinationIata}
         </h2>
         {offers.map((offer) => (
           <FlightCard

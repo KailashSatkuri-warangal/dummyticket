@@ -5,13 +5,13 @@ import {
   Download,
   ExternalLink,
   Mail,
-  ShieldAlert,
+  Plane,
   AlertTriangle,
   FileText,
 } from 'lucide-react';
 import {
   getBookingByIdOrReference,
-  getPlatformStore,
+  listBookingEmailLogs,
 } from '@/lib/booking/store';
 import { formatDuration, formatInr } from '@/lib/config/brand';
 import { LazySignatureBoardingPass as SignatureBoardingPass } from '@/components/tickets/LazyBoardingPass';
@@ -22,8 +22,9 @@ export default async function PaymentSuccessPage(props: {
 }) {
   const sp = await props.searchParams;
   const bookingRef = typeof sp.booking === 'string' ? sp.booking : '';
-  const booking = bookingRef ? getBookingByIdOrReference(bookingRef) : undefined;
-  const store = getPlatformStore();
+  const booking = bookingRef
+    ? await getBookingByIdOrReference(bookingRef)
+    : undefined;
 
   // Critical security requirement: Never mark or display a booking as paid
   // solely because the browser redirected to /payment/success.
@@ -56,11 +57,7 @@ export default async function PaymentSuccessPage(props: {
     );
   }
 
-  const bookingEmails = store.emailLogs.filter(
-    (e) =>
-      e.bookingReference === booking.bookingReference ||
-      e.bookingId === booking.id
-  );
+  const bookingEmails = await listBookingEmailLogs(booking.id);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
@@ -97,7 +94,7 @@ export default async function PaymentSuccessPage(props: {
               className="inline-flex items-center gap-1.5 rounded-xl bg-coral-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-coral-700"
             >
               <Download className="h-4 w-4" />
-              Download Boarding Pass PDF
+              Download Itinerary PDF
             </a>
             <a
               href={`/api/tickets/${booking.bookingReference}/pdf?type=receipt`}
@@ -107,7 +104,7 @@ export default async function PaymentSuccessPage(props: {
               Download Payment Receipt PDF
             </a>
             <Link
-              href={`/sample-ticket/${booking.bookingReference}`}
+              href={`/ticket/${booking.bookingReference}`}
               className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs font-bold text-navy-900 hover:bg-slate-50"
             >
               Full Ticket Page
@@ -117,12 +114,14 @@ export default async function PaymentSuccessPage(props: {
         </div>
       </div>
 
-      {/* Sample Mode Notice */}
-      {booking.fulfillmentMode === 'sample_demo' && (
-        <div className="rounded-xl border-2 border-dashed border-amber-400 bg-amber-50 p-4 text-xs text-amber-950 flex items-center gap-3">
-          <ShieldAlert className="h-5 w-5 text-amber-700 shrink-0" />
+      {/* Airline PNR Confirmation */}
+      {booking.airlinePnr && (
+        <div className="rounded-xl border border-emerald-300 bg-emerald-50 p-4 text-xs text-emerald-950 flex items-center gap-3">
+          <Plane className="h-5 w-5 text-emerald-700 shrink-0" />
           <div>
-            <strong>SAMPLE — NOT VALID FOR TRAVEL:</strong> Your DummyTicket boarding pass has been generated in Sample/Demo mode for travel planning and itinerary demonstration. It is not an airline-issued boarding ticket.
+            <strong>Reservation Confirmed — Airline PNR {booking.airlinePnr}:</strong>{' '}
+            Your itinerary has been issued and is verifiable online. E-tickets were sent to{' '}
+            {booking.contactEmail}.
           </div>
         </div>
       )}

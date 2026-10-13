@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import {
   getBookingByIdOrReference,
-  getPlatformStore,
+  insertPaymentOrder,
+  updateBookingRecord,
 } from '@/lib/booking/store';
 import {
   computeRazorpayPaymentSignature,
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const booking = getBookingByIdOrReference(body.bookingId);
+    const booking = await getBookingByIdOrReference(body.bookingId);
     if (!booking) {
       return NextResponse.json(
         { error: 'Booking record not found.' },
@@ -50,25 +51,18 @@ export async function POST(request: Request) {
       currency: booking.currency,
     });
 
-    const store = getPlatformStore();
-    booking.paymentStatus = 'pending';
-    booking.updatedAt = new Date().toISOString();
-
-    const paymentId = `pay-${Date.now().toString(36)}`;
-    store.payments.set(paymentId, {
-      id: paymentId,
+    const payment = await insertPaymentOrder({
       bookingId: booking.id,
       bookingReference: booking.bookingReference,
       razorpayOrderId: order.orderId,
-      razorpaySignatureVerified: false,
       amountSubunits: order.amountSubunits,
-      amountInr: booking.totalAmount,
       currency: order.currency,
-      status: 'pending',
       isLiveMode: order.isLiveMode,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     });
+
+    if (booking.paymentStatus !== 'pending') {
+      await updateBookingRecord(booking.id, { paymentStatus: 'pending' });
+    }
 
     // In sandbox/test mode, provide a deterministic test payment ID and server-signed test signature
     // so developers and QA can execute full cryptographic verification end-to-end.
@@ -78,7 +72,7 @@ export async function POST(request: Request) {
       : undefined;
 
     return NextResponse.json({
-      paymentRecordId: paymentId,
+      paymentRecordId: payment.id,
       bookingReference: booking.bookingReference,
       orderId: order.orderId,
       amountSubunits: order.amountSubunits,

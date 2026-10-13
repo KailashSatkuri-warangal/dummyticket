@@ -1,18 +1,21 @@
 import React from 'react';
-import { getPlatformStore } from '@/lib/booking/store';
+import { listAllEmailLogs } from '@/lib/booking/store';
 
-export default function AdminEmailTemplatesPage() {
-  const store = getPlatformStore();
+export const dynamic = 'force-dynamic';
+
+export default async function AdminEmailTemplatesPage() {
+  const emailLogs = await listAllEmailLogs();
 
   const templateCatalog = [
     'welcome_verification',
     'password_reset',
     'booking_initiated',
+    'booking_confirmation',
+    'payment_receipt',
+    'itinerary_document',
     'payment_pending',
     'payment_successful',
     'payment_failed',
-    'sample_itinerary_generated',
-    'real_booking_confirmed',
     'ticket_issued',
     'booking_cancelled',
     'refund_initiated',
@@ -46,24 +49,30 @@ export default function AdminEmailTemplatesPage() {
 
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-4">
         <h2 className="text-base font-bold text-navy-900">
-          Email Delivery Log ({store.emailLogs.length})
+          Email Delivery Log ({emailLogs.length})
         </h2>
-        <div className="divide-y divide-slate-100 text-xs">
-          {store.emailLogs.map((em) => (
-            <div key={em.id} className="py-3 flex justify-between">
-              <div>
-                <p className="font-bold text-navy-900">{em.subject}</p>
-                <p className="text-slate-500">
-                  To: {em.recipientEmail} · Template: {em.templateName} · MsgID:{' '}
-                  {em.providerMessageId}
-                </p>
+        {emailLogs.length === 0 ? (
+          <p className="text-xs text-slate-500 py-4 text-center">
+            No transactional emails dispatched yet. Lifecycle emails are logged here in real time.
+          </p>
+        ) : (
+          <div className="divide-y divide-slate-100 text-xs">
+            {emailLogs.map((em) => (
+              <div key={em.id} className="py-3 flex justify-between gap-4">
+                <div>
+                  <p className="font-bold text-navy-900">{em.subject}</p>
+                  <p className="text-slate-500 truncate">
+                    To: {em.recipientEmail} · Template: {em.templateName} · MsgID:{' '}
+                    {em.providerMessageId ?? '—'}
+                  </p>
+                </div>
+                <span className="rounded bg-brand-50 px-2 py-0.5 font-mono text-[11px] font-bold uppercase text-brand-700 self-start shrink-0">
+                  {em.status}
+                </span>
               </div>
-              <span className="rounded bg-brand-50 px-2 py-0.5 font-mono text-[11px] font-bold uppercase text-brand-700 self-start">
-                {em.status}
-              </span>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

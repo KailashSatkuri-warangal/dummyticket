@@ -1,14 +1,24 @@
 import { NextResponse } from 'next/server';
-import { getPlatformStore } from '@/lib/booking/store';
+import {
+  listAllNotifications,
+  listUserNotifications,
+  markNotificationsRead,
+} from '@/lib/booking/store';
 import { getCurrentSessionUser } from '@/lib/security/auth';
 
 export async function GET() {
   const user = await getCurrentSessionUser();
-  const store = getPlatformStore();
+  if (!user) {
+    return NextResponse.json(
+      { error: 'Sign in to view notifications.' },
+      { status: 401 }
+    );
+  }
 
-  const items = store.notifications.filter(
-    (n) => n.userId === user.id || user.role === 'admin'
-  );
+  const items =
+    user.role === 'admin'
+      ? await listAllNotifications()
+      : await listUserNotifications(user.id);
 
   return NextResponse.json({
     notifications: items,
@@ -18,27 +28,21 @@ export async function GET() {
 
 export async function PATCH(request: Request) {
   const user = await getCurrentSessionUser();
-  const store = getPlatformStore();
+  if (!user) {
+    return NextResponse.json(
+      { error: 'Sign in to manage notifications.' },
+      { status: 401 }
+    );
+  }
   const body = (await request.json().catch(() => ({}))) as {
     notificationId?: string;
     markAllRead?: boolean;
   };
 
-  if (body.markAllRead) {
-    store.notifications.forEach((n) => {
-      if (n.userId === user.id || user.role === 'admin') {
-        n.isRead = true;
-      }
-    });
-  } else if (body.notificationId) {
-    const item = store.notifications.find((n) => n.id === body.notificationId);
-    if (item && (item.userId === user.id || user.role === 'admin')) {
-      item.isRead = true;
-    }
-  }
-
-  const items = store.notifications.filter(
-    (n) => n.userId === user.id || user.role === 'admin'
+  const items = await markNotificationsRead(
+    user.id,
+    body,
+    user.role === 'admin'
   );
 
   return NextResponse.json({

@@ -115,7 +115,7 @@ export default async function BlogArticlePage(props: {
               Ready to Compare Transparent Flight Fares?
             </h3>
             <p className="text-xs text-slate-300 mt-0.5">
-              Search routes or generate a clearly labeled sample itinerary in seconds.
+              Search routes or receive a confirmed itinerary in seconds.
             </p>
           </div>
           <Link

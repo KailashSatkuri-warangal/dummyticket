@@ -4,7 +4,7 @@ import { formatDuration, formatInr } from '@/lib/config/brand';
 import { AdminActionTrigger } from '@/components/admin/AdminActionTrigger';
 
 export default function AdminFlightsPage() {
-  const sampleOffers = [
+  const inventoryOffers = [
     ...getDeterministicFlightOffers({
       from: 'HYD',
       to: 'MSY',
@@ -24,7 +24,7 @@ export default function AdminFlightsPage() {
           Flight Inventory & Fare Tier Management
         </h1>
         <p className="text-xs text-slate-600 mt-1">
-          Manage Mode A (Demo Inventory) and Mode B (Authorized Provider Inventory), baggage rules, and base fares.
+          Manage the authorized provider inventory, baggage rules, and base fares.
         </p>
       </div>
 
@@ -42,7 +42,7 @@ export default function AdminFlightsPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {sampleOffers.map((offer) => (
+            {inventoryOffers.map((offer) => (
               <tr key={offer.id}>
                 <td className="px-3 py-3 font-bold text-navy-900">
                   {offer.airline.name} ({offer.flightNumber})
@@ -61,7 +61,7 @@ export default function AdminFlightsPage() {
                 <td className="px-3 py-3 font-bold text-brand-700">
                   {formatInr(offer.totalFareInr)}
                 </td>
-                <td className="px-3 py-3 uppercase text-[10px] font-bold text-amber-800">
+                <td className="px-3 py-3 uppercase text-[10px] font-bold text-verified-700">
                   {offer.inventoryMode}
                 </td>
                 <td className="px-3 py-3">

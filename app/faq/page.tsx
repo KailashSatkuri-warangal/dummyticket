@@ -2,17 +2,17 @@ import React from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Frequently Asked Questions (FAQ) — Flights, Fares & Sample Tickets',
+  title: 'Frequently Asked Questions (FAQ) — Flights, Fares & Tickets',
   description:
-    'Read answers about flight search, sample itinerary documents, Razorpay payment verification, fare changes, and refunds.',
+    'Read answers about flight search, itinerary documents, Razorpay payment verification, fare changes, and refunds.',
 };
 
 export default function FaqPage() {
   const faqs = [
     {
-      question: 'Is a Sample Itinerary valid for airport check-in or boarding?',
+      question: 'Will I receive a document I can use at the airport?',
       answer:
-        'No. Any document generated in Demo/Sample Mode is prominently labeled "SAMPLE ITINERARY — NOT VALID FOR TRAVEL" and is strictly for travel planning, budgeting, or itinerary visualization. Only bookings fulfilled in Live Provider Mode with an official airline-issued PNR and 13-digit e-ticket number are valid for travel.',
+        'Your confirmed itinerary carries the airline confirmation (PNR) for your reservation and is delivered as a downloadable PDF with a QR verification link. Boarding passes themselves are issued by the airline when you check in — present your PNR at check-in to receive one.',
     },
     {
       question: 'What happens if the fare changes while I am filling out passenger details?',

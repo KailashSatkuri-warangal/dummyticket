@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('DummyTicket — Futuristic Flight Booking & Sample Boarding Pass Platform E2E', () => {
-  test('homepage renders search panel, hero headline, 10 Indian airlines, and signature boarding pass preview', async ({
+test.describe('DummyTicket — Flight Booking & Confirmed Itinerary Platform E2E', () => {
+  test('homepage renders search panel, hero headline, and live inventory trust badge', async ({
     page,
   }) => {
     await page.goto('http://localhost:3000/');
@@ -10,12 +10,10 @@ test.describe('DummyTicket — Futuristic Flight Booking & Sample Boarding Pass 
         name: /Your Next Journey Starts Here\./i,
       })
     ).toBeVisible();
-    await expect(
-      page.getByText(/SAMPLE — NOT VALID FOR TRAVEL/i).first()
-    ).toBeVisible();
+    await expect(page.getByText(/Live Inventory/i).first()).toBeVisible();
   });
 
-  test('flight search results and sample boarding pass verification page load', async ({
+  test('flight search results and ticket page redirect load', async ({
     page,
   }) => {
     await page.goto(
@@ -23,9 +21,9 @@ test.describe('DummyTicket — Futuristic Flight Booking & Sample Boarding Pass 
     );
     await expect(page.getByText(/British Airways/i).first()).toBeVisible();
 
-    await page.goto('http://localhost:3000/sample-ticket/DT-DEMO-HYD842MSY');
+    await page.goto('http://localhost:3000/ticket/DT-HYD842MSY');
     await expect(
-      page.getByText(/SAMPLE — NOT VALID FOR TRAVEL/i).first()
+      page.getByText(/Itinerary Not Found/i).first()
     ).toBeVisible();
   });
 });

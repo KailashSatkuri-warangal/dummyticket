@@ -1,10 +1,14 @@
 import React from 'react';
-import { listUniqueBookings } from '@/lib/booking/store';
+import { listAllBookings } from '@/lib/booking/store';
 import { formatInr } from '@/lib/config/brand';
 
-export default function AdminReportsPage() {
-  const bookings = listUniqueBookings();
-  const capturedBookings = bookings.filter((b) => b.paymentStatus === 'captured');
+export const dynamic = 'force-dynamic';
+
+export default async function AdminReportsPage() {
+  const bookings = await listAllBookings();
+  const capturedBookings = bookings.filter(
+    (b) => b.paymentStatus === 'captured'
+  );
   const conversionRate =
     bookings.length > 0
       ? Math.round((capturedBookings.length / bookings.length) * 100)
@@ -13,6 +17,9 @@ export default function AdminReportsPage() {
     (sum, b) => sum + b.totalAmount,
     0
   );
+  const ticketedCount = bookings.filter(
+    (b) => b.status === 'ticketed'
+  ).length;
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-5">
@@ -39,9 +46,9 @@ export default function AdminReportsPage() {
           </p>
         </div>
         <div className="rounded-xl border border-slate-200 p-4">
-          <p className="text-slate-500">Sample vs. Live Ratio</p>
+          <p className="text-slate-500">Provider-Confirmed Ticket Issuance</p>
           <p className="mt-1 text-2xl font-extrabold text-brand-700">
-            100% Sample Demo
+            {ticketedCount} / {bookings.length}
           </p>
         </div>
       </div>

@@ -43,12 +43,10 @@ export function SignatureBoardingPass({
     'mobile' | 'gate_stub' | 'horizontal' | 'pdf_preview'
   >(defaultView);
 
-  const isSample = booking.fulfillmentMode === 'sample_demo';
   const primaryPassenger = booking.passengers[0] ?? {
     firstName: 'Traveler',
     lastName: 'Primary',
     passengerType: 'adult',
-    sampleSeat: '17B (SAMPLE)',
   };
 
   const depTime = new Date(
@@ -72,7 +70,7 @@ export function SignatureBoardingPass({
 
   const displayRef = booking.bookingReference.startsWith('DT-')
     ? booking.bookingReference
-    : `DT-DEMO-${booking.bookingReference.replace(/^AV-/, '')}`;
+    : `DT-${booking.bookingReference.replace(/^AV-/, '')}`;
 
   return (
     <div className="space-y-6">
@@ -190,7 +188,7 @@ export function SignatureBoardingPass({
               {/* Centered White Pill Badge */}
               <div className="flex justify-center mb-6">
                 <span className="rounded-full bg-white px-4 py-1 text-[11px] font-black uppercase tracking-widest text-[#0062E0] shadow-sm">
-                  {isSample ? 'SAMPLE BOARDING PASS' : 'BOARDING PASS'}
+                  BOARDING PASS
                 </span>
               </div>
 
@@ -333,14 +331,9 @@ export function SignatureBoardingPass({
                       SEAT
                     </p>
                     <p className="font-mono text-base font-black text-[#0062E0]">
-                      {primaryPassenger.sampleSeat ?? '17B'}
+                      ASSIGNED AT CHECK-IN
                     </p>
                   </div>
-                  {isSample && (
-                    <span className="inline-block rounded-md bg-amber-50 border border-amber-200 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-amber-900">
-                      SAMPLE — NOT VALID FOR TRAVEL
-                    </span>
-                  )}
                 </div>
 
                 {/* Scannable High-Contrast QR Code */}
@@ -383,7 +376,7 @@ export function SignatureBoardingPass({
                   YOUR PLANE
                 </p>
                 <p className="font-mono text-sm font-extrabold text-navy-900">
-                  {booking.flightOffer.airline.name} · AIRBUS 7896 ZX
+                  {booking.flightOffer.airline.name}
                 </p>
               </div>
             </div>
@@ -434,7 +427,7 @@ export function SignatureBoardingPass({
                   SEAT
                 </p>
                 <p className="font-mono text-sm font-black text-white">
-                  {primaryPassenger.sampleSeat ?? '17B'}
+                  AT CHECK-IN
                 </p>
               </div>
             </div>
@@ -564,7 +557,7 @@ export function SignatureBoardingPass({
                   </div>
                   <div>
                     <p className="text-[10px] font-bold uppercase text-slate-400">SEAT</p>
-                    <p className="font-mono font-black text-blue-600 text-sm">{primaryPassenger.sampleSeat ?? '17B'}</p>
+                    <p className="font-mono font-black text-blue-600 text-sm">AT CHECK-IN</p>
                   </div>
                   <div className="text-right">
                     <p className="text-[10px] font-bold uppercase text-slate-400">BOARDING TIME</p>
@@ -650,7 +643,7 @@ export function SignatureBoardingPass({
         {/* ========================================================================= */}
         {viewMode === 'pdf_preview' && (
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            {/* Document 1: Sample Itinerary PDF Sheet */}
+            {/* Document 1: Itinerary PDF Sheet */}
             <div className="rounded-2xl border-2 border-slate-200 bg-white p-6 shadow-card space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div>
@@ -658,7 +651,7 @@ export function SignatureBoardingPass({
                     Document 1 · Printable A4 Itinerary
                   </span>
                   <h3 className="text-base font-extrabold text-navy-900">
-                    Sample Boarding-Pass Itinerary ({displayRef})
+                    Boarding-Pass Itinerary ({displayRef})
                   </h3>
                 </div>
                 <a
@@ -670,8 +663,10 @@ export function SignatureBoardingPass({
                 </a>
               </div>
 
-              <div className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-center text-xs font-black text-amber-900">
-                SAMPLE — NOT VALID FOR TRAVEL
+              <div className="rounded-lg bg-emerald-50 border border-emerald-200 px-3 py-2 text-center text-xs font-black text-emerald-800">
+                {booking.airlinePnr
+                  ? `CONFIRMED ITINERARY — PNR ${booking.airlinePnr}`
+                  : 'CONFIRMED ITINERARY'}
               </div>
 
               <div className="space-y-2 text-xs text-slate-700">

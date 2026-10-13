@@ -1,10 +1,37 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Shield, Trash2, CheckCircle2 } from 'lucide-react';
 
 export default function AccountSecurityPage() {
+  const router = useRouter();
   const [deletionRequested, setDeletionRequested] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+
+  async function requestDeletion() {
+    setSubmitting(true);
+    setError('');
+    try {
+      const res = await fetch('/api/account/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ deletionRequested: true }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.error ?? 'Unable to submit deletion request.');
+        return;
+      }
+      setDeletionRequested(true);
+      router.refresh();
+    } catch {
+      setError('Network error while submitting deletion request.');
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -35,12 +62,16 @@ export default function AccountSecurityPage() {
           ) : (
             <button
               type="button"
-              onClick={() => setDeletionRequested(true)}
-              className="mt-3 inline-flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-xs font-bold text-red-700 hover:bg-red-100"
+              onClick={requestDeletion}
+              disabled={submitting}
+              className="mt-3 inline-flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-xs font-bold text-red-700 hover:bg-red-100 disabled:opacity-60"
             >
               <Trash2 className="h-4 w-4" />
-              Request Account Deletion
+              {submitting ? 'Submitting…' : 'Request Account Deletion'}
             </button>
+          )}
+          {error && (
+            <p className="mt-2 text-xs font-semibold text-red-600">{error}</p>
           )}
         </div>
       </div>

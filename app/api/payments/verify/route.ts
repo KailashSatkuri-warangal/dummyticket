@@ -4,6 +4,7 @@ import { verifyRazorpayPaymentSignature } from '@/lib/razorpay/service';
 import {
   fulfillVerifiedPayment,
   getBookingByIdOrReference,
+  markPaymentFailed,
 } from '@/lib/booking/store';
 
 export async function POST(request: Request) {
@@ -28,7 +29,7 @@ export async function POST(request: Request) {
       razorpay_signature,
     } = parsed.data;
 
-    const booking = getBookingByIdOrReference(bookingId);
+    const booking = await getBookingByIdOrReference(bookingId);
     if (!booking) {
       return NextResponse.json(
         { error: 'Booking record not found.' },
@@ -43,8 +44,11 @@ export async function POST(request: Request) {
     });
 
     if (!isSignatureValid) {
-      booking.paymentStatus = 'failed';
-      booking.updatedAt = new Date().toISOString();
+      await markPaymentFailed({
+        bookingId: booking.id,
+        razorpayOrderId: razorpay_order_id,
+        failureReason: 'Razorpay HMAC signature verification failed',
+      });
       return NextResponse.json(
         {
           verified: false,
@@ -68,6 +72,7 @@ export async function POST(request: Request) {
       bookingStatus: fulfilled.booking.status,
       paymentStatus: fulfilled.booking.paymentStatus,
       ticketStatus: fulfilled.booking.ticketStatus,
+      airlinePnr: fulfilled.ticket.airlinePnr,
       documentReference: fulfilled.ticket.documentReference,
     });
   } catch (err) {

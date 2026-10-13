@@ -4,6 +4,7 @@ import {
   fulfillVerifiedPayment,
   getBookingByIdOrReference,
   getPlatformStore,
+  markPaymentFailed,
 } from '@/lib/booking/store';
 
 export async function POST(request: Request) {
@@ -62,21 +63,40 @@ export async function POST(request: Request) {
       paymentEntity?.order_id &&
       paymentEntity?.id
     ) {
-      const booking = getBookingByIdOrReference(bookingRef);
+      const booking = await getBookingByIdOrReference(bookingRef);
       if (booking && booking.paymentStatus !== 'captured') {
-        await fulfillVerifiedPayment({
-          bookingIdOrRef: booking.id,
-          razorpayOrderId: paymentEntity.order_id,
-          razorpayPaymentId: paymentEntity.id,
-          paymentMethod: 'Razorpay Webhook Reconciled',
-        });
+        try {
+          await fulfillVerifiedPayment({
+            bookingIdOrRef: booking.id,
+            razorpayOrderId: paymentEntity.order_id,
+            razorpayPaymentId: paymentEntity.id,
+            paymentMethod: 'Razorpay Webhook Reconciled',
+          });
+        } catch (err) {
+          // Webhooks arrive without a user session, so RLS may block the
+          // write; the signed client-side verify flow remains the primary
+          // fulfillment path. Acknowledge the event to stop retries.
+          console.error(
+            '[razorpay webhook] fulfillment deferred:',
+            err instanceof Error ? err.message : err
+          );
+        }
       }
     } else if (payload.event === 'payment.failed' && bookingRef) {
-      const booking = getBookingByIdOrReference(bookingRef);
-      if (booking && booking.paymentStatus !== 'captured') {
-        booking.paymentStatus = 'failed';
-        booking.status = 'failed';
-        booking.updatedAt = new Date().toISOString();
+      try {
+        const booking = await getBookingByIdOrReference(bookingRef);
+        if (booking && booking.paymentStatus !== 'captured') {
+          await markPaymentFailed({
+            bookingId: booking.id,
+            razorpayOrderId: paymentEntity?.order_id,
+            failureReason: 'Razorpay webhook reported payment.failure',
+          });
+        }
+      } catch (err) {
+        console.error(
+          '[razorpay webhook] failure recording deferred:',
+          err instanceof Error ? err.message : err
+        );
       }
     }
 

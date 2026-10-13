@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import {
   ShieldAlert,
   LayoutDashboard,
@@ -32,6 +33,10 @@ export default async function AdminLayout({
 }) {
   const user = await getCurrentSessionUser();
 
+  if (!user) {
+    redirect('/login?next=/admin');
+  }
+
   if (!isAuthorizedAdminRole(user.role)) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-16 text-center space-y-4">
@@ -40,13 +45,13 @@ export default async function AdminLayout({
           403 Forbidden — Administrator Role Required
         </h1>
         <p className="text-sm text-slate-600">
-          Server-side authorization blocked access to <code>/admin</code> because your current session role is <strong>{user.role}</strong>.
+          Server-side authorization blocked access to <code>/admin</code> because your current session role is <strong>{user.role}</strong>. Contact a platform administrator to request elevated access.
         </p>
         <Link
-          href="/login"
+          href="/account"
           className="inline-flex rounded-xl bg-brand-600 px-5 py-2.5 text-xs font-bold text-white"
         >
-          Switch to Admin Role in Sign In Portal
+          Return to Customer Dashboard
         </Link>
       </div>
     );

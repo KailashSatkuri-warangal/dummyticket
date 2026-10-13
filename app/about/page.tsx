@@ -4,9 +4,9 @@ import { getBrandConfig } from '@/lib/config/brand';
 import { ShieldCheck, Scale, FileText } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'About the Platform — Transparent Flight Search & Sample Itineraries',
+  title: 'About the Platform — Transparent Flight Search & Confirmed Itineraries',
   description:
-    'Learn how our flight comparison and sample itinerary generation platform enforces transparent pricing, server-verified payments, and honest document labeling.',
+    'Learn how our flight comparison and booking platform enforces transparent pricing, server-verified payments, and honest document labeling.',
 };
 
 export default function AboutPage() {
@@ -22,7 +22,7 @@ export default function AboutPage() {
           Built for Transparent Flight Comparison & Honest Travel Documentation
         </h1>
         <p className="text-sm text-slate-600 leading-relaxed">
-          {brand.name} ({brand.legalEntityName}) is a full-stack aviation search, booking management, and sample-ticket generation platform designed around strict pricing transparency and compliance.
+          {brand.name} ({brand.legalEntityName}) is a full-stack aviation search, booking management, and confirmed-itinerary delivery platform designed around strict pricing transparency and compliance.
         </p>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 pt-4 text-xs">
@@ -38,10 +38,10 @@ export default function AboutPage() {
           <div className="rounded-xl border border-slate-200 p-4 space-y-2">
             <FileText className="h-5 w-5 text-brand-600" />
             <h2 className="font-bold text-sm text-navy-900">
-              Clear Mode Separation
+              Confirmed Reservations
             </h2>
             <p className="text-slate-600">
-              We strictly separate Demo Inventory (Mode A) sample itineraries from Live Provider (Mode B) airline reservations.
+              Every completed booking is issued with an airline confirmation (PNR), downloadable itinerary, and separate payment receipt.
             </p>
           </div>
           <div className="rounded-xl border border-slate-200 p-4 space-y-2">

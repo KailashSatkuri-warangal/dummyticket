@@ -23,11 +23,11 @@ export default function AdminSettingsPage() {
         </div>
         <div className="rounded-xl border border-slate-200 p-4 space-y-1">
           <p className="text-slate-500">Inventory Operating Mode</p>
-          <p className="text-sm font-bold uppercase text-amber-800">
+          <p className="text-sm font-bold uppercase text-verified-700">
             {brand.inventoryMode}
           </p>
           <p className="text-slate-500">
-            Supabase Live: {brand.supabaseConfigured ? 'Connected' : 'Local Demo Fallback'} ·
+            Supabase Live: {brand.supabaseConfigured ? 'Connected' : 'Not Configured — Run Migrations'} ·
             Razorpay Live Key: {brand.razorpayConfigured ? 'Configured' : 'Sandbox Test Mode'}
           </p>
         </div>

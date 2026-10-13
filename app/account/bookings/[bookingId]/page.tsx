@@ -5,7 +5,13 @@ import { getSessionUser } from '@/lib/auth/session';
 import { formatInr } from '@/lib/config/brand';
 import { CancelBookingButton } from '@/components/booking/CancelBookingButton';
 import { Download, ExternalLink } from 'lucide-react';
-
+type Passenger = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  passengerType: string;
+  ticketNumber?: string | null;
+};
 export default async function AccountSingleBookingPage(props: {
   params: Promise<{ bookingId: string }>;
 }) {
@@ -100,7 +106,7 @@ export default async function AccountSingleBookingPage(props: {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 text-xs">
           <div className="rounded-xl bg-slate-50 p-4 space-y-1.5">
             <p className="font-bold text-navy-900">Passengers</p>
-            {booking.passengers.map((p) => (
+            {booking.passengers.map((p: Passenger) => (
               <p key={p.id}>
                 • {p.firstName} {p.lastName} ({p.passengerType})
                 {p.ticketNumber ? (

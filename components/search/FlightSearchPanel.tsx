@@ -15,6 +15,7 @@ import {
 import { AIRPORTS } from '@/lib/flights/dataset';
 import type { Airport, CabinClass, TripType } from '@/types';
 import { flightSearchSchema } from '@/lib/validation/schemas';
+import { FlightGlobeAnimation } from '@/components/ui/FlightGlobeAnimation';
 
 interface FlightSearchPanelProps {
   initialFrom?: string;
@@ -208,15 +209,29 @@ export function FlightSearchPanel({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      aria-label="Flight Search Form"
-      className={`rounded-2xl border border-slate-200 bg-white shadow-elevated ${
-        compact ? 'p-4 sm:p-5' : 'p-5 sm:p-7'
-      }`}
-    >
-      {/* Top Row: Trip Type & Cabin Class */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+    <div className="relative">
+      {/* Flight Moving Around Globe Overlay during Search */}
+      {isSubmitting && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center rounded-2xl bg-white/95 backdrop-blur-md p-6 shadow-2xl transition-all">
+          <FlightGlobeAnimation
+            title={`Finding Flights from ${fromCode} to ${toCode}...`}
+            subtitle="Checking direct & connecting availability, airline schedules, and instant booking fares"
+            origin={fromCode}
+            destination={toCode}
+            size="md"
+          />
+        </div>
+      )}
+
+      <form
+        onSubmit={handleSubmit}
+        aria-label="Flight Search Form"
+        className={`rounded-2xl border border-slate-200 bg-white shadow-elevated ${
+          compact ? 'p-4 sm:p-5' : 'p-5 sm:p-7'
+        }`}
+      >
+        {/* Top Row: Trip Type & Cabin Class */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
         <div
           role="radiogroup"
           aria-label="Trip Type"
@@ -590,5 +605,6 @@ export function FlightSearchPanel({
         </button>
       </div>
     </form>
+    </div>
   );
 }

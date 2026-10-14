@@ -1,3 +1,5 @@
+import { FlightGlobeAnimation } from '@/components/ui/FlightGlobeAnimation';
+
 export default function FlightsLoading() {
   return (
     <div
@@ -5,6 +7,17 @@ export default function FlightsLoading() {
       aria-busy="true"
       aria-label="Loading flight results"
     >
+      {/* Globe flight animation banner */}
+      <div className="card overflow-hidden bg-gradient-to-b from-blue-50/50 to-white p-6 shadow-card border border-blue-100">
+        <FlightGlobeAnimation
+          title="Searching Live Flights Across Carriers..."
+          subtitle="Querying Indian & global airline GDS systems, fare rules, and seat tiers"
+          origin="HYD"
+          destination="BOM"
+          size="md"
+        />
+      </div>
+
       {/* Stepper */}
       <div className="card flex items-center justify-between gap-2 p-4">
         {Array.from({ length: 4 }).map((_, i) => (

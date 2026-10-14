@@ -16,6 +16,7 @@ import { getFlightOfferById } from '@/lib/flights/dataset';
 import { calculateCompleteFare } from '@/lib/pricing/engine';
 import { formatDuration, formatInr } from '@/lib/config/brand';
 import { BookingStepper } from '@/components/booking/BookingStepper';
+import { FlightGlobeAnimation } from '@/components/ui/FlightGlobeAnimation';
 import type { CabinClass, PassengerInput } from '@/types';
 
 export default function CheckoutPage() {
@@ -340,7 +341,22 @@ export default function CheckoutPage() {
     : computedSnapshot.grandTotal;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
+    <div className="relative mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
+      {/* Flight Moving Around Globe Processing Modal */}
+      {submitting && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/70 backdrop-blur-md p-4 transition-all">
+          <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl border border-blue-100">
+            <FlightGlobeAnimation
+              title="Securing Your Flight Reservation..."
+              subtitle="Locking seat inventory, auditing fares, and initializing encrypted payment gateway"
+              origin={offer.origin.iataCode}
+              destination={offer.destination.iataCode}
+              size="md"
+            />
+          </div>
+        </div>
+      )}
+
       <BookingStepper currentStep={submitting ? 'payment' : 'passengers'} />
 
       {/* Header & Progress */}

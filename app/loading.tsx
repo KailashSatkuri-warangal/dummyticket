@@ -1,6 +1,16 @@
+import { FlightGlobeAnimation } from '@/components/ui/FlightGlobeAnimation';
+
 export default function RootLoading() {
   return (
     <div className="container-page py-10" aria-busy="true" aria-label="Loading page">
+      <FlightGlobeAnimation
+        title="Loading Flight & Studio Services..."
+        subtitle="Initializing live routes, verified inventory, and platform settings"
+        origin="HYD"
+        destination="DEL"
+        size="md"
+        className="mb-6"
+      />
       <div className="skeleton h-6 w-48" />
       <div className="skeleton mt-3 h-10 w-full max-w-xl" />
       <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -17,3 +27,4 @@ export default function RootLoading() {
     </div>
   );
 }
+

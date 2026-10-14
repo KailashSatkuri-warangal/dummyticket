@@ -1952,6 +1952,122 @@ export async function setUserSuspended(
   if (error) throw new Error(`Unable to update suspension state: ${error.message}`);
 }
 
+// ----------------------------------------------------------------------------
+// Generic admin catalog CRUD (coupons, airports, airlines, blog posts,
+// destinations, route pages, fare rules, site settings). Rows are keyed by
+// their snake_case DB columns; the admin UI drives off column definitions.
+// ----------------------------------------------------------------------------
+
+export const CATALOG_ENTITIES = [
+  'coupon',
+  'airport',
+  'airline',
+  'blog_post',
+  'destination',
+  'route_page',
+  'fare_rule',
+  'site_setting',
+] as const;
+
+export type CatalogEntity = (typeof CATALOG_ENTITIES)[number];
+
+const CATALOG_TABLES: Record<
+  CatalogEntity,
+  { table: string; orderBy?: string }
+> = {
+  coupon: { table: 'coupons', orderBy: 'created_at' },
+  airport: { table: 'airports', orderBy: 'created_at' },
+  airline: { table: 'airlines', orderBy: 'created_at' },
+  blog_post: { table: 'blog_posts', orderBy: 'published_at' },
+  destination: { table: 'destinations', orderBy: 'updated_at' },
+  route_page: { table: 'route_pages', orderBy: 'updated_at' },
+  fare_rule: { table: 'fare_rules', orderBy: 'created_at' },
+  site_setting: { table: 'site_settings', orderBy: 'updated_at' },
+};
+
+function assertCatalogEntity(entity: string): asserts entity is CatalogEntity {
+  if (!CATALOG_ENTITIES.includes(entity as CatalogEntity)) {
+    throw new Error(`Unknown catalog entity: ${entity}`);
+  }
+}
+
+export async function listCatalog(entity: CatalogEntity): Promise<any[]> {
+  const db = await getDb();
+  if (!db) return [];
+  const cfg = CATALOG_TABLES[entity];
+  let query = db.from(cfg.table).select('*');
+  if (cfg.orderBy) query = query.order(cfg.orderBy, { ascending: false });
+  const { data, error } = await query;
+  if (error) {
+    console.error(`[store] listCatalog(${entity}) failed:`, error.message);
+    return [];
+  }
+  return data ?? [];
+}
+
+export async function upsertCatalogRecord(
+  entity: CatalogEntity,
+  record: Record<string, unknown> & { id?: string }
+): Promise<string> {
+  const db = await getDb();
+  if (!db) throw new Error('Database is not configured.');
+  const cfg = CATALOG_TABLES[entity];
+  const { id, ...fields } = record;
+  const payload = Object.fromEntries(
+    Object.entries(fields).filter(([, value]) => value !== undefined)
+  );
+
+  // site_settings is keyed by `key` (text PK), not a uuid id column.
+  if (entity === 'site_setting') {
+    const key = String(payload.key ?? id ?? '');
+    if (!key) throw new Error('Site setting requires a key.');
+    let value: unknown = payload.value ?? null;
+    if (typeof value === 'string') {
+      try {
+        value = JSON.parse(value);
+      } catch {
+        value = value === '' ? null : value;
+      }
+    }
+    const { error } = await db
+      .from('site_settings')
+      .upsert({ key, value }, { onConflict: 'key' });
+    if (error) throw new Error(`Unable to save setting: ${error.message}`);
+    return key;
+  }
+
+  if (id) {
+    const { error } = await db.from(cfg.table).update(payload).eq('id', id);
+    if (error) throw new Error(`Unable to update ${entity}: ${error.message}`);
+    return id;
+  }
+  const { data, error } = await db
+    .from(cfg.table)
+    .insert(payload)
+    .select('id')
+    .single();
+  if (error) throw new Error(`Unable to create ${entity}: ${error.message}`);
+  return (data as { id: string }).id;
+}
+
+export async function deleteCatalogRecord(
+  entity: CatalogEntity,
+  id: string
+): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error('Database is not configured.');
+  if (entity === 'site_setting') {
+    const { error } = await db.from('site_settings').delete().eq('key', id);
+    if (error) throw new Error(`Unable to delete setting: ${error.message}`);
+    return;
+  }
+  const cfg = CATALOG_TABLES[entity];
+  const { error } = await db.from(cfg.table).delete().eq('id', id);
+  if (error) throw new Error(`Unable to delete ${entity}: ${error.message}`);
+}
+
+export { assertCatalogEntity };
+
 export async function insertSupportRequest(params: {
   userId?: string;
   name: string;

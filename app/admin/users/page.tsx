@@ -1,5 +1,6 @@
 import React from 'react';
 import { listAllProfiles } from '@/lib/booking/store';
+import { UserRoleControls } from '@/components/admin/UserRoleControls';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,6 +36,7 @@ export default async function AdminUsersPage() {
                 <th className="px-4 py-2.5">Role(s)</th>
                 <th className="px-4 py-2.5">Status</th>
                 <th className="px-4 py-2.5">Joined</th>
+                <th className="px-4 py-2.5 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -61,6 +63,15 @@ export default async function AdminUsersPage() {
                   </td>
                   <td className="px-4 py-3 text-slate-500">
                     {new Date(u.createdAt).toLocaleDateString('en-IN')}
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex justify-end">
+                      <UserRoleControls
+                        userId={u.id}
+                        roles={u.roles}
+                        isSuspended={u.isSuspended}
+                      />
+                    </div>
                   </td>
                 </tr>
               ))}

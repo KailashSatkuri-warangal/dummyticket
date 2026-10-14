@@ -4,12 +4,17 @@ import {
   isAuthorizedAdminRole,
 } from '@/lib/security/auth';
 import {
+  assertCatalogEntity,
+  deleteCatalogRecord,
   getBookingByIdOrReference,
   getRefundById,
   persistEmailLog,
   recordAuditLog,
+  setUserRole,
+  setUserSuspended,
   updateBookingRecord,
   updateRefundStatus,
+  upsertCatalogRecord,
 } from '@/lib/booking/store';
 import { setAdminOfferAdjustment } from '@/lib/pricing/engine';
 import { validateTicketFulfillment } from '@/lib/booking/state-machine';
@@ -32,7 +37,76 @@ export async function POST(request: Request) {
     providerBookingRef?: string;
     airlinePnr?: string;
     refundId?: string;
+    userId?: string;
+    role?: string;
+    isSuspended?: boolean;
+    entity?: string;
+    record?: Record<string, unknown> & { id?: string };
+    id?: string;
   };
+
+  if (body.action === 'ASSIGN_ROLE' && body.userId && body.role) {
+    await setUserRole({
+      userId: body.userId,
+      role: body.role as Parameters<typeof setUserRole>[0]['role'],
+      assignedBy: user.id,
+    });
+    const audit = await recordAuditLog({
+      actorId: user.id,
+      actorEmail: user.email,
+      action: 'ADMIN_ASSIGNED_ROLE',
+      resourceType: 'user_role',
+      resourceId: body.userId,
+      afterState: { role: body.role },
+    });
+    return NextResponse.json({ success: true, audit });
+  }
+
+  if (
+    body.action === 'SET_SUSPENDED' &&
+    body.userId &&
+    typeof body.isSuspended === 'boolean'
+  ) {
+    await setUserSuspended(body.userId, body.isSuspended);
+    const audit = await recordAuditLog({
+      actorId: user.id,
+      actorEmail: user.email,
+      action: body.isSuspended
+        ? 'ADMIN_SUSPENDED_USER'
+        : 'ADMIN_REACTIVATED_USER',
+      resourceType: 'profile',
+      resourceId: body.userId,
+      afterState: { isSuspended: body.isSuspended },
+    });
+    return NextResponse.json({ success: true, audit });
+  }
+
+  if (body.action === 'CATALOG_UPSERT' && body.entity && body.record) {
+    assertCatalogEntity(body.entity);
+    const recordId = await upsertCatalogRecord(body.entity, body.record);
+    const audit = await recordAuditLog({
+      actorId: user.id,
+      actorEmail: user.email,
+      action: body.record.id ? 'ADMIN_UPDATED_RECORD' : 'ADMIN_CREATED_RECORD',
+      resourceType: body.entity,
+      resourceId: recordId,
+      afterState: body.record,
+    });
+    return NextResponse.json({ success: true, id: recordId, audit });
+  }
+
+  if (body.action === 'CATALOG_DELETE' && body.entity && body.id) {
+    assertCatalogEntity(body.entity);
+    await deleteCatalogRecord(body.entity, body.id);
+    const audit = await recordAuditLog({
+      actorId: user.id,
+      actorEmail: user.email,
+      action: 'ADMIN_DELETED_RECORD',
+      resourceType: body.entity,
+      resourceId: body.id,
+    });
+    return NextResponse.json({ success: true, audit });
+  }
 
   if (body.action === 'SET_FARE_ADJUSTMENT' && body.flightOfferId !== undefined) {
     const delta = Number(body.deltaInr ?? 0);

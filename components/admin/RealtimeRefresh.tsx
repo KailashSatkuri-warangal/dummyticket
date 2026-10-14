@@ -33,7 +33,7 @@ export function RealtimeRefresh() {
     };
 
     const supabase = createSupabaseBrowserClient();
-    let channel: ReturnType<typeof supabase.channel> | undefined;
+    let channel: ReturnType<NonNullable<typeof supabase>['channel']> | undefined;
     if (supabase) {
       let ch = supabase.channel('admin-realtime');
       for (const table of LIVE_TABLES) {

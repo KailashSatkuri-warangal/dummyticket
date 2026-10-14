@@ -1,43 +1,131 @@
 import React from 'react';
 import Link from 'next/link';
-import { DESTINATIONS, ROUTE_PAGES } from '@/lib/flights/dataset';
+import { listCatalog } from '@/lib/booking/store';
+import { CrudColumn, CrudManager } from '@/components/admin/CrudManager';
 
-export default function AdminSeoPage() {
+const ROUTE_COLUMNS: CrudColumn[] = [
+  {
+    key: 'slug',
+    label: 'Slug',
+    type: 'text',
+    required: true,
+    placeholder: 'e.g. hyd-to-del, bom-to-dxb',
+  },
+  {
+    key: 'origin_iata',
+    label: 'Origin IATA',
+    type: 'text',
+    required: true,
+    placeholder: 'e.g. HYD',
+  },
+  {
+    key: 'destination_iata',
+    label: 'Destination IATA',
+    type: 'text',
+    required: true,
+    placeholder: 'e.g. DEL',
+  },
+  {
+    key: 'origin_city',
+    label: 'Origin City',
+    type: 'text',
+    placeholder: 'e.g. Hyderabad',
+  },
+  {
+    key: 'destination_city',
+    label: 'Destination City',
+    type: 'text',
+    placeholder: 'e.g. New Delhi',
+  },
+  {
+    key: 'starting_fare_inr',
+    label: 'Starting Fare (₹)',
+    type: 'number',
+    placeholder: 'e.g. 4299',
+  },
+  {
+    key: 'daily_flights_count',
+    label: 'Daily Flights',
+    type: 'number',
+    placeholder: 'e.g. 24',
+  },
+  {
+    key: 'meta_title',
+    label: 'SEO Meta Title',
+    type: 'text',
+    placeholder: 'Hyderabad to Delhi Flights — Timings & Fares',
+  },
+];
+
+const DESTINATION_COLUMNS: CrudColumn[] = [
+  {
+    key: 'slug',
+    label: 'Slug',
+    type: 'text',
+    required: true,
+    placeholder: 'e.g. dubai, goa, london',
+  },
+  {
+    key: 'name',
+    label: 'Destination Name',
+    type: 'text',
+    required: true,
+    placeholder: 'e.g. Dubai, United Arab Emirates',
+  },
+  {
+    key: 'country',
+    label: 'Country',
+    type: 'text',
+    required: true,
+    placeholder: 'e.g. United Arab Emirates',
+  },
+  {
+    key: 'hero_title',
+    label: 'Hero Title',
+    type: 'text',
+    placeholder: 'e.g. Explore Futuristic Dubai',
+  },
+];
+
+export default async function AdminSeoPage() {
+  const [routes, destinations] = await Promise.all([
+    listCatalog('route_page'),
+    listCatalog('destination'),
+  ]);
+
   return (
-    <div className="space-y-6">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-4">
+    <div className="space-y-8">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-2">
         <h1 className="text-xl font-extrabold text-navy-900">
-          SEO Route Landing Pages ({ROUTE_PAGES.length}) & Destination Guides (
-          {DESTINATIONS.length})
+          SEO Routes & Destination Guides Management
         </h1>
         <p className="text-xs text-slate-600">
-          Controlled indexable route pages and destination guides included in{' '}
-          <Link href="/sitemap.xml" className="text-brand-600 underline">
+          Manage landing pages indexed in Google and linked from the sitemap. XML sitemap updates automatically at{' '}
+          <Link href="/sitemap.xml" className="text-brand-600 font-semibold underline">
             /sitemap.xml
           </Link>
           .
         </p>
-
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 text-xs">
-          {ROUTE_PAGES.map((r) => (
-            <div
-              key={r.id}
-              className="rounded-xl border border-slate-200 p-3.5 flex items-center justify-between"
-            >
-              <div>
-                <p className="font-bold text-navy-900">{r.metaTitle}</p>
-                <p className="text-slate-500 font-mono">/routes/{r.slug}</p>
-              </div>
-              <Link
-                href={`/routes/${r.slug}`}
-                className="font-bold text-brand-600 hover:underline"
-              >
-                Open →
-              </Link>
-            </div>
-          ))}
-        </div>
       </div>
+
+      <CrudManager
+        entity="route_page"
+        title={`Popular Flight Routes (${routes.length})`}
+        description="Configure route pairs, daily frequencies, starting fares, and structured flight metadata."
+        columns={ROUTE_COLUMNS}
+        rows={routes}
+        emptyHint="No routes configured. Click 'Add New' to create an SEO route."
+      />
+
+      <CrudManager
+        entity="destination"
+        title={`Destination Guides (${destinations.length})`}
+        description="Manage city and country destination guides, hero banners, and visa documentation requirements."
+        columns={DESTINATION_COLUMNS}
+        rows={destinations}
+        emptyHint="No destinations found. Click 'Add New' to add a destination."
+      />
     </div>
   );
 }
+

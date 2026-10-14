@@ -17,7 +17,14 @@ import type {
 import {
   getDeterministicFlightOffers,
   getFlightOfferById,
+  AIRPORTS,
+  AIRLINES,
+  FARE_RULES,
+  BLOG_POSTS,
+  DESTINATIONS,
+  ROUTE_PAGES,
 } from '@/lib/flights/dataset';
+import { CONFIGURED_COUPONS } from '@/lib/pricing/engine';
 import {
   canTransitionBookingStatus,
   canTransitionPaymentStatus,
@@ -1993,16 +2000,110 @@ function assertCatalogEntity(entity: string): asserts entity is CatalogEntity {
 
 export async function listCatalog(entity: CatalogEntity): Promise<any[]> {
   const db = await getDb();
-  if (!db) return [];
-  const cfg = CATALOG_TABLES[entity];
-  let query = db.from(cfg.table).select('*');
-  if (cfg.orderBy) query = query.order(cfg.orderBy, { ascending: false });
-  const { data, error } = await query;
-  if (error) {
-    console.error(`[store] listCatalog(${entity}) failed:`, error.message);
-    return [];
+  let dbRows: any[] = [];
+  if (db) {
+    const cfg = CATALOG_TABLES[entity];
+    let query = db.from(cfg.table).select('*');
+    if (cfg.orderBy) query = query.order(cfg.orderBy, { ascending: false });
+    const { data, error } = await query;
+    if (!error && data && data.length > 0) {
+      dbRows = data;
+    }
   }
-  return data ?? [];
+
+  if (dbRows.length > 0) {
+    return dbRows;
+  }
+
+  // Fallback to static datasets so the admin has full out-of-the-box data for CRUD & review
+  if (entity === 'airport') {
+    return AIRPORTS.map((a) => ({
+      id: a.id,
+      iata_code: a.iataCode,
+      icao_code: a.icaoCode,
+      name: a.name,
+      city: a.city,
+      country: a.country,
+      country_code: a.countryCode,
+      timezone: a.timezone,
+      is_international: a.isInternational,
+    }));
+  }
+  if (entity === 'airline') {
+    return AIRLINES.map((a) => ({
+      id: a.id,
+      iata_code: a.iataCode,
+      icao_code: a.icaoCode,
+      name: a.name,
+      country: a.country,
+      category: a.category,
+      brand_color: a.brandColor,
+      is_active: a.isActive,
+      is_verified: a.isVerified,
+    }));
+  }
+  if (entity === 'fare_rule') {
+    return Object.values(FARE_RULES).map((r) => ({
+      id: r.id,
+      code: r.code,
+      name: r.name,
+      cabin: r.cabin,
+      cabin_baggage_kg: r.cabinBaggageKg,
+      checked_baggage_kg: r.checkedBaggageKg,
+      change_fee_inr: r.changeFeeInr,
+      cancellation_fee_inr: r.cancellationFeeInr,
+      is_refundable: r.isRefundable,
+    }));
+  }
+  if (entity === 'coupon') {
+    return Object.values(CONFIGURED_COUPONS).map((c) => ({
+      id: `cpn-${c.code.toLowerCase()}`,
+      code: c.code,
+      description: c.description,
+      discount_type: c.discountType,
+      discount_value: c.discountValue,
+      min_fare_inr: c.minOrderAmountInr,
+      max_discount_inr: c.maxDiscountInr,
+      is_active: c.isActive,
+    }));
+  }
+  if (entity === 'blog_post') {
+    return BLOG_POSTS.map((b) => ({
+      id: b.id,
+      slug: b.slug,
+      title: b.title,
+      category: b.category,
+      excerpt: b.excerpt,
+      author: b.authorName,
+      is_published: true,
+      published_at: b.publishedAt,
+    }));
+  }
+  if (entity === 'destination') {
+    return DESTINATIONS.map((d) => ({
+      id: d.id,
+      slug: d.slug,
+      name: d.city,
+      country: d.country,
+      hero_title: d.headline,
+      highlights: d.highlights,
+    }));
+  }
+  if (entity === 'route_page') {
+    return ROUTE_PAGES.map((rp) => ({
+      id: rp.id,
+      slug: rp.slug,
+      origin_iata: rp.originIata,
+      destination_iata: rp.destinationIata,
+      origin_city: rp.originCity,
+      destination_city: rp.destinationCity,
+      starting_fare_inr: rp.startingFareInr,
+      daily_flights_count: rp.dailyFlightsCount,
+      meta_title: rp.metaTitle,
+    }));
+  }
+
+  return [];
 }
 
 export async function upsertCatalogRecord(

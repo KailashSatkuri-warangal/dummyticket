@@ -1,45 +1,66 @@
 import React from 'react';
-import Link from 'next/link';
-import { BLOG_POSTS } from '@/lib/flights/dataset';
+import { listCatalog } from '@/lib/booking/store';
+import { CrudColumn, CrudManager } from '@/components/admin/CrudManager';
 
-export default function AdminBlogPage() {
+const BLOG_COLUMNS: CrudColumn[] = [
+  {
+    key: 'slug',
+    label: 'URL Slug',
+    type: 'text',
+    required: true,
+    placeholder: 'e.g. domestic-flight-baggage-rules-india',
+  },
+  {
+    key: 'title',
+    label: 'Article Title',
+    type: 'text',
+    required: true,
+    placeholder: 'e.g. Complete Guide to Domestic Flights in India',
+  },
+  {
+    key: 'category',
+    label: 'Category',
+    type: 'text',
+    required: true,
+    placeholder: 'e.g. Baggage & Travel Rules',
+  },
+  {
+    key: 'author',
+    label: 'Author Name',
+    type: 'text',
+    placeholder: 'e.g. DummyTicket Aviation Desk',
+  },
+  {
+    key: 'excerpt',
+    label: 'Summary Excerpt',
+    type: 'textarea',
+    placeholder: 'Brief summary of the article for search results and cards.',
+  },
+  {
+    key: 'is_published',
+    label: 'Published',
+    type: 'boolean',
+    options: [
+      { value: 'true', label: 'Published' },
+      { value: 'false', label: 'Draft' },
+    ],
+  },
+];
+
+export default async function AdminBlogPage() {
+  const posts = await listCatalog('blog_post');
+
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-5">
-      <div>
-        <h1 className="text-xl font-extrabold text-navy-900">
-          Editorial Blog CMS ({BLOG_POSTS.length} Published Articles)
-        </h1>
-        <p className="text-xs text-slate-600 mt-1">
-          Manage SEO articles, meta titles, structured headings, and FAQ blocks.
-        </p>
-      </div>
-
-      <div className="divide-y divide-slate-100 text-xs">
-        {BLOG_POSTS.map((post) => (
-          <div
-            key={post.id}
-            className="py-4 flex flex-wrap items-center justify-between gap-4"
-          >
-            <div>
-              <span className="rounded bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700">
-                {post.category}
-              </span>
-              <p className="mt-1 text-sm font-bold text-navy-900">
-                {post.title}
-              </p>
-              <p className="text-slate-500">
-                Slug: <code>/blog/{post.slug}</code> · Updated: {post.updatedAt.slice(0, 10)}
-              </p>
-            </div>
-            <Link
-              href={`/blog/${post.slug}`}
-              className="rounded-lg border border-slate-200 px-3 py-1.5 font-semibold text-brand-600 hover:bg-slate-50"
-            >
-              Preview Live Page →
-            </Link>
-          </div>
-        ))}
-      </div>
+    <div className="space-y-6">
+      <CrudManager
+        entity="blog_post"
+        title={`Editorial Blog CMS (${posts.length})`}
+        description="Write, edit, and publish SEO travel guides, visa ticket requirements, and airport policies."
+        columns={BLOG_COLUMNS}
+        rows={posts}
+        emptyHint="No blog posts found. Click 'Add New' to draft an article."
+      />
     </div>
   );
 }
+

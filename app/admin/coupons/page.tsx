@@ -1,43 +1,75 @@
 import React from 'react';
-import { CONFIGURED_COUPONS } from '@/lib/pricing/engine';
-import { formatInr } from '@/lib/config/brand';
+import { listCatalog } from '@/lib/booking/store';
+import { CrudColumn, CrudManager } from '@/components/admin/CrudManager';
 
-export default function AdminCouponsPage() {
-  const coupons = Object.values(CONFIGURED_COUPONS);
+const COLUMNS: CrudColumn[] = [
+  {
+    key: 'code',
+    label: 'Coupon Code',
+    type: 'text',
+    required: true,
+    placeholder: 'e.g. WELCOME10, FLAT500',
+  },
+  {
+    key: 'description',
+    label: 'Description',
+    type: 'text',
+    required: true,
+    placeholder: 'e.g. 10% off on all Indian domestic routes',
+  },
+  {
+    key: 'discount_type',
+    label: 'Discount Type',
+    type: 'select',
+    options: [
+      { value: 'percentage', label: 'Percentage (%)' },
+      { value: 'fixed', label: 'Fixed Amount (₹)' },
+    ],
+  },
+  {
+    key: 'discount_value',
+    label: 'Discount Value',
+    type: 'number',
+    required: true,
+    placeholder: 'e.g. 10 (for 10%) or 500 (for ₹500)',
+  },
+  {
+    key: 'min_fare_inr',
+    label: 'Min Order (₹)',
+    type: 'number',
+    placeholder: 'e.g. 3000',
+  },
+  {
+    key: 'max_discount_inr',
+    label: 'Max Discount (₹)',
+    type: 'number',
+    placeholder: 'e.g. 1500',
+  },
+  {
+    key: 'is_active',
+    label: 'Status',
+    type: 'boolean',
+    options: [
+      { value: 'true', label: 'Active' },
+      { value: 'false', label: 'Disabled' },
+    ],
+  },
+];
+
+export default async function AdminCouponsPage() {
+  const coupons = await listCatalog('coupon');
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-5">
-      <div>
-        <h1 className="text-xl font-extrabold text-navy-900">
-          Promotional Codes & Discount Rules
-        </h1>
-        <p className="text-xs text-slate-600 mt-1">
-          Active promo codes validated by the server-side pricing engine.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {coupons.map((c) => (
-          <div
-            key={c.code}
-            className="rounded-xl border border-slate-200 p-4 text-xs space-y-1.5"
-          >
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-base font-extrabold text-brand-700">
-                {c.code}
-              </span>
-              <span className="rounded bg-verified-50 px-2 py-0.5 font-semibold text-verified-700">
-                {c.isActive ? 'Active' : 'Disabled'}
-              </span>
-            </div>
-            <p className="font-semibold text-navy-900">{c.description}</p>
-            <p className="text-slate-500">
-              Minimum Order: {formatInr(c.minOrderAmountInr)} · Max Discount:{' '}
-              {formatInr(c.maxDiscountInr)}
-            </p>
-          </div>
-        ))}
-      </div>
+    <div className="space-y-6">
+      <CrudManager
+        entity="coupon"
+        title={`Promotional Coupons (${coupons.length})`}
+        description="Create, edit, and deactivate discount codes and minimum order rules evaluated by the pricing engine."
+        columns={COLUMNS}
+        rows={coupons}
+        emptyHint="No active coupon codes found. Click 'Add New' to create one."
+      />
     </div>
   );
 }
+

@@ -1,10 +1,71 @@
 import React from 'react';
-import { FARE_RULES } from '@/lib/flights/dataset';
-import { formatInr } from '@/lib/config/brand';
+import { listCatalog } from '@/lib/booking/store';
+import { CrudColumn, CrudManager } from '@/components/admin/CrudManager';
 import { AdminActionTrigger } from '@/components/admin/AdminActionTrigger';
 
-export default function AdminPricingPage() {
-  const rules = Object.values(FARE_RULES);
+const FARE_RULE_COLUMNS: CrudColumn[] = [
+  {
+    key: 'code',
+    label: 'Rule Code',
+    type: 'text',
+    required: true,
+    placeholder: 'e.g. ECO_SAVER, BIZ_FLEX',
+  },
+  {
+    key: 'name',
+    label: 'Tier Name',
+    type: 'text',
+    required: true,
+    placeholder: 'e.g. Economy Saver, Business Flex',
+  },
+  {
+    key: 'cabin',
+    label: 'Cabin',
+    type: 'select',
+    options: [
+      { value: 'economy', label: 'Economy' },
+      { value: 'premium_economy', label: 'Premium Economy' },
+      { value: 'business', label: 'Business' },
+      { value: 'first', label: 'First Class' },
+    ],
+  },
+  {
+    key: 'cabin_baggage_kg',
+    label: 'Cabin Bag (kg)',
+    type: 'number',
+    placeholder: 'e.g. 7',
+  },
+  {
+    key: 'checked_baggage_kg',
+    label: 'Checked Bag (kg)',
+    type: 'number',
+    placeholder: 'e.g. 15 or 25',
+  },
+  {
+    key: 'change_fee_inr',
+    label: 'Change Fee (₹)',
+    type: 'number',
+    placeholder: 'e.g. 1999',
+  },
+  {
+    key: 'cancellation_fee_inr',
+    label: 'Cancel Fee (₹)',
+    type: 'number',
+    placeholder: 'e.g. 2999',
+  },
+  {
+    key: 'is_refundable',
+    label: 'Refundable',
+    type: 'boolean',
+    options: [
+      { value: 'true', label: 'Yes' },
+      { value: 'false', label: 'No' },
+    ],
+  },
+];
+
+export default async function AdminPricingPage() {
+  const fareRules = await listCatalog('fare_rule');
 
   return (
     <div className="space-y-6">
@@ -37,35 +98,15 @@ export default function AdminPricingPage() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-4">
-        <h2 className="text-base font-bold text-navy-900">
-          Configured Fare Rules & Baggage Tiers
-        </h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {rules.map((r) => (
-            <div
-              key={r.id}
-              className="rounded-xl border border-slate-200 p-4 text-xs space-y-1.5"
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-sm text-navy-900">{r.name}</span>
-                <span className="font-mono text-brand-700 font-semibold">
-                  {r.code}
-                </span>
-              </div>
-              <p className="text-slate-600">
-                Cabin: {r.cabin.toUpperCase()} · Refundable:{' '}
-                {r.isRefundable ? 'Yes' : 'No'}
-              </p>
-              <p className="text-slate-600">
-                Cancellation Fee: {formatInr(r.cancellationFeeInr)} · Change Fee:{' '}
-                {formatInr(r.changeFeeInr)}
-              </p>
-              <p className="text-slate-500">{r.termsSummary}</p>
-            </div>
-          ))}
-        </div>
-      </div>
+      <CrudManager
+        entity="fare_rule"
+        title={`Configured Fare Rules & Baggage Tiers (${fareRules.length})`}
+        description="Add, edit, or remove fare class tiers, baggage allowances, cancellation charges, and refundability rules."
+        columns={FARE_RULE_COLUMNS}
+        rows={fareRules}
+        emptyHint="No fare rules found. Click 'Add New' to configure a rule."
+      />
     </div>
   );
 }
+

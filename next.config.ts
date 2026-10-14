@@ -4,6 +4,15 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'www.gstatic.com',
+        pathname: '/flights/airline_logos/**',
+      },
+    ],
+  },
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
   },

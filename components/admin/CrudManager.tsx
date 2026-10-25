@@ -49,9 +49,20 @@ function coerce(column: CrudColumn, raw: string): unknown {
   return raw === '' ? null : raw;
 }
 
-function display(value: unknown): string {
+function display(value: unknown, column?: CrudColumn): string {
   if (value === null || value === undefined || value === '') return '—';
   if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+  if (
+    typeof value === 'number' &&
+    column?.key &&
+    (column.key.includes('fare') ||
+      column.key.includes('fee') ||
+      column.key.includes('inr') ||
+      column.key.includes('amount') ||
+      column.key.includes('price'))
+  ) {
+    return `₹${value.toLocaleString('en-IN')}`;
+  }
   if (typeof value === 'object') return JSON.stringify(value);
   return String(value);
 }
@@ -303,8 +314,17 @@ export function CrudManager({
               {rows.map((row) => (
                 <tr key={row.id}>
                   {tableColumns.map((col) => (
-                    <td key={col.key} className="max-w-[260px] truncate px-4 py-3">
-                      {display(row[col.key])}
+                    <td
+                      key={col.key}
+                      className={`max-w-[260px] truncate px-4 py-3 ${
+                        col.key === 'total_fare_inr'
+                          ? 'font-bold text-brand-700'
+                          : col.key === 'flight_number'
+                          ? 'font-bold text-navy-900 font-mono'
+                          : ''
+                      }`}
+                    >
+                      {display(row[col.key], col)}
                     </td>
                   ))}
                   <td className="px-4 py-3">

@@ -24,7 +24,7 @@ import {
   DESTINATIONS,
   ROUTE_PAGES,
 } from '@/lib/flights/dataset';
-import { CONFIGURED_COUPONS } from '@/lib/pricing/engine';
+import { CONFIGURED_COUPONS, setAdminOfferAdjustment } from '@/lib/pricing/engine';
 import {
   canTransitionBookingStatus,
   canTransitionPaymentStatus,
@@ -67,6 +67,7 @@ interface PlatformStoreState {
     status: 'requested' | 'approved' | 'processed' | 'rejected';
     createdAt: string;
   }>;
+  catalogStore: Map<string, Map<string, any>>;
 }
 
 const globalForStore = globalThis as unknown as {
@@ -86,12 +87,19 @@ function createInitialStore(): PlatformStoreState {
     emailLogs: [],
     auditLogs: [],
     refunds: [],
+    catalogStore: new Map<string, Map<string, any>>(),
   };
 }
 
 export function getPlatformStore(): PlatformStoreState {
   if (!globalForStore.__dummyticketStore) {
     globalForStore.__dummyticketStore = createInitialStore();
+  }
+  if (!globalForStore.__dummyticketStore.catalogStore) {
+    globalForStore.__dummyticketStore.catalogStore = new Map<
+      string,
+      Map<string, any>
+    >();
   }
   return globalForStore.__dummyticketStore;
 }
@@ -1966,6 +1974,7 @@ export async function setUserSuspended(
 // ----------------------------------------------------------------------------
 
 export const CATALOG_ENTITIES = [
+  'flight',
   'coupon',
   'airport',
   'airline',
@@ -1982,6 +1991,7 @@ const CATALOG_TABLES: Record<
   CatalogEntity,
   { table: string; orderBy?: string }
 > = {
+  flight: { table: 'flight_offers', orderBy: 'created_at' },
   coupon: { table: 'coupons', orderBy: 'created_at' },
   airport: { table: 'airports', orderBy: 'created_at' },
   airline: { table: 'airlines', orderBy: 'created_at' },
@@ -1999,25 +2009,109 @@ function assertCatalogEntity(entity: string): asserts entity is CatalogEntity {
 }
 
 export async function listCatalog(entity: CatalogEntity): Promise<any[]> {
+  const store = getPlatformStore();
+  const entityStore = store.catalogStore.get(entity);
+
   const db = await getDb();
   let dbRows: any[] = [];
   if (db) {
-    const cfg = CATALOG_TABLES[entity];
-    let query = db.from(cfg.table).select('*');
-    if (cfg.orderBy) query = query.order(cfg.orderBy, { ascending: false });
-    const { data, error } = await query;
-    if (!error && data && data.length > 0) {
-      dbRows = data;
+    try {
+      const cfg = CATALOG_TABLES[entity];
+      let query = db.from(cfg.table).select('*');
+      if (cfg.orderBy) query = query.order(cfg.orderBy, { ascending: false });
+      const { data, error } = await query;
+      if (!error && data && data.length > 0) {
+        if (entity === 'flight') {
+          dbRows = data.map((row: any) => ({
+            ...row,
+            total_fare_inr:
+              row.total_fare_inr ??
+              (Number(row.base_fare_inr) || 0) +
+                (Number(row.taxes_inr) || 0) +
+                (Number(row.service_fee_inr) || 0),
+          }));
+        } else {
+          dbRows = data;
+        }
+      }
+    } catch {
+      // Ignore DB query errors and fall back gracefully
     }
   }
 
   if (dbRows.length > 0) {
+    if (entityStore) {
+      const existingIds = new Set(dbRows.map((r) => r.id));
+      for (const [id, record] of entityStore.entries()) {
+        if (record._deleted) {
+          dbRows = dbRows.filter((r) => r.id !== id);
+        } else if (existingIds.has(id)) {
+          dbRows = dbRows.map((r) => (r.id === id ? { ...r, ...record } : r));
+        } else {
+          dbRows.unshift({ id, ...record });
+        }
+      }
+    }
     return dbRows;
   }
 
   // Fallback to static datasets so the admin has full out-of-the-box data for CRUD & review
-  if (entity === 'airport') {
-    return AIRPORTS.map((a) => ({
+  let rows: any[] = [];
+  if (entity === 'flight') {
+    const defaultOffers = [
+      ...getDeterministicFlightOffers({
+        from: 'HYD',
+        to: 'DEL',
+        departDate: '2026-12-15',
+      }),
+      ...getDeterministicFlightOffers({
+        from: 'DEL',
+        to: 'BOM',
+        departDate: '2026-12-15',
+      }),
+      ...getDeterministicFlightOffers({
+        from: 'BOM',
+        to: 'BLR',
+        departDate: '2026-12-15',
+      }),
+      ...getDeterministicFlightOffers({
+        from: 'BLR',
+        to: 'HYD',
+        departDate: '2026-12-15',
+      }),
+      ...getDeterministicFlightOffers({
+        from: 'DEL',
+        to: 'DXB',
+        departDate: '2026-12-15',
+      }),
+      ...getDeterministicFlightOffers({
+        from: 'HYD',
+        to: 'MSY',
+        departDate: '2026-12-15',
+      }),
+    ];
+    rows = defaultOffers.map((offer) => ({
+      id: offer.id,
+      flight_number: offer.flightNumber,
+      airline_name: offer.airline.name,
+      airline_iata: offer.airline.iataCode,
+      origin_iata: offer.origin.iataCode,
+      destination_iata: offer.destination.iataCode,
+      cabin: offer.cabin,
+      total_fare_inr: offer.totalFareInr,
+      base_fare_inr: offer.baseFareInr,
+      taxes_inr: offer.taxesInr,
+      service_fee_inr: offer.serviceFeeInr,
+      duration_minutes: offer.durationMinutes,
+      stops_count: offer.stopsCount,
+      cabin_baggage_kg: offer.fareRule?.cabinBaggageKg ?? 7,
+      checked_baggage_kg: offer.fareRule?.checkedBaggageKg ?? 15,
+      seats_available: offer.seatsAvailable ?? 9,
+      inventory_mode: offer.inventoryMode ?? 'sample_demo',
+      is_active: true,
+    }));
+  } else if (entity === 'airport') {
+    rows = AIRPORTS.map((a) => ({
       id: a.id,
       iata_code: a.iataCode,
       icao_code: a.icaoCode,
@@ -2028,9 +2122,8 @@ export async function listCatalog(entity: CatalogEntity): Promise<any[]> {
       timezone: a.timezone,
       is_international: a.isInternational,
     }));
-  }
-  if (entity === 'airline') {
-    return AIRLINES.map((a) => ({
+  } else if (entity === 'airline') {
+    rows = AIRLINES.map((a) => ({
       id: a.id,
       iata_code: a.iataCode,
       icao_code: a.icaoCode,
@@ -2041,9 +2134,8 @@ export async function listCatalog(entity: CatalogEntity): Promise<any[]> {
       is_active: a.isActive,
       is_verified: a.isVerified,
     }));
-  }
-  if (entity === 'fare_rule') {
-    return Object.values(FARE_RULES).map((r) => ({
+  } else if (entity === 'fare_rule') {
+    rows = Object.values(FARE_RULES).map((r) => ({
       id: r.id,
       code: r.code,
       name: r.name,
@@ -2054,9 +2146,8 @@ export async function listCatalog(entity: CatalogEntity): Promise<any[]> {
       cancellation_fee_inr: r.cancellationFeeInr,
       is_refundable: r.isRefundable,
     }));
-  }
-  if (entity === 'coupon') {
-    return Object.values(CONFIGURED_COUPONS).map((c) => ({
+  } else if (entity === 'coupon') {
+    rows = Object.values(CONFIGURED_COUPONS).map((c) => ({
       id: `cpn-${c.code.toLowerCase()}`,
       code: c.code,
       description: c.description,
@@ -2066,9 +2157,8 @@ export async function listCatalog(entity: CatalogEntity): Promise<any[]> {
       max_discount_inr: c.maxDiscountInr,
       is_active: c.isActive,
     }));
-  }
-  if (entity === 'blog_post') {
-    return BLOG_POSTS.map((b) => ({
+  } else if (entity === 'blog_post') {
+    rows = BLOG_POSTS.map((b) => ({
       id: b.id,
       slug: b.slug,
       title: b.title,
@@ -2078,9 +2168,8 @@ export async function listCatalog(entity: CatalogEntity): Promise<any[]> {
       is_published: true,
       published_at: b.publishedAt,
     }));
-  }
-  if (entity === 'destination') {
-    return DESTINATIONS.map((d) => ({
+  } else if (entity === 'destination') {
+    rows = DESTINATIONS.map((d) => ({
       id: d.id,
       slug: d.slug,
       name: d.city,
@@ -2088,9 +2177,8 @@ export async function listCatalog(entity: CatalogEntity): Promise<any[]> {
       hero_title: d.headline,
       highlights: d.highlights,
     }));
-  }
-  if (entity === 'route_page') {
-    return ROUTE_PAGES.map((rp) => ({
+  } else if (entity === 'route_page') {
+    rows = ROUTE_PAGES.map((rp) => ({
       id: rp.id,
       slug: rp.slug,
       origin_iata: rp.originIata,
@@ -2103,68 +2191,188 @@ export async function listCatalog(entity: CatalogEntity): Promise<any[]> {
     }));
   }
 
-  return [];
+  // Apply in-memory store additions / edits / deletions over static datasets
+  if (entityStore) {
+    const existingIds = new Set(rows.map((r) => r.id));
+    for (const [id, record] of entityStore.entries()) {
+      if (record._deleted) {
+        rows = rows.filter((r) => r.id !== id);
+      } else if (existingIds.has(id)) {
+        rows = rows.map((r) => (r.id === id ? { ...r, ...record } : r));
+      } else {
+        rows.unshift({ id, ...record });
+      }
+    }
+  }
+
+  return rows;
 }
 
 export async function upsertCatalogRecord(
   entity: CatalogEntity,
   record: Record<string, unknown> & { id?: string }
 ): Promise<string> {
-  const db = await getDb();
-  if (!db) throw new Error('Database is not configured.');
-  const cfg = CATALOG_TABLES[entity];
-  const { id, ...fields } = record;
-  const payload = Object.fromEntries(
-    Object.entries(fields).filter(([, value]) => value !== undefined)
-  );
+  const store = getPlatformStore();
+  if (!store.catalogStore.has(entity)) {
+    store.catalogStore.set(entity, new Map());
+  }
+  const entityStore = store.catalogStore.get(entity)!;
+  const id =
+    record.id ||
+    (entity === 'site_setting'
+      ? String(record.key)
+      : entity === 'flight'
+      ? `offer-custom-${newId().slice(0, 8)}`
+      : newId());
 
-  // site_settings is keyed by `key` (text PK), not a uuid id column.
-  if (entity === 'site_setting') {
-    const key = String(payload.key ?? id ?? '');
-    if (!key) throw new Error('Site setting requires a key.');
-    let value: unknown = payload.value ?? null;
-    if (typeof value === 'string') {
-      try {
-        value = JSON.parse(value);
-      } catch {
-        value = value === '' ? null : value;
+  // If entity is flight, compute consistent fares
+  if (entity === 'flight') {
+    const totalFare =
+      record.total_fare_inr !== undefined && record.total_fare_inr !== null
+        ? Number(record.total_fare_inr)
+        : undefined;
+    const taxes =
+      record.taxes_inr !== undefined && record.taxes_inr !== null
+        ? Number(record.taxes_inr)
+        : totalFare
+        ? Math.round(totalFare * 0.18)
+        : 0;
+    const serviceFee =
+      record.service_fee_inr !== undefined && record.service_fee_inr !== null
+        ? Number(record.service_fee_inr)
+        : 0;
+
+    if (totalFare !== undefined) {
+      const baseFare =
+        record.base_fare_inr !== undefined && record.base_fare_inr !== null
+          ? Number(record.base_fare_inr)
+          : Math.max(100, totalFare - taxes - serviceFee);
+      record.total_fare_inr = totalFare;
+      record.base_fare_inr = baseFare;
+      record.taxes_inr = taxes;
+      record.service_fee_inr = serviceFee;
+    } else if (
+      record.base_fare_inr !== undefined &&
+      record.base_fare_inr !== null
+    ) {
+      const baseFare = Number(record.base_fare_inr);
+      record.total_fare_inr = baseFare + taxes + serviceFee;
+      record.base_fare_inr = baseFare;
+      record.taxes_inr = taxes;
+      record.service_fee_inr = serviceFee;
+    }
+
+    if (id && record.total_fare_inr !== undefined) {
+      const orig = getFlightOfferById(id);
+      if (orig) {
+        const delta = Number(record.base_fare_inr) - orig.baseFareInr;
+        setAdminOfferAdjustment(id, delta);
       }
     }
-    const { error } = await db
-      .from('site_settings')
-      .upsert({ key, value }, { onConflict: 'key' });
-    if (error) throw new Error(`Unable to save setting: ${error.message}`);
-    return key;
   }
 
-  if (id) {
-    const { error } = await db.from(cfg.table).update(payload).eq('id', id);
-    if (error) throw new Error(`Unable to update ${entity}: ${error.message}`);
-    return id;
+  // Update in-memory store immediately
+  entityStore.set(id, { ...record, id });
+
+  // Persist to Supabase if available
+  try {
+    const db = await getDb();
+    if (db) {
+      const cfg = CATALOG_TABLES[entity];
+      const { id: recId, ...fields } = record;
+      const payload = Object.fromEntries(
+        Object.entries(fields).filter(([, value]) => value !== undefined)
+      );
+
+      if (entity === 'site_setting') {
+        const key = String(payload.key ?? id ?? '');
+        if (key) {
+          let value: unknown = payload.value ?? null;
+          if (typeof value === 'string') {
+            try {
+              value = JSON.parse(value);
+            } catch {
+              value = value === '' ? null : value;
+            }
+          }
+          await db
+            .from('site_settings')
+            .upsert({ key, value }, { onConflict: 'key' });
+        }
+      } else if (entity === 'flight') {
+        const dbFlightPayload: Record<string, unknown> = {
+          flight_number: payload.flight_number,
+          origin_iata: payload.origin_iata,
+          destination_iata: payload.destination_iata,
+          cabin: payload.cabin || 'economy',
+          base_fare_inr: payload.base_fare_inr,
+          taxes_inr: payload.taxes_inr || 0,
+          service_fee_inr: payload.service_fee_inr || 0,
+          duration_minutes: payload.duration_minutes || 120,
+          stops_count: payload.stops_count || 0,
+          seats_available: payload.seats_available || 9,
+          is_active:
+            payload.is_active !== undefined ? payload.is_active : true,
+          departure_time: payload.departure_time || new Date().toISOString(),
+          arrival_time:
+            payload.arrival_time ||
+            new Date(Date.now() + 2 * 3600 * 1000).toISOString(),
+        };
+        if (payload.inventory_mode) {
+          dbFlightPayload.inventory_mode = payload.inventory_mode;
+        }
+
+        if (record.id && UUID_RE.test(record.id)) {
+          await db.from(cfg.table).update(dbFlightPayload).eq('id', record.id);
+        } else {
+          await db.from(cfg.table).insert(dbFlightPayload);
+        }
+      } else {
+        if (record.id) {
+          await db.from(cfg.table).update(payload).eq('id', record.id);
+        } else {
+          const { data } = await db
+            .from(cfg.table)
+            .insert(payload)
+            .select('id')
+            .maybeSingle();
+          if (data && (data as { id: string }).id) {
+            return (data as { id: string }).id;
+          }
+        }
+      }
+    }
+  } catch (dbErr) {
+    console.warn(`[store] Database write error for ${entity}:`, dbErr);
   }
-  const { data, error } = await db
-    .from(cfg.table)
-    .insert(payload)
-    .select('id')
-    .single();
-  if (error) throw new Error(`Unable to create ${entity}: ${error.message}`);
-  return (data as { id: string }).id;
+
+  return id;
 }
 
 export async function deleteCatalogRecord(
   entity: CatalogEntity,
   id: string
 ): Promise<void> {
-  const db = await getDb();
-  if (!db) throw new Error('Database is not configured.');
-  if (entity === 'site_setting') {
-    const { error } = await db.from('site_settings').delete().eq('key', id);
-    if (error) throw new Error(`Unable to delete setting: ${error.message}`);
-    return;
+  const store = getPlatformStore();
+  if (!store.catalogStore.has(entity)) {
+    store.catalogStore.set(entity, new Map());
   }
-  const cfg = CATALOG_TABLES[entity];
-  const { error } = await db.from(cfg.table).delete().eq('id', id);
-  if (error) throw new Error(`Unable to delete ${entity}: ${error.message}`);
+  const entityStore = store.catalogStore.get(entity)!;
+  entityStore.set(id, { _deleted: true });
+
+  try {
+    const db = await getDb();
+    if (db) {
+      if (entity === 'site_setting') {
+        await db.from('site_settings').delete().eq('key', id);
+      } else {
+        const cfg = CATALOG_TABLES[entity];
+        await db.from(cfg.table).delete().eq('id', id);
+      }
+    }
+  } catch (err) {
+    console.warn(`[store] Database delete error for ${entity}:`, err);
+  }
 }
 
 export { assertCatalogEntity };

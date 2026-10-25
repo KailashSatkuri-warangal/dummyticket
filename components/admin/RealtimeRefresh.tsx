@@ -11,6 +11,7 @@ const POLL_MS = 10_000;
 // (bookings, payments, profiles, refunds, email_logs, notifications) are
 // deliberately excluded — those pages refresh via the polling loop.
 const LIVE_TABLES = [
+  'flight_offers',
   'coupons',
   'airports',
   'airlines',

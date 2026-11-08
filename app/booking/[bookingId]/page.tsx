@@ -44,7 +44,7 @@ export default async function BookingDetailsPage(props: {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card flex flex-wrap items-center justify-between gap-4">
+      <div className="rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-elevated flex flex-wrap items-center justify-between gap-4">
         <div>
           <span className="eyebrow">
             Booking Management Record
@@ -68,7 +68,7 @@ export default async function BookingDetailsPage(props: {
             booking.status !== 'cancelled' && (
               <Link
                 href={`/checkout/${booking.flightOfferId}?depart=${booking.departureDate}&adults=${booking.adults}`}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2.5 text-xs font-bold text-white"
+                className="btn-shimmer inline-flex items-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-brand-700 transition-all"
               >
                 <CreditCard className="h-4 w-4" />
                 Complete Payment
@@ -76,21 +76,21 @@ export default async function BookingDetailsPage(props: {
             )}
           <Link
             href={`/ticket/${booking.bookingReference}`}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-navy-900 hover:bg-slate-50"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-navy-900 hover:bg-slate-50 transition-colors"
           >
             <FileText className="h-4 w-4 text-brand-600" />
             View Itinerary
           </Link>
           <a
             href={`/api/tickets/${booking.bookingReference}/pdf`}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-coral-600 px-4 py-2.5 text-xs font-bold text-white hover:bg-coral-700"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-coral-600 px-4 py-2.5 text-xs font-bold text-white hover:bg-coral-700 transition-colors shadow-sm"
           >
             <Download className="h-4 w-4" />
             Itinerary PDF
           </a>
           <a
             href={`/api/tickets/${booking.bookingReference}/pdf?type=receipt`}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-navy-900 px-4 py-2.5 text-xs font-bold text-white hover:bg-navy-800"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-navy-900 px-4 py-2.5 text-xs font-bold text-white hover:bg-navy-800 transition-colors shadow-sm"
           >
             <Download className="h-4 w-4" />
             Receipt PDF

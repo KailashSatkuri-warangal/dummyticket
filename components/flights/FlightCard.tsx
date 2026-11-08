@@ -62,7 +62,7 @@ export function FlightCard({
   return (
     <article
       aria-label={`${offer.airline.name} flight ${offer.flightNumber} from ${offer.origin.iataCode} to ${offer.destination.iataCode}`}
-      className="card card-interactive group p-4 sm:p-5"
+      className="card card-interactive group p-5 sm:p-6 rounded-2xl border border-slate-200/90 bg-white shadow-card hover:border-brand-400 hover:shadow-card-hover transition-all duration-200"
     >
       {/* Top Badges Row */}
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3 mb-4">
@@ -82,7 +82,7 @@ export function FlightCard({
           </span>
         </div>
 
-        <span className="text-xs font-medium text-slate-500">
+        <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
           {offer.cabin.replace('_', ' ').toUpperCase()} · {offer.fareRule.name}
         </span>
       </div>
@@ -93,10 +93,10 @@ export function FlightCard({
         <div className="flex items-center gap-3.5 lg:col-span-3">
           <AirlineLogo airline={offer.airline} size="md" />
           <div>
-            <h3 className="text-base font-bold text-navy-900">
+            <h3 className="text-base font-extrabold text-navy-900 group-hover:text-brand-600 transition-colors">
               {offer.airline.name}
             </h3>
-            <p className="text-xs font-mono tabular-nums text-slate-500">
+            <p className="text-xs font-mono font-semibold tabular-nums text-slate-500">
               {offer.flightNumber} · {offer.segments[0]?.aircraftType ?? 'Jet'}
             </p>
           </div>
@@ -105,29 +105,29 @@ export function FlightCard({
         {/* Schedule & Duration */}
         <div className="grid grid-cols-3 items-center gap-2 text-center lg:col-span-5">
           <div className="text-left">
-            <p className="text-base font-extrabold tabular-nums text-navy-900 sm:text-lg">
+            <p className="text-lg font-black tabular-nums text-navy-900 sm:text-xl">
               {depTimeFormatted}
             </p>
-            <p className="text-xs font-bold font-mono text-brand-700">
+            <p className="text-xs font-black font-mono text-brand-700">
               {offer.origin.iataCode}
             </p>
-            <p className="text-[11px] text-slate-500 truncate">
+            <p className="text-[11px] text-slate-500 font-medium truncate">
               {offer.origin.city}
             </p>
           </div>
 
           <div className="flex flex-col items-center justify-center px-2">
-            <span className="text-xs font-semibold tabular-nums text-slate-600 flex items-center gap-1">
+            <span className="text-xs font-bold tabular-nums text-slate-700 flex items-center gap-1">
               <Clock className="h-3 w-3 text-brand-600" />
               {formatDuration(offer.durationMinutes)}
             </span>
             <div className="my-1.5 flex w-full items-center">
-              <div className="h-0.5 flex-1 bg-slate-300" />
-              <PlaneTakeoff className="mx-1.5 h-3.5 w-3.5 text-brand-600 transition-transform group-hover:translate-x-1" />
-              <div className="h-0.5 flex-1 bg-slate-300" />
+              <div className="h-0.5 flex-1 bg-slate-200" />
+              <PlaneTakeoff className="mx-1.5 h-4 w-4 text-brand-600 transition-transform group-hover:translate-x-1" />
+              <div className="h-0.5 flex-1 bg-slate-200" />
             </div>
             <span
-              className={`text-[11px] font-semibold ${
+              className={`text-[11px] font-extrabold ${
                 offer.stopsCount === 0 ? 'text-verified-700' : 'text-amber-700'
               }`}
             >
@@ -143,13 +143,13 @@ export function FlightCard({
           </div>
 
           <div className="text-right">
-            <p className="text-base font-extrabold tabular-nums text-navy-900 sm:text-lg">
+            <p className="text-lg font-black tabular-nums text-navy-900 sm:text-xl">
               {arrTimeFormatted}
             </p>
-            <p className="text-xs font-bold font-mono text-brand-700">
+            <p className="text-xs font-black font-mono text-brand-700">
               {offer.destination.iataCode}
             </p>
-            <p className="text-[11px] text-slate-500 truncate">
+            <p className="text-[11px] text-slate-500 font-medium truncate">
               {offer.destination.city}
             </p>
           </div>
@@ -159,7 +159,7 @@ export function FlightCard({
         <div className="flex flex-col sm:flex-row lg:flex-col items-start sm:items-center lg:items-end justify-between border-t lg:border-t-0 lg:border-l border-slate-100 pt-4 lg:pt-0 lg:pl-6 lg:col-span-4 gap-3">
           <div className="lg:text-right">
             <div className="flex items-baseline lg:justify-end gap-2">
-              <span className="text-2xl font-extrabold tabular-nums text-navy-900">
+              <span className="text-2xl sm:text-3xl font-black tabular-nums text-brand-700">
                 {formatInr(totalForParty)}
               </span>
               {offer.historicalAvgInr && (
@@ -168,7 +168,7 @@ export function FlightCard({
                 </span>
               )}
             </div>
-            <p className="text-[11px] tabular-nums text-slate-500">
+            <p className="text-[11px] tabular-nums text-slate-500 font-medium">
               Includes {formatInr(offer.taxesInr)} taxes + {formatInr(offer.serviceFeeInr)} fee / adult
             </p>
           </div>
@@ -176,13 +176,13 @@ export function FlightCard({
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <Link
               href={`/flights/${offer.id}?${queryParams.toString()}`}
-              className="inline-flex items-center justify-center rounded-xl border border-slate-200 px-3 py-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+              className="inline-flex items-center justify-center rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors"
             >
               Details
             </Link>
             <Link
               href={`/checkout/${offer.id}?${queryParams.toString()}`}
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-brand-700 transition-colors"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-600 btn-shimmer px-5 py-2.5 text-xs font-black text-white shadow-md shadow-brand-600/20 hover:bg-brand-700 hover:shadow-brand-600/35 hover:-translate-y-0.5 transition-all"
             >
               <span>Select Flight</span>
               <ArrowRight className="h-3.5 w-3.5" />

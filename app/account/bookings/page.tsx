@@ -36,7 +36,7 @@ export default function AccountBookingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card">
+      <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-card">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="text-xl font-extrabold text-navy-900">
@@ -61,9 +61,9 @@ export default function AccountBookingsPage() {
                 key={tab.id}
                 type="button"
                 onClick={() => setFilter(tab.id)}
-                className={`rounded-lg px-3 py-1.5 text-xs font-semibold ${
+                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all duration-200 ${
                   filter === tab.id
-                    ? 'bg-brand-600 text-white'
+                    ? 'bg-brand-600 text-white shadow-sm'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >

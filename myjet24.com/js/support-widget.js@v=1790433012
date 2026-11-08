@@ -1,0 +1,210 @@
+/* "Lena" support widget — quick answers (free) + Claude Haiku fallback.
+   Security: replies rendered as TEXT (no innerHTML) → no XSS from model/user output.
+   Support email is revealed only from the 3rd question onward. */
+(function () {
+  'use strict';
+  var root = document.getElementById('lena-widget');
+  if (!root) return;
+
+  var ENDPOINT      = root.getAttribute('data-endpoint');
+  var CSRF          = root.getAttribute('data-csrf');
+  var SUPPORT       = root.getAttribute('data-support') || '';
+  var LIMIT         = parseInt(root.getAttribute('data-limit') || '10', 10);
+  var ESCALATE_AFTER= parseInt(root.getAttribute('data-escalate-after') || '3', 10);
+  var LOCALE       = root.getAttribute('data-locale') || 'en';
+
+  /* ---- Texte ----
+     Sie kommen aus dem JSON-Block, den das Blade aus resources/lang/{locale}/seo.php
+     schreibt. In DIESER Datei steht bewusst kein einziger englischer Satz: sie wird mit
+     ?v={filemtime} ein Jahr gecacht und muss fuer alle 15 Sprachen dieselbe bleiben.
+     Englische Rueckfalltexte hier waeren ausserdem Kopien, die beim naechsten
+     Textwechsel unbemerkt veralten - und der Waechter koennte nicht mehr pruefen, dass
+     hier keine Texte stehen.
+
+     Fehlt der Block oder ein Pflichttext, wird das Fenster ABGESCHALTET statt halb
+     englisch angezeigt. Der Fall tritt nur ein, wenn jemand den Blade-Block entfernt. */
+  var T = (function () {
+    var o = null;
+    try {
+      var el = document.getElementById('lena-i18n');
+      if (el) o = JSON.parse(el.textContent);
+    } catch (e) { o = null; }
+    if (!o || typeof o !== 'object') return null;
+    // Fehlt ein Schluessel, gibt Laravel seinen Namen zurueck ("seo.sup_greeting").
+    // fallback_locale ist 'en', der Fall ist also selten - aber nie sichtbar werden.
+    var gut = function (k) {
+      return typeof o[k] === 'string' && o[k] !== '' && o[k].indexOf('seo.') !== 0;
+    };
+    var pflicht = ['greeting', 'more', 'email_team', 'err_generic', 'err_unreachable', 'limit_ph'];
+    for (var i = 0; i < pflicht.length; i++) { if (!gut(pflicht[i])) return null; }
+    o.gut = gut;
+    return o;
+  })();
+
+  if (!T) { root.style.display = 'none'; return; }
+
+  var toggle = document.getElementById('lena-toggle');
+  var closeB = document.getElementById('lena-close');
+  var panel  = document.getElementById('lena-panel');
+  var body   = document.getElementById('lena-body');
+  var quick  = document.getElementById('lena-quick');
+  var quickHead = document.getElementById('lena-quick-head');
+  var quickList = document.getElementById('lena-quick-list');
+  var form   = document.getElementById('lena-form');
+  var input  = document.getElementById('lena-text');
+  var sendBtn= form.querySelector('button');
+
+  var askCount = 0;        // total user questions (quick + free text)
+  var emailShown = false;
+  var started = false;
+  var busy = false;
+
+  // ---- Schnellantworten (sofort, ohne Kosten) ----
+  // Aus T aufgebaut statt fest eingetragen. Ein Paar erscheint nur, wenn BEIDE Texte da
+  // sind - ein Knopf ohne Antwort waere schlimmer als kein Knopf.
+  var QUICK = (function () {
+    var l = [];
+    for (var n = 1; n <= 6; n++) {
+      if (T.gut('q' + n + '_q') && T.gut('q' + n + '_a')) {
+        l.push({ q: T['q' + n + '_q'], a: T['q' + n + '_a'] });
+      }
+    }
+    return l;
+  })();
+
+  function openPanel() {
+    panel.hidden = false;
+    root.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+    if (!started) { started = true; start(); }
+    setTimeout(function () { body.scrollTop = body.scrollHeight; }, 30);
+  }
+  function closePanel() {
+    panel.hidden = true;
+    root.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+  toggle.addEventListener('click', function () { panel.hidden ? openPanel() : closePanel(); });
+  closeB.addEventListener('click', closePanel);
+
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;            // textContent → XSS-safe
+    return e;
+  }
+  function scroll() { body.scrollTop = body.scrollHeight; }
+
+  function addMsg(text, who) {
+    var m = el('div', 'lena-msg ' + (who === 'user' ? 'lena-user' : 'lena-bot'), text);
+    body.appendChild(m);
+    scroll();
+  }
+
+  function showTyping() {
+    var t = el('div', 'lena-typing');
+    t.appendChild(el('span')); t.appendChild(el('span')); t.appendChild(el('span'));
+    body.appendChild(t); scroll();
+    return t;
+  }
+
+  // Bot message after a human-like typing delay.
+  function botSay(text, cb) {
+    var t = showTyping();
+    var delay = 700 + Math.min(1400, text.length * 12) + Math.random() * 350;
+    setTimeout(function () {
+      t.remove();
+      addMsg(text, 'bot');
+      maybeEscalate();
+      if (cb) cb();
+    }, delay);
+  }
+
+  function maybeEscalate() {
+    if (emailShown || !SUPPORT || askCount < ESCALATE_AFTER) return;
+    emailShown = true;
+    var wrap = el('div', 'lena-escalate');
+    var a = document.createElement('a');
+    a.href = 'mailto:' + SUPPORT + '?subject=' + encodeURIComponent('MyJet24 support request');
+    a.rel = 'noopener';
+    a.appendChild(el('span', null, '✉'));
+    a.appendChild(el('span', null, T.email_team));
+    wrap.appendChild(a);
+    body.appendChild(wrap);
+    scroll();
+  }
+
+  function renderQuick() {
+    quickList.innerHTML = '';
+    QUICK.forEach(function (item) {
+      var b = el('button', null, item.q);
+      b.addEventListener('click', function () {
+        if (busy) return;
+        askCount++;
+        addMsg(item.q, 'user');
+        botSay(item.a);
+      });
+      quickList.appendChild(b);
+    });
+    var more = el('button', 'lena-more', T.more);
+    more.addEventListener('click', function () { input.focus(); });
+    quickList.appendChild(more);
+  }
+
+  // Chevron / header → collapse or expand the quick questions manually.
+  quickHead.addEventListener('click', function () { quick.classList.toggle('collapsed'); });
+  quickHead.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); quick.classList.toggle('collapsed'); }
+  });
+  // Typing also tucks them away (re-open anytime via the chevron).
+  input.addEventListener('focus', function () { quick.classList.add('collapsed'); });
+
+  function start() {
+    // Begruessung und Schnellfragen SOFORT. Vorher lief die Begruessung durch botSay
+    // (0,7-2,4 s Tippanimation) und renderQuick erst als Rueckruf danach: das Panel war
+    // beim Oeffnen mehrere Sekunden leer - bei 540 bzw. 724 px Hoehe eine leere Flaeche
+    // mit drei Punkten. Die Tippanimation bleibt dort, wo sie hingehoert: bei echten
+    // Antworten, die tatsaechlich Zeit brauchen.
+    addMsg(T.greeting, 'bot');
+    renderQuick();
+  }
+
+  // ---- Free text → server (Claude Haiku) ----
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var msg = (input.value || '').trim();
+    if (!msg || busy) return;
+    askCount++;
+    quick.classList.add('collapsed');
+    addMsg(msg, 'user');
+    input.value = '';
+    busy = true; sendBtn.disabled = true;
+
+    var t = showTyping();
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+      body: JSON.stringify({ message: msg, locale: LOCALE })
+    })
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function (data) {
+      // small human-like delay on top of real latency
+      setTimeout(function () {
+        t.remove();
+        addMsg((data && data.reply) ? String(data.reply) : T.err_generic, 'bot');
+        maybeEscalate();
+        if (data && data.limited) {
+          input.disabled = true; sendBtn.disabled = true;
+          input.placeholder = T.limit_ph;
+        }
+        busy = false; if (!input.disabled) sendBtn.disabled = false;
+      }, 500 + Math.random() * 500);
+    })
+    .catch(function () {
+      t.remove();
+      addMsg(T.err_unreachable, 'bot');
+      maybeEscalate();
+      busy = false; sendBtn.disabled = false;
+    });
+  });
+})();

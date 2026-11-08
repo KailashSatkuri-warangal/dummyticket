@@ -40,7 +40,7 @@ export default async function DestinationGuidePage(props: {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 space-y-8">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-card space-y-4">
+      <div className="rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-elevated space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <span className="rounded-lg bg-brand-50 px-3 py-1 font-mono text-xs font-bold text-brand-700">
             Airport Code: {dest.airportIata} · {dest.country}

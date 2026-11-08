@@ -1,0 +1,458 @@
+/**
+ * Kalender im Markenstil für die Datumsfelder des Buchungsformulars.
+ *
+ * GRUNDFORM: Das native <input type="date"> bleibt stehen — im Fluss, `required`, mit
+ * min/max, und als einzige Livewire-Quelle. Darüber deckt ein <button> das Feld ab und
+ * öffnet diesen Kalender. Lädt diese Datei nicht, bleibt der Knopf per CSS unsichtbar und
+ * das native Feld voll bedienbar.
+ *
+ * KEINE ENGINE-WEICHEN. Der Vorfall vom 02.09.2026 kam daher, dass
+ * `@supports selector(::-webkit-datetime-edit)` als Weiche diente — Firefox meldet
+ * Unterstützung für unbekannte -webkit-Pseudoelemente und führt sie trotzdem nicht aus.
+ * Deshalb hier: kein @supports, kein -webkit-, kein navigator.userAgent, kein
+ * Intl.Locale.weekInfo (mal Getter, mal Methode). Ein Wächter-Test hält das fest.
+ */
+(function () {
+    'use strict';
+
+    if (typeof Intl === 'undefined' || typeof Intl.DateTimeFormat !== 'function') return;
+
+    /**
+     * Erster Wochentag je Sprache (1 = Montag … 7 = Sonntag).
+     * Bewusst eine Tabelle statt Intl.Locale.weekInfo: dessen Form unterscheidet sich
+     * zwischen Engines, und genau das lässt sich hier nicht gegentesten.
+     */
+    var FIRST_DAY = {
+        de: 1, es: 1, fr: 1, ru: 1, zh: 1, tr: 1,
+        en: 7, pt: 7, id: 7, he: 7, hi: 7, ur: 7, ja: 7, ko: 7,
+        ar: 6
+    };
+
+    /** CLDR liefert für Urdu lateinische Initialen bei 'narrow' — dort 'short' nehmen. */
+    var WEEKDAY_WIDTH = { ur: 'short' };
+
+    var PANEL_CLASS = 'dp-panel';
+    var open = null; // { field, trigger, panel, view: {y, m}, focusIso }
+
+    // ---------- Datumshilfen ----------
+    // NIE new Date('YYYY-MM-DD') — das parst als UTC und liegt westlich davon einen Tag
+    // daneben, ausgerechnet bei der Gruppe, für die minDate() die Toleranz hat.
+
+    function parseIso(iso) {
+        if (!iso) return null;
+        var p = String(iso).split('-');
+        if (p.length !== 3) return null;
+        var d = new Date(+p[0], +p[1] - 1, +p[2]);
+        return isNaN(d.getTime()) ? null : d;
+    }
+
+    function toIso(d) {
+        var m = d.getMonth() + 1, day = d.getDate();
+        return d.getFullYear() + '-' + (m < 10 ? '0' : '') + m + '-' + (day < 10 ? '0' : '') + day;
+    }
+
+    function addDays(iso, n) {
+        var d = parseIso(iso);
+        if (!d) return '';
+        d.setDate(d.getDate() + n);
+        return toIso(d);
+    }
+
+    function maxIso(a, b) {
+        if (!a) return b || '';
+        if (!b) return a;
+        return a > b ? a : b;
+    }
+
+    // ---------- Sprache ----------
+
+    function lang() {
+        return (document.documentElement.getAttribute('lang') || 'en').split('-')[0];
+    }
+
+    function fmt(opts) {
+        try { return new Intl.DateTimeFormat(lang(), opts); }
+        catch (e) { return new Intl.DateTimeFormat('en', opts); }
+    }
+
+    function monthNames() {
+        var f = fmt({ month: 'long' }), out = [];
+        for (var m = 0; m < 12; m++) out.push(f.format(new Date(2026, m, 1)));
+        return out;
+    }
+
+    function weekdayNames(first) {
+        var f = fmt({ weekday: WEEKDAY_WIDTH[lang()] || 'narrow' }), out = [];
+        // 2027-01-04 ist ein Montag.
+        for (var i = 0; i < 7; i++) {
+            var dow = ((first - 1 + i) % 7);
+            out.push(f.format(new Date(2027, 0, 4 + dow)));
+        }
+        return out;
+    }
+
+    function longDate(d) {
+        return fmt({ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(d);
+    }
+
+    function displayDate(d) {
+        return fmt({ day: 'numeric', month: 'long', year: 'numeric' }).format(d);
+    }
+
+    // ---------- Livewire ----------
+
+    /**
+     * wire:model.blur registriert AUSSCHLIESSLICH einen blur-Listener — ein
+     * dispatchEvent(new Event('input')) wäre wirkungslos. Der dritte Parameter false
+     * bedeutet "kein Netzwerk-Commit" und bildet damit exakt das Verhalten von .blur nach:
+     * der Wert wandert in den Client-Snapshot und geht mit dem nächsten Commit mit.
+     */
+    function writeValue(native, iso) {
+        native.value = iso;
+
+        var root = native.closest('[wire\\:id]');
+        var prop = native.getAttribute('wire:model.blur') || native.getAttribute('wire:model');
+
+        if (root && prop && window.Livewire && typeof Livewire.find === 'function') {
+            try {
+                var wire = Livewire.find(root.getAttribute('wire:id'));
+                if (wire && typeof wire.set === 'function') wire.set(prop, iso, false);
+            } catch (e) { /* der Wert steht im Feld; der Submit nimmt ihn mit */ }
+        }
+
+        native.dispatchEvent(new Event('change', { bubbles: true }));
+        syncTrigger(native.closest('.date-field'));
+    }
+
+    // ---------- Anzeige ----------
+
+    function syncTrigger(field) {
+        if (!field) return;
+        var native = field.querySelector('.dp-native');
+        var text = field.querySelector('.dp-trigger-text');
+        if (!native || !text) return;
+
+        var d = parseIso(native.value);
+        if (d) {
+            text.textContent = displayDate(d);
+            text.classList.remove('dp-placeholder');
+        } else {
+            text.textContent = text.getAttribute('data-dp-placeholder') || '';
+            text.classList.add('dp-placeholder');
+        }
+    }
+
+    function syncAll() {
+        document.querySelectorAll('.date-field').forEach(syncTrigger);
+    }
+
+    // ---------- Grenzen ----------
+
+    function bounds(field) {
+        var native = field.querySelector('.dp-native');
+        var min = native.getAttribute('min') || '';
+        var max = native.getAttribute('max') || '';
+
+        // Untergrenze eines verknüpften Feldes IMMER frisch aus dem DOM lesen —
+        // kein zwischengespeicherter Zustand, keine zweite Wahrheit.
+        var fromId = field.getAttribute('data-dp-min-from');
+        if (fromId) {
+            var linked = document.getElementById(fromId);
+            if (linked && linked.value) {
+                var soft = linked.value;
+                // return_date ist after_or_equal, checkout_date ist after — daher das Flag.
+                if (field.hasAttribute('data-dp-min-exclusive')) soft = addDays(soft, 1);
+                min = maxIso(min, soft);
+            }
+        }
+        return { min: min, max: max };
+    }
+
+    function disabled(iso, b) {
+        if (b.min && iso < b.min) return true;
+        if (b.max && iso > b.max) return true;
+        return false;
+    }
+
+    // ---------- Panel ----------
+
+    function build(field) {
+        var native = field.querySelector('.dp-native');
+        var b = bounds(field);
+        var sel = native.value;
+        var start = parseIso(sel) || parseIso(b.min) || new Date();
+
+        var panel = document.createElement('div');
+        panel.className = PANEL_CLASS;
+        panel.setAttribute('role', 'dialog');
+        panel.id = field.getAttribute('data-dp-panel') || (native.id + '_panel');
+        panel.setAttribute('aria-labelledby', panel.id + '_cap');
+
+        open = {
+            field: field, native: native, panel: panel,
+            view: { y: start.getFullYear(), m: start.getMonth() },
+            focusIso: sel || toIso(start),
+            bounds: b
+        };
+
+        field.appendChild(panel);
+        render();
+        return panel;
+    }
+
+    function render() {
+        if (!open) return;
+        var b = open.bounds, v = open.view;
+        var months = monthNames();
+        var first = FIRST_DAY[lang()] || 1;
+        var minY = b.min ? +b.min.slice(0, 4) : v.y - 1;
+        var maxY = b.max ? +b.max.slice(0, 4) : v.y + 1;
+
+        var prevIso = toIso(new Date(v.y, v.m - 1, 1));
+        var nextIso = toIso(new Date(v.y, v.m + 1, 1));
+        var canPrev = !b.min || prevIso.slice(0, 7) >= b.min.slice(0, 7);
+        var canNext = !b.max || nextIso.slice(0, 7) <= b.max.slice(0, 7);
+
+        var h = '';
+        h += '<div class="dp-head">';
+        h += '<button type="button" class="dp-nav" data-dp-step="-1"' + (canPrev ? '' : ' disabled') +
+             ' aria-label="' + esc(months[(v.m + 11) % 12] + ' ' + (v.m === 0 ? v.y - 1 : v.y)) + '">' + chevron() + '</button>';
+        h += '<span class="dp-caption" id="' + open.panel.id + '_cap" aria-live="polite">';
+        h += '<select class="dp-sel dp-sel-m" aria-label="' + esc(months[v.m]) + '">';
+        for (var m = 0; m < 12; m++) {
+            var mIso = toIso(new Date(v.y, m, 1));
+            var mOut = (b.min && mIso.slice(0, 7) < b.min.slice(0, 7)) || (b.max && mIso.slice(0, 7) > b.max.slice(0, 7));
+            h += '<option value="' + m + '"' + (m === v.m ? ' selected' : '') + (mOut ? ' disabled' : '') + '>' + esc(months[m]) + '</option>';
+        }
+        h += '</select>';
+        h += '<select class="dp-sel dp-sel-y" aria-label="' + v.y + '">';
+        for (var y = minY; y <= maxY; y++) h += '<option value="' + y + '"' + (y === v.y ? ' selected' : '') + '>' + y + '</option>';
+        h += '</select></span>';
+        h += '<button type="button" class="dp-nav" data-dp-step="1"' + (canNext ? '' : ' disabled') +
+             ' aria-label="' + esc(months[(v.m + 1) % 12] + ' ' + (v.m === 11 ? v.y + 1 : v.y)) + '">' + chevron() + '</button>';
+        h += '</div>';
+
+        var wd = weekdayNames(first);
+        h += '<div class="dp-grid" role="grid"><div class="dp-row dp-wd" role="row">';
+        for (var i = 0; i < 7; i++) h += '<span role="columnheader">' + esc(wd[i]) + '</span>';
+        h += '</div>';
+
+        var firstOfMonth = new Date(v.y, v.m, 1);
+        var lead = (firstOfMonth.getDay() + 7 - (first % 7)) % 7;
+        var cur = new Date(v.y, v.m, 1 - lead);
+        var todayIso = toIso(new Date());
+        var dayFmt = fmt({ day: 'numeric' });
+
+        for (var w = 0; w < 6; w++) {
+            h += '<div class="dp-row" role="row">';
+            for (var d = 0; d < 7; d++) {
+                var iso = toIso(cur);
+                var out = cur.getMonth() !== v.m;
+                var dis = disabled(iso, b);
+                var isSel = iso === open.native.value;
+                var cls = 'dp-day' + (out ? ' dp-out' : '') + (isSel ? ' dp-selected' : '') + (iso === todayIso ? ' dp-today' : '');
+                h += '<button type="button" role="gridcell" class="' + cls + '" data-dp-iso="' + iso + '"' +
+                     (dis ? ' disabled aria-disabled="true"' : '') +
+                     (isSel ? ' aria-selected="true"' : '') +
+                     (iso === todayIso ? ' aria-current="date"' : '') +
+                     ' tabindex="' + (iso === open.focusIso ? '0' : '-1') + '"' +
+                     ' aria-label="' + esc(longDate(cur)) + '">' + esc(dayFmt.format(cur)) + '</button>';
+                cur.setDate(cur.getDate() + 1);
+            }
+            h += '</div>';
+        }
+        h += '</div>';
+
+        open.panel.innerHTML = h;
+        position();
+    }
+
+    function chevron() {
+        return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>';
+    }
+
+    function esc(s) {
+        return String(s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
+
+    /**
+     * Platzierung. Vertikal ist der Weg frei, horizontal beschneidet body{overflow-x:hidden}
+     * — deshalb feste Maximalbreite statt Feldbreite. Der Platz nach oben und unten wird um
+     * die feste Navigation (72/64 px) und die untere Leiste (64 px unter 768 px) gekürzt,
+     * sonst klappt das Panel darunter.
+     */
+    function position() {
+        if (!open) return;
+        var r = open.trigger ? open.trigger.getBoundingClientRect() : open.field.getBoundingClientRect();
+        var vh = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+        var small = window.matchMedia('(max-width: 768px)').matches;
+        var navH = small ? 64 : 72;
+        var barH = small ? 64 : 0;
+
+        var need = open.panel.offsetHeight || 340;
+        var below = vh - r.bottom - barH - 8;
+        var above = r.top - navH - 8;
+        var up = below < need && above > below;
+
+        open.panel.classList.toggle('dp-above', up);
+        open.panel.style.maxHeight = Math.max(220, (up ? above : below)) + 'px';
+    }
+
+    // ---------- Öffnen / Schliessen ----------
+
+    function openFor(trigger) {
+        var field = trigger.closest('.date-field');
+        if (!field) return;
+        closeAll(false);
+        var panel = build(field);
+        open.trigger = trigger;
+        trigger.setAttribute('aria-expanded', 'true');
+        requestAnimationFrame(function () {
+            position();
+            var f = panel.querySelector('.dp-day[tabindex="0"]:not([disabled])') ||
+                    panel.querySelector('.dp-day:not([disabled])');
+            if (f) f.focus();
+        });
+    }
+
+    function closeAll(refocus) {
+        if (!open) return;
+        var t = open.trigger;
+        if (open.panel && open.panel.parentNode) open.panel.parentNode.removeChild(open.panel);
+        if (t) t.setAttribute('aria-expanded', 'false');
+        open = null;
+        if (refocus && t) t.focus();
+    }
+
+    function choose(iso) {
+        if (!open) return;
+        var field = open.field, native = open.native;
+        writeValue(native, iso);
+
+        // Ein verknüpftes Folgefeld, das jetzt ungültig wäre, leeren — statt den Nutzer in
+        // eine Serverfehlermeldung laufen zu lassen für etwas, das er gerade selbst tat.
+        document.querySelectorAll('.date-field[data-dp-min-from="' + native.id + '"]').forEach(function (dep) {
+            var depNative = dep.querySelector('.dp-native');
+            if (!depNative || !depNative.value) return;
+            var db = bounds(dep);
+            if (disabled(depNative.value, db)) writeValue(depNative, '');
+        });
+
+        closeAll(true);
+    }
+
+    function step(months) {
+        if (!open) return;
+        var d = new Date(open.view.y, open.view.m + months, 1);
+        open.view = { y: d.getFullYear(), m: d.getMonth() };
+        render();
+        var f = open.panel.querySelector('.dp-day:not(.dp-out):not([disabled])');
+        if (f) f.focus();
+    }
+
+    function moveFocus(days) {
+        if (!open) return;
+        var iso = addDays(open.focusIso, days);
+        var d = parseIso(iso);
+        if (!d) return;
+        open.focusIso = iso;
+        if (d.getFullYear() !== open.view.y || d.getMonth() !== open.view.m) {
+            open.view = { y: d.getFullYear(), m: d.getMonth() };
+            render();
+        }
+        var cell = open.panel.querySelector('.dp-day[data-dp-iso="' + iso + '"]');
+        if (cell) {
+            open.panel.querySelectorAll('.dp-day').forEach(function (c) { c.setAttribute('tabindex', '-1'); });
+            cell.setAttribute('tabindex', '0');
+            cell.focus();
+        }
+    }
+
+    // ---------- Delegierte Listener ----------
+    // Alles auf document — überlebt jeden Livewire-Morph ohne Re-Binding.
+
+    document.addEventListener('click', function (e) {
+        var trigger = e.target.closest && e.target.closest('.dp-trigger');
+        if (trigger) {
+            e.preventDefault();
+            if (open && open.trigger === trigger) closeAll(true); else openFor(trigger);
+            return;
+        }
+
+        var day = e.target.closest && e.target.closest('.dp-day');
+        if (day && !day.disabled) { choose(day.getAttribute('data-dp-iso')); return; }
+
+        var nav = e.target.closest && e.target.closest('.dp-nav');
+        if (nav) { step(+nav.getAttribute('data-dp-step')); return; }
+
+        if (open && !e.target.closest('.' + PANEL_CLASS)) closeAll(false);
+    });
+
+    document.addEventListener('change', function (e) {
+        if (!open || !e.target.closest || !e.target.closest('.' + PANEL_CLASS)) return;
+        if (e.target.classList.contains('dp-sel-m')) open.view.m = +e.target.value;
+        else if (e.target.classList.contains('dp-sel-y')) open.view.y = +e.target.value;
+        else return;
+        render();
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (!open) {
+            var t = e.target.closest && e.target.closest('.dp-trigger');
+            if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openFor(t); }
+            return;
+        }
+        if (!e.target.closest('.' + PANEL_CLASS)) return;
+
+        // In RTL zeigt die linke Pfeiltaste auf den NÄCHSTEN Tag. Richtung aus dem
+        // gerenderten Panel lesen, nicht aus der Sprache raten.
+        var rtl = getComputedStyle(open.panel).direction === 'rtl';
+        var back = rtl ? 'ArrowRight' : 'ArrowLeft';
+        var fwd = rtl ? 'ArrowLeft' : 'ArrowRight';
+
+        switch (e.key) {
+            case back:        e.preventDefault(); moveFocus(-1); break;
+            case fwd:         e.preventDefault(); moveFocus(1); break;
+            case 'ArrowUp':   e.preventDefault(); moveFocus(-7); break;
+            case 'ArrowDown': e.preventDefault(); moveFocus(7); break;
+            case 'Home':      e.preventDefault(); moveFocus(-(new Date(parseIso(open.focusIso)).getDay())); break;
+            case 'End':       e.preventDefault(); moveFocus(6 - (new Date(parseIso(open.focusIso)).getDay())); break;
+            case 'PageUp':    e.preventDefault(); moveFocus(e.shiftKey ? -365 : -28); break;
+            case 'PageDown':  e.preventDefault(); moveFocus(e.shiftKey ? 365 : 28); break;
+            case 'Escape':    e.preventDefault(); closeAll(true); break;
+            case 'Enter':
+            case ' ':
+                var cell = e.target.closest('.dp-day');
+                if (cell && !cell.disabled) { e.preventDefault(); choose(cell.getAttribute('data-dp-iso')); }
+                break;
+        }
+    });
+
+    window.addEventListener('scroll', function () { if (open) position(); }, { passive: true });
+    window.addEventListener('resize', function () { if (open) position(); });
+    if (window.visualViewport) window.visualViewport.addEventListener('resize', function () { if (open) position(); });
+
+    // bfcache: FixCacheControl entfernt bewusst no-store, der Browser stellt Feldwerte
+    // wieder her, ohne input/change zu feuern.
+    window.addEventListener('pageshow', function () { closeAll(false); syncAll(); });
+    window.addEventListener('pagehide', function () { closeAll(false); });
+
+    function boot() {
+        syncAll();
+        // Das native Feld darf keinen eigenen Tab-Stopp mehr haben — der Knopf deckt es ab.
+        document.querySelectorAll('.date-field .dp-native').forEach(function (n) {
+            n.setAttribute('tabindex', '-1');
+        });
+    }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+    else boot();
+
+    document.addEventListener('livewire:init', function () {
+        if (!window.Livewire || !Livewire.hook) return;
+        Livewire.hook('morph', function () { closeAll(false); });
+        Livewire.hook('morphed', boot);
+    });
+})();

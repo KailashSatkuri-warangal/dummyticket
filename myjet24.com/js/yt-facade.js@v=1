@@ -1,0 +1,34 @@
+/* Click-to-play facade for YouTube embeds (myjet24).
+   The real youtube-nocookie iframe is injected only after user interaction,
+   so crawlers see no embedded video and pages skip ~1MB of player JS. */
+(function () {
+    'use strict';
+    if (window.__ytFacade) return;
+    window.__ytFacade = 1;
+
+    function play(f) {
+        if (f.dataset.ytDone) return;
+        f.dataset.ytDone = '1';
+        var id = f.dataset.ytId || '';
+        if (!/^[A-Za-z0-9_-]{6,20}$/.test(id)) return;
+        var i = document.createElement('iframe');
+        i.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+        i.title = f.dataset.ytTitle || 'Video';
+        i.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+        i.setAttribute('allowfullscreen', '');
+        i.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:0;';
+        f.textContent = '';
+        f.appendChild(i);
+    }
+
+    document.addEventListener('click', function (e) {
+        var t = e.target;
+        var f = t && t.closest ? t.closest('.yt-facade') : null;
+        if (f) play(f);
+    });
+
+    var s = document.createElement('style');
+    s.textContent = '.yt-facade-btn:hover .yt-facade-pill,.yt-facade-btn:focus-visible .yt-facade-pill{background:#f00;}' +
+        '.yt-facade-btn:focus-visible{outline:3px solid #fff;outline-offset:-3px;}';
+    document.head.appendChild(s);
+})();

@@ -117,8 +117,8 @@ export function Header({
     <header
       className={`sticky top-0 z-40 w-full transition-all duration-300 ${
         scrolled
-          ? 'border-b border-slate-200/90 bg-white/95 shadow-sm backdrop-blur-md'
-          : 'border-b border-slate-200/60 bg-white/85 backdrop-blur-sm'
+          ? 'border-b border-slate-200/90 bg-white/95 shadow-md backdrop-blur-xl'
+          : 'border-b border-slate-200/70 bg-white/90 shadow-sm backdrop-blur-md'
       }`}
     >
       {/* Trust bar */}
@@ -176,15 +176,17 @@ export function Header({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`relative px-3 py-2 rounded-lg transition-colors ${
-                    isActive ? 'text-brand-600 font-semibold' : 'text-slate-700 hover:text-brand-600 hover:bg-slate-50'
+                  className={`relative px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-200 ${
+                    isActive
+                      ? 'text-brand-600 bg-brand-50 shadow-sm'
+                      : 'text-slate-600 hover:text-brand-600 hover:bg-slate-100/70'
                   }`}
                 >
                   {item.label}
                   {isActive && (
                     <motion.span
                       layoutId="header-nav-underline"
-                      className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-brand-600"
+                      className="absolute inset-x-3 -bottom-1 h-0.5 rounded-full bg-brand-600"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -283,7 +285,7 @@ export function Header({
             <>
               <Link
                 href="/login"
-                className="btn btn-secondary hidden px-3 py-2 text-xs sm:inline-flex"
+                className="btn btn-secondary hidden px-3.5 py-2 text-xs font-bold sm:inline-flex"
               >
                 <LogIn className="h-4 w-4 text-brand-600" />
                 Sign In
@@ -291,7 +293,7 @@ export function Header({
 
               <Link
                 href="/signup"
-                className="btn btn-primary px-3.5 py-2 text-xs focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-1"
+                className="btn btn-primary btn-shimmer px-4 py-2 text-xs font-bold shadow-md shadow-brand-600/20 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-1"
               >
                 <Sparkles className="h-4 w-4" />
                 <span>Get Started</span>

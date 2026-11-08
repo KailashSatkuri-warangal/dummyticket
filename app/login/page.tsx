@@ -62,7 +62,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="card space-y-6 p-6 shadow-elevated sm:p-8">
+    <div className="card space-y-6 rounded-3xl border border-slate-200/90 bg-white p-7 shadow-elevated sm:p-9">
       <div>
         <span className="eyebrow">Welcome Back</span>
         <h1 className="section-heading mt-1">Sign In to Your Account</h1>
@@ -131,7 +131,7 @@ function LoginForm() {
           </div>
         </div>
 
-        <button type="submit" disabled={loading} className="btn btn-primary w-full py-3">
+        <button type="submit" disabled={loading} className="btn btn-primary btn-shimmer w-full py-3.5 shadow-md hover:shadow-glow-brand transition-all">
           <span>{loading ? 'Signing In...' : 'Sign In'}</span>
           <ArrowRight className="h-4 w-4" />
         </button>

@@ -35,7 +35,7 @@ export default function AccountSecurityPage() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-4">
+      <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-card space-y-4">
         <div className="flex items-center gap-2">
           <Shield className="h-5 w-5 text-brand-600" />
           <h1 className="text-xl font-extrabold text-navy-900">

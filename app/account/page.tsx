@@ -22,7 +22,7 @@ export default async function AccountOverviewPage() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card flex flex-wrap items-center justify-between gap-4">
+      <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-card flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-navy-900">
             Customer Dashboard Overview
@@ -33,7 +33,7 @@ export default async function AccountOverviewPage() {
         </div>
         <Link
           href="/flights?from=HYD&to=DEL&depart=2026-12-15&adults=1&cabin=economy"
-          className="inline-flex items-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2.5 text-xs font-bold text-white hover:bg-brand-700"
+          className="btn-shimmer inline-flex items-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-brand-700 hover:shadow-glow-brand transition-all"
         >
           <Plane className="h-4 w-4" />
           Quick Flight Search
@@ -42,13 +42,13 @@ export default async function AccountOverviewPage() {
 
       {/* Metrics Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card">
+        <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-card hover:shadow-card-hover transition-all">
           <p className="text-xs font-semibold text-slate-500">Total Bookings</p>
           <p className="mt-2 text-3xl font-extrabold text-navy-900">
             {bookings.length}
           </p>
         </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card">
+        <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-card hover:shadow-card-hover transition-all">
           <p className="text-xs font-semibold text-slate-500">
             Confirmed / Ticketed
           </p>
@@ -56,7 +56,7 @@ export default async function AccountOverviewPage() {
             {confirmedCount}
           </p>
         </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card">
+        <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-card hover:shadow-card-hover transition-all">
           <p className="text-xs font-semibold text-slate-500">
             Pending Payment
           </p>

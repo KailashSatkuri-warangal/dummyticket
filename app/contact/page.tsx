@@ -74,14 +74,14 @@ export default function ContactPage() {
           </div>
         </div>
 
-        <div className="lg:col-span-7 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-card">
-          <h2 className="text-base font-bold text-navy-900 mb-4">
+        <div className="lg:col-span-7 rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-elevated">
+          <h2 className="text-lg font-extrabold text-navy-900 mb-4">
             Submit a Support Ticket
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4 text-xs">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">
+                <label className="block font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                   Your Name *
                 </label>
                 <input
@@ -89,11 +89,11 @@ export default function ContactPage() {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 px-3.5 py-2 text-navy-900"
+                  className="input-field"
                 />
               </div>
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">
+                <label className="block font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                   Email Address *
                 </label>
                 <input
@@ -101,26 +101,26 @@ export default function ContactPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 px-3.5 py-2 text-navy-900"
+                  className="input-field"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">
+                <label className="block font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                   Booking Reference (Optional)
                 </label>
                 <input
                   type="text"
                   value={bookingReference}
                   onChange={(e) => setBookingReference(e.target.value)}
-                  placeholder="AV-HYD842MSY"
-                  className="w-full rounded-xl border border-slate-200 px-3.5 py-2 font-mono uppercase text-navy-900"
+                  placeholder="DT-HYD842MSY"
+                  className="input-field font-mono uppercase font-bold"
                 />
               </div>
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">
+                <label className="block font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                   Subject *
                 </label>
                 <input
@@ -129,13 +129,13 @@ export default function ContactPage() {
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                   placeholder="Itinerary or payment inquiry"
-                  className="w-full rounded-xl border border-slate-200 px-3.5 py-2 text-navy-900"
+                  className="input-field"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block font-semibold text-slate-700 mb-1">
+              <label className="block font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                 Message *
               </label>
               <textarea
@@ -143,14 +143,14 @@ export default function ContactPage() {
                 required
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="w-full rounded-xl border border-slate-200 px-3.5 py-2 text-navy-900"
+                className="input-field"
               />
             </div>
 
             <button
               type="submit"
               disabled={status === 'loading'}
-              className="rounded-xl bg-brand-600 px-6 py-3 text-xs font-bold text-white hover:bg-brand-700"
+              className="btn btn-primary btn-shimmer px-7 py-3 text-xs font-black shadow-md shadow-brand-600/20"
             >
               {status === 'loading' ? 'Submitting...' : 'Submit Support Request'}
             </button>

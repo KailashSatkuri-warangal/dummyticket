@@ -423,7 +423,7 @@ export default function CheckoutPage() {
         {/* Left 8 Columns: Passenger Forms & Terms Consent */}
         <div className="lg:col-span-8 space-y-6">
           {/* Contact Information */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-4">
+          <div className="rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-7 shadow-card space-y-4">
             <h2 className="text-base font-bold text-navy-900">
               1. Booking Contact & Delivery Details
             </h2>
@@ -459,7 +459,7 @@ export default function CheckoutPage() {
           </div>
 
           {/* Passenger Details */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-5">
+          <div className="rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-7 shadow-card space-y-5">
             <div className="flex items-center justify-between">
               <h2 className="text-base font-bold text-navy-900 flex items-center gap-2">
                 <User className="h-4 w-4 text-brand-600" />
@@ -474,7 +474,7 @@ export default function CheckoutPage() {
             {passengers.map((pax, idx) => (
               <div
                 key={idx}
-                className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 space-y-3"
+                className="rounded-2xl border border-slate-200/80 bg-slate-50/70 p-4 sm:p-5 space-y-3"
               >
                 <p className="text-xs font-bold uppercase tracking-wider text-brand-700">
                   Passenger {idx + 1} · {pax.passengerType}
@@ -493,7 +493,7 @@ export default function CheckoutPage() {
                         updatePassenger(idx, 'firstName', e.target.value)
                       }
                       placeholder="e.g., Arjun"
-                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-navy-900"
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-navy-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                     />
                   </div>
                   <div>
@@ -508,7 +508,7 @@ export default function CheckoutPage() {
                         updatePassenger(idx, 'lastName', e.target.value)
                       }
                       placeholder="e.g., Reddy"
-                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-navy-900"
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-navy-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                     />
                   </div>
                   <div>
@@ -521,7 +521,7 @@ export default function CheckoutPage() {
                       onChange={(e) =>
                         updatePassenger(idx, 'dateOfBirth', e.target.value)
                       }
-                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-navy-900"
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-navy-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                     />
                   </div>
                 </div>
@@ -540,7 +540,7 @@ export default function CheckoutPage() {
                           updatePassenger(idx, 'passportNumber', e.target.value)
                         }
                         placeholder="e.g., Z4988921"
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-navy-900"
+                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-navy-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                       />
                     </div>
                     <div>
@@ -555,7 +555,7 @@ export default function CheckoutPage() {
                         onChange={(e) =>
                           updatePassenger(idx, 'passportExpiry', e.target.value)
                         }
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-navy-900"
+                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-navy-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                       />
                     </div>
                   </div>
@@ -569,7 +569,7 @@ export default function CheckoutPage() {
           </div>
 
           {/* Explicit Terms & Itinerary Delivery Consent */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-3">
+          <div className="rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-7 shadow-card space-y-3">
             <h2 className="text-base font-bold text-navy-900">
               3. Mandatory Disclosures & Consent
             </h2>
@@ -617,7 +617,7 @@ export default function CheckoutPage() {
 
         {/* Right 4 Columns: Summary, Promo Code & Payment Action */}
         <div className="lg:col-span-4 space-y-4">
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-elevated sticky top-24 space-y-4">
+          <div className="rounded-3xl border border-slate-200/90 bg-white p-6 shadow-elevated sticky top-24 space-y-4">
             <div className="border-b border-slate-100 pb-3">
               <span className="text-xs font-bold text-brand-600">
                 {offer.airline.name} · {offer.flightNumber}
@@ -696,7 +696,7 @@ export default function CheckoutPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-3.5 text-sm font-bold text-white shadow-sm hover:bg-brand-700 disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 btn-shimmer px-5 py-4 text-sm font-black text-white shadow-lg shadow-brand-600/25 hover:bg-brand-700 hover:shadow-brand-600/40 hover:-translate-y-0.5 active:scale-[0.99] disabled:opacity-50 transition-all"
             >
               <Lock className="h-4 w-4" />
               <span>

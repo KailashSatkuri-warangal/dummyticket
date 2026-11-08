@@ -1,0 +1,153 @@
+/* ---------- Das native Feld ---------- */
+
+/* 24.09.2026: Auf iPhone-Safari ragte das Kalendersymbol des nativen Feldes rechts
+   aus dem Rahmen und wurde am Bildschirmrand gekappt. Chromium bei 390 px zeigt
+   dagegen keinen Ueberlauf (Feld 292 px im 292-px-Rahmen, intrinsisch nur 197 px) -
+   der Fehler entsteht erst, weil appearance:auto WebKit eigene Metriken fuer das
+   Steuerelement erlaubt.
+
+   Am TYP angehaengt, nicht an .inp: die vier Visa-Werkzeuge benutzen form-input
+   bzw. gar keine Klasse und blieben sonst ungeschuetzt - dort liegt zudem kein
+   Knopf ueber dem Feld, ein Ueberlauf waere voll sichtbar.
+
+   KEINE Engine-Weiche: alle Engines bekommen denselben Wert, in Chromium ist er
+   messbar wirkungslos. Kein ::-webkit-calendar-picker-indicator{display:none} -
+   das waere eine Praefix-Regel ueber Sichtbarkeit (verboten seit 02.09.2026) und
+   naehme dem offenen Geburtsdatumsfeld die Zeigerbedienung. */
+input[type="date"] {
+    -webkit-appearance: none;   /* iOS vor 15.4 kennt nur die Praefix-Schreibweise */
+    appearance: none;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.inp[type="date"] {
+    position: relative;
+    min-height: 52px;                 /* type=date hat andere intrinsische Höhe als text */
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: right 1rem center;
+    /* Physisch, nicht logisch: Datumsfelder erzwingen intern LTR, die logische Auflösung
+       kippt dadurch in RTL — gemessen am 02.09.2026. */
+    padding-right: 3rem;
+}
+
+[dir="rtl"] .inp[type="date"] {
+    background-position: left 1rem center;
+    padding-left: 3rem;
+    padding-right: 1.1rem;
+}
+
+/* color-scheme färbt das native Kalender-Panel selbst. Ohne das klappt auf der
+   nachtschwarzen Seite ein grelles weisses Panel auf — das bleibt für den Fall wichtig,
+   dass das JS nicht lädt und das native Feld übernimmt. */
+[data-theme="dark"] .inp[type="date"] {
+    color-scheme: dark;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23a78bfa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cpath d='M16 2v4M8 2v4M3 10h18'/%3E%3C/svg%3E");
+}
+
+[data-theme="light"] .inp[type="date"] {
+    color-scheme: light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%237c3aed' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cpath d='M16 2v4M8 2v4M3 10h18'/%3E%3C/svg%3E");
+}
+
+/* ---------- Der Auslöser ---------- */
+
+.date-field { position: relative; }
+
+/* Ohne JS unsichtbar: das native Feld bleibt dann die vollwertige Bedienung.
+   Der Knopf ersetzt das Feld NICHT — es behält required, min/max und wire:model,
+   damit die Formularprüfung des Browsers und Livewire unangetastet bleiben. */
+html:not(.js) .dp-trigger { display: none; }
+
+html.js .dp-native {
+    /* Text unsichtbar, Feld bleibt im Fluss und validierbar. */
+    color: transparent;
+}
+
+html.js .dp-trigger {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: start;
+    cursor: pointer;
+    touch-action: manipulation;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.dp-trigger .dp-trigger-text { flex: 1; }
+.dp-trigger .dp-placeholder { color: var(--text2); }
+
+/* ---------- Das Panel ---------- */
+
+.dp-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+    /* Feste, kompakte Breite — bewusst NICHT die Feldbreite: am Rechner ist das Feld
+       702 px breit, ein Kalender in dieser Breite sähe verloren aus. Auf dem Handy ist
+       340 px umgekehrt breiter als das 292 px schmale Feld und ergibt ~46 px je Spalte
+       statt 38. Der Deckel auf 100vw-28px verhindert, dass body{overflow-x:hidden} das
+       Panel seitlich abschneidet. */
+    width: min(340px, calc(100vw - 28px));
+    /* Über dem Flughafen-Vorschlag (50), unter der festen Navigation (100). */
+    z-index: 60;
+    overflow-y: auto;
+    padding: 0.85rem;
+    border-radius: 16px;
+    background: var(--card-bg, #14102b);
+    border: 1px solid var(--card-border, var(--border));
+    box-shadow: 0 18px 48px rgba(10, 4, 30, 0.55);
+}
+
+[dir="rtl"] .dp-panel { transform: translateX(50%); }
+
+.dp-panel.dp-above { top: auto; bottom: calc(100% + 8px); }
+
+.dp-head { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.6rem; }
+.dp-caption { flex: 1; display: flex; gap: 0.35rem; justify-content: center; }
+
+.dp-sel {
+    background: transparent; color: var(--text); border: 1px solid transparent;
+    border-radius: 8px; padding: 0.25rem 0.4rem; font: inherit; font-weight: 700; cursor: pointer;
+}
+.dp-sel:hover, .dp-sel:focus-visible { border-color: var(--border); outline: none; }
+
+.dp-nav {
+    display: flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 10px;
+    background: transparent; border: 1px solid var(--border); color: var(--text); cursor: pointer;
+}
+.dp-nav:hover:not(:disabled) { border-color: var(--purple); color: var(--purple); }
+.dp-nav:disabled { opacity: 0.3; cursor: default; }
+/* Ein einziges Chevron, in RTL gespiegelt — die DOM-Reihenfolge dreht der Fluss selbst. */
+.dp-nav[data-dp-step="1"] svg { transform: rotate(180deg); }
+[dir="rtl"] .dp-nav svg { transform: scaleX(-1); }
+[dir="rtl"] .dp-nav[data-dp-step="1"] svg { transform: scaleX(-1) rotate(180deg); }
+
+.dp-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.dp-wd span {
+    display: flex; align-items: center; justify-content: center;
+    height: 30px; font-size: 0.72rem; font-weight: 700; color: var(--text2);
+}
+
+.dp-day {
+    display: flex; align-items: center; justify-content: center;
+    aspect-ratio: 1 / 1; min-height: 40px;
+    border: none; border-radius: 10px; background: transparent;
+    color: var(--text); font: inherit; font-size: 0.9rem; cursor: pointer;
+}
+.dp-day:hover:not(:disabled) { background: rgba(124, 58, 237, 0.18); }
+.dp-day:focus-visible { outline: 2px solid var(--purple); outline-offset: -2px; }
+.dp-day.dp-out { color: var(--text2); opacity: 0.45; }
+.dp-day:disabled { opacity: 0.25; cursor: default; }
+.dp-day.dp-today { box-shadow: inset 0 0 0 1px var(--purple); }
+.dp-day.dp-selected { background: var(--purple); color: #fff; font-weight: 800; }
+
+@media (max-width: 768px) {
+    .dp-day { min-height: 44px; }
+}

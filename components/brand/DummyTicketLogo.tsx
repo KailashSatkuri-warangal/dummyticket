@@ -21,7 +21,7 @@ export function DummyTicketLogo({
   const wordmarkPrimary =
     theme === 'dark' || theme === 'ticket' ? '#FFFFFF' : '#0B1120';
   const wordmarkAccent =
-    theme === 'ticket' ? '#FBBF24' : theme === 'dark' ? '#599EFF' : '#0057FF';
+    theme === 'ticket' ? '#FBBF24' : theme === 'dark' ? '#fb7185' : '#e11d48';
   const subtextColor =
     theme === 'dark' || theme === 'ticket'
       ? 'rgba(255,255,255,0.75)'
@@ -50,11 +50,11 @@ export function DummyTicketLogo({
           >
             <stop
               offset="0%"
-              stopColor={theme === 'ticket' ? '#0062E0' : '#0057FF'}
+              stopColor={theme === 'ticket' ? '#f43f5e' : '#e11d48'}
             />
             <stop
               offset="100%"
-              stopColor={theme === 'ticket' ? '#003E99' : '#060913'}
+              stopColor={theme === 'ticket' ? '#be123c' : '#881337'}
             />
           </linearGradient>
         </defs>

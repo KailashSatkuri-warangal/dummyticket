@@ -60,7 +60,7 @@ export default function SignupPage() {
   if (confirmationSent) {
     return (
       <div className="mx-auto max-w-md px-4 py-12 sm:px-6">
-        <div className="card space-y-4 p-6 text-center shadow-elevated sm:p-8">
+        <div className="card space-y-4 rounded-3xl border border-slate-200/90 bg-white p-7 text-center shadow-elevated sm:p-9">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-verified-50 text-verified-600">
             <MailCheck className="h-7 w-7" />
           </div>
@@ -71,7 +71,7 @@ export default function SignupPage() {
             We sent a confirmation link to <strong>{email}</strong>. Click the
             link to activate your account, then sign in.
           </p>
-          <Link href="/login" className="btn btn-primary w-full py-3">
+          <Link href="/login" className="btn btn-primary btn-shimmer w-full py-3.5 shadow-md hover:shadow-glow-brand transition-all">
             Back to Sign In
           </Link>
         </div>
@@ -81,7 +81,7 @@ export default function SignupPage() {
 
   return (
     <div className="mx-auto max-w-md px-4 py-12 sm:px-6">
-      <div className="card space-y-5 p-6 shadow-elevated sm:p-8">
+      <div className="card space-y-5 rounded-3xl border border-slate-200/90 bg-white p-7 shadow-elevated sm:p-9">
         <div>
           <h1 className="text-2xl font-extrabold text-navy-900">
             Create Your Travel Account
@@ -148,7 +148,7 @@ export default function SignupPage() {
             </span>
           </label>
 
-          <button type="submit" disabled={loading} className="btn btn-primary w-full py-3">
+          <button type="submit" disabled={loading} className="btn btn-primary btn-shimmer w-full py-3.5 shadow-md hover:shadow-glow-brand transition-all">
             <UserPlus className="h-4 w-4" />
             {loading ? 'Creating Account...' : 'Create Account'}
           </button>

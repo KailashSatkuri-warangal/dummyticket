@@ -35,7 +35,7 @@ export default async function AccountLayout({
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <aside className="lg:col-span-3 space-y-4">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card">
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-card">
             <p className="eyebrow">
               Customer Portal
             </p>

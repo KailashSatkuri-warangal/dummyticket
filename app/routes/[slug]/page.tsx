@@ -70,7 +70,7 @@ export default async function RouteLandingPageView(props: {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 space-y-8">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-card space-y-4">
+      <div className="rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-elevated space-y-4">
         <span className="eyebrow">
           Verified Route Guide · {route.originIata} → {route.destinationIata}
         </span>
@@ -83,21 +83,21 @@ export default async function RouteLandingPageView(props: {
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 text-xs">
-          <div className="rounded-xl bg-slate-50 p-3.5">
-            <span className="text-slate-500">Average Non-stop Duration</span>
-            <p className="mt-1 text-base font-bold text-navy-900">
+          <div className="rounded-2xl border border-slate-100 bg-slate-50/80 p-4 shadow-sm">
+            <span className="text-slate-500 font-medium">Average Non-stop Duration</span>
+            <p className="mt-1 text-base font-extrabold text-navy-900">
               {formatDuration(route.averageDurationMinutes)}
             </p>
           </div>
-          <div className="rounded-xl bg-slate-50 p-3.5">
-            <span className="text-slate-500">Operating Airlines</span>
-            <p className="mt-1 text-base font-bold text-navy-900">
+          <div className="rounded-2xl border border-slate-100 bg-slate-50/80 p-4 shadow-sm">
+            <span className="text-slate-500 font-medium">Operating Airlines</span>
+            <p className="mt-1 text-base font-extrabold text-navy-900">
               {route.airlinesOperating.join(', ')}
             </p>
           </div>
-          <div className="rounded-xl bg-slate-50 p-3.5">
-            <span className="text-slate-500">Starting Fare</span>
-            <p className="mt-1 text-base font-bold text-brand-700">
+          <div className="rounded-2xl border border-slate-100 bg-slate-50/80 p-4 shadow-sm">
+            <span className="text-slate-500 font-medium">Starting Fare</span>
+            <p className="mt-1 text-base font-extrabold text-brand-700">
               {formatInr(route.startingFareInr)}
             </p>
           </div>

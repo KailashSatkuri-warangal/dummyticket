@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 280" fill="none">
+  <!-- Card background -->
+  <rect width="160" height="280" rx="16" fill="#f5f3ff"/>
+
+  <!-- Sky glow -->
+  <ellipse cx="80" cy="95" rx="68" ry="52" fill="#ede9fe"/>
+
+  <!-- DISTANT HILLS -->
+  <path d="M0,160 Q30,130 60,145 Q90,130 120,145 Q145,135 160,150 L160,165 L0,165 Z" fill="#ddd6fe" opacity="0.5"/>
+  <path d="M0,165 Q40,148 80,158 Q120,148 160,158 L160,175 L0,175 Z" fill="#e9d5ff" opacity="0.45"/>
+
+  <!-- RIVER (Bhutan dzongs are traditionally built at river confluences) -->
+  <path d="M0,220 Q40,215 80,218 Q120,215 160,220 L160,228 Q120,225 80,228 Q40,225 0,228 Z" fill="#c4b5fd" opacity="0.4"/>
+  <path d="M0,222 Q40,218 80,222 Q120,218 160,222" stroke="#a78bfa" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- DZONG FORTRESS MAIN STRUCTURE -->
+  <!-- Foundation platform -->
+  <rect x="10" y="175" width="140" height="10" rx="2" fill="#5b21b6"/>
+
+  <!-- OUTER DEFENSIVE WALL (left wing) -->
+  <rect x="10" y="130" width="28" height="55" rx="1.5" fill="#7c3aed"/>
+  <!-- Left wall battlements (top crenellation) -->
+  <rect x="10" y="124" width="5" height="8" rx="0.5" fill="#6d28d9"/>
+  <rect x="17" y="124" width="5" height="8" rx="0.5" fill="#6d28d9"/>
+  <rect x="24" y="124" width="5" height="8" rx="0.5" fill="#6d28d9"/>
+  <rect x="31" y="124" width="7" height="8" rx="0.5" fill="#6d28d9"/>
+  <!-- Left wall windows (small slits) -->
+  <rect x="16" y="140" width="6" height="9" rx="1" fill="#ede9fe" opacity="0.55"/>
+  <rect x="27" y="140" width="6" height="9" rx="1" fill="#ede9fe" opacity="0.55"/>
+  <rect x="16" y="158" width="6" height="9" rx="1" fill="#ede9fe" opacity="0.5"/>
+  <rect x="27" y="158" width="6" height="9" rx="1" fill="#ede9fe" opacity="0.5"/>
+
+  <!-- OUTER DEFENSIVE WALL (right wing) -->
+  <rect x="122" y="130" width="28" height="55" rx="1.5" fill="#7c3aed"/>
+  <!-- Right wall battlements -->
+  <rect x="122" y="124" width="5" height="8" rx="0.5" fill="#6d28d9"/>
+  <rect x="129" y="124" width="5" height="8" rx="0.5" fill="#6d28d9"/>
+  <rect x="136" y="124" width="5" height="8" rx="0.5" fill="#6d28d9"/>
+  <rect x="143" y="124" width="7" height="8" rx="0.5" fill="#6d28d9"/>
+  <!-- Right wall windows -->
+  <rect x="127" y="140" width="6" height="9" rx="1" fill="#ede9fe" opacity="0.55"/>
+  <rect x="138" y="140" width="6" height="9" rx="1" fill="#ede9fe" opacity="0.55"/>
+  <rect x="127" y="158" width="6" height="9" rx="1" fill="#ede9fe" opacity="0.5"/>
+  <rect x="138" y="158" width="6" height="9" rx="1" fill="#ede9fe" opacity="0.5"/>
+
+  <!-- CENTRAL UTSE TOWER (the tall central tower of a Bhutanese dzong) -->
+  <!-- Tower base -->
+  <rect x="52" y="100" width="56" height="85" rx="2" fill="#8b5cf6"/>
+  <!-- Tower windows — row 1 -->
+  <rect x="58" y="112" width="8" height="12" rx="1.5" fill="#ddd6fe" opacity="0.65"/>
+  <rect x="70" y="112" width="8" height="12" rx="1.5" fill="#ddd6fe" opacity="0.65"/>
+  <rect x="82" y="112" width="8" height="12" rx="1.5" fill="#ddd6fe" opacity="0.65"/>
+  <rect x="94" y="112" width="8" height="12" rx="1.5" fill="#ddd6fe" opacity="0.65"/>
+  <!-- Tower windows — row 2 -->
+  <rect x="58" y="132" width="8" height="12" rx="1.5" fill="#ddd6fe" opacity="0.6"/>
+  <rect x="70" y="132" width="8" height="12" rx="1.5" fill="#ddd6fe" opacity="0.6"/>
+  <rect x="82" y="132" width="8" height="12" rx="1.5" fill="#ddd6fe" opacity="0.6"/>
+  <rect x="94" y="132" width="8" height="12" rx="1.5" fill="#ddd6fe" opacity="0.6"/>
+  <!-- Tower windows — row 3 -->
+  <rect x="62" y="153" width="8" height="12" rx="1.5" fill="#ede9fe" opacity="0.55"/>
+  <rect x="76" y="153" width="8" height="12" rx="1.5" fill="#ede9fe" opacity="0.55"/>
+  <rect x="90" y="153" width="8" height="12" rx="1.5" fill="#ede9fe" opacity="0.55"/>
+
+  <!-- Central tower BUDDHIST ROOF (tiered pagoda style) -->
+  <!-- Roof tier 3 (bottom of roof) -->
+  <path d="M48,100 Q80,88 112,100" fill="#5b21b6"/>
+  <!-- Roof tier 2 -->
+  <path d="M55,88 Q80,77 105,88" fill="#6d28d9"/>
+  <!-- Roof tier 1 (top) -->
+  <path d="M62,77 Q80,66 98,77" fill="#7c3aed"/>
+  <!-- Golden roof ornament tip -->
+  <line x1="80" y1="66" x2="80" y2="50" stroke="#5b21b6" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="80" cy="49" r="2.5" fill="#5b21b6"/>
+  <line x1="74" y1="55" x2="86" y2="55" stroke="#5b21b6" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- COURTYARD GATE (central entrance arch) -->
+  <rect x="72" y="158" width="16" height="22" rx="1" fill="#5b21b6"/>
+  <path d="M72,165 Q80,158 88,165" fill="#4c1d95"/>
+
+  <!-- CONNECTING WALLS (low walls joining outer wings to central tower) -->
+  <rect x="38" y="155" width="14" height="30" rx="1" fill="#6d28d9"/>
+  <rect x="108" y="155" width="14" height="30" rx="1" fill="#6d28d9"/>
+
+  <!-- DECORATIVE BANDS on tower (Bhutanese dzongs have painted bands) -->
+  <rect x="52" y="98" width="56" height="4" rx="1" fill="#c4b5fd" opacity="0.5"/>
+  <rect x="52" y="127" width="56" height="2" rx="0.5" fill="#c4b5fd" opacity="0.4"/>
+  <rect x="52" y="148" width="56" height="2" rx="0.5" fill="#c4b5fd" opacity="0.35"/>
+
+  <!-- GROUND + COURTYARD -->
+  <rect x="0" y="230" width="160" height="15" rx="2" fill="#ddd6fe" opacity="0.5"/>
+  <!-- Cobblestone hint -->
+  <line x1="0" y1="232" x2="160" y2="232" stroke="#c4b5fd" stroke-width="0.5" opacity="0.3"/>
+  <line x1="0" y1="236" x2="160" y2="236" stroke="#c4b5fd" stroke-width="0.5" opacity="0.3"/>
+
+  <!-- Prayer flags above tower -->
+  <line x1="50" y1="50" x2="80" y2="48" stroke="#a78bfa" stroke-width="0.8" opacity="0.6"/>
+  <rect x="52" y="49" width="5" height="4" rx="0.5" fill="#7c3aed" opacity="0.7"/>
+  <rect x="60" y="48" width="5" height="4" rx="0.5" fill="#a78bfa" opacity="0.7"/>
+  <rect x="68" y="48" width="5" height="4" rx="0.5" fill="#6d28d9" opacity="0.7"/>
+
+  <!-- Decorative sparkles -->
+  <circle cx="142" cy="45" r="2" fill="#a78bfa" opacity="0.5"/>
+  <circle cx="150" cy="80" r="1.5" fill="#c4b5fd" opacity="0.4"/>
+  <circle cx="12" cy="55" r="1.5" fill="#a78bfa" opacity="0.4"/>
+
+  <!-- LABEL -->
+  <text x="80" y="256" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#5b21b6">Tashichho Dzong</text>
+  <text x="80" y="269" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9.5" fill="#7c3aed" opacity="0.85">Thimphu · Bhutan</text>
+</svg>

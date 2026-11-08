@@ -1,0 +1,231 @@
+/**
+ * MyJet24 — 3D Hero Globe (Premium Fintech Style, MyJet24 Purple)
+ *
+ * Stack:    Three.js r160 ESM, self-hosted /js/three.module.js
+ * Pattern:  Tether-style Fibonacci dot globe, brand purple, NO airplane/satellite
+ * Motion:   Slow, premium, no quick rotation
+ *
+ * Per spec:
+ *   - SphereGeometry r=0.985, 48x48 — subtle inner sphere
+ *   - 2400 Fibonacci dots (purple, opacity 0.55)
+ *   - 13 city markers + halos with unsynchronised pulse
+ *   - 14 static arc connections (no moving particles)
+ *   - 220 background stars
+ *   - Camera fov=38, position (0,0,4.2)
+ *   - Mouse parallax with lerp 0.05
+ *   - Auto-rotation 0.0009 (slow)
+ *   - Initial fade-in
+ */
+
+(async function bootHeroGlobe(){
+    'use strict';
+
+    // ═══ GUARDS — MÜSSEN vor dem Laden von Three.js stehen ═══
+    // Three.js wird bewusst per dynamischem import() nachgeladen, NICHT statisch oben.
+    // Ein statischer Import läuft immer, auch wenn die Guards direkt danach abbrechen:
+    // das kostete jedes Handy 228 KB Download + 1,2 MB Parsing für eine Animation,
+    // die dort nie startet. Wer das zurückbaut, bringt den Fehler zurück.
+    const canvas = document.getElementById('heroGlobeCanvas');
+    if (!canvas) return;
+    if (window.innerWidth < 768) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const THREE = await import('/js/three.module.js');
+
+    const container = canvas.parentElement;
+
+    // ═══ COLORS — MyJet24 Brand Purple ═══
+    const C = {
+        dots:   0x7c3aed,  // brand purple
+        marker: 0xa78bfa,  // lighter purple for city dots
+        sphere: 0x2e1065,  // deep purple inner sphere (very subtle)
+        arc:    0x8b5cf6,  // medium purple for connection arcs
+        stars:  0x7c3aed,
+    };
+
+    // ═══ RENDERER ═══
+    const renderer = new THREE.WebGLRenderer({
+        canvas, antialias: true, alpha: true,
+        powerPreference: 'high-performance'
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+    camera.position.set(0, 0, 4.2);
+
+    const sizeRenderer = () => {
+        const w = container.offsetWidth, h = container.offsetHeight;
+        if (w === 0 || h === 0) return;
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+    };
+
+    // ═══ GLOBE BASE — subtle inner volume ═══
+    const globe = new THREE.Group();
+    scene.add(globe);
+
+    globe.add(new THREE.Mesh(
+        new THREE.SphereGeometry(0.985, 48, 48),
+        new THREE.MeshBasicMaterial({ color: C.sphere, transparent: true, opacity: 0.04 })
+    ));
+
+    // ═══ FIBONACCI DOT PATTERN — 2400 points ═══
+    const dotCount = 2400;
+    const dotPositions = new Float32Array(dotCount * 3);
+    for (let i = 0; i < dotCount; i++) {
+        const phi = Math.acos(-1 + (2 * i) / dotCount);
+        const theta = Math.sqrt(dotCount * Math.PI) * phi;
+        dotPositions[i*3]     = Math.cos(theta) * Math.sin(phi);
+        dotPositions[i*3 + 1] = Math.sin(theta) * Math.sin(phi);
+        dotPositions[i*3 + 2] = Math.cos(phi);
+    }
+    const dotsGeo = new THREE.BufferGeometry();
+    dotsGeo.setAttribute('position', new THREE.BufferAttribute(dotPositions, 3));
+    globe.add(new THREE.Points(dotsGeo, new THREE.PointsMaterial({
+        color: C.dots, size: 0.014, opacity: 0.55,
+        transparent: true, sizeAttenuation: true, depthWrite: false
+    })));
+
+    // ═══ CITY MARKERS ═══
+    const latLngToVec3 = (lat, lng, r = 1.0) => {
+        const phi = (90 - lat) * Math.PI / 180;
+        const theta = (lng + 180) * Math.PI / 180;
+        return new THREE.Vector3(
+            -r * Math.sin(phi) * Math.cos(theta),
+             r * Math.cos(phi),
+             r * Math.sin(phi) * Math.sin(theta)
+        );
+    };
+
+    const cities = [
+        { lat: 13.7563,  lng: 100.5018 }, // Bangkok
+        { lat: 25.2048,  lng:  55.2708 }, // Dubai
+        { lat: 51.5074,  lng:  -0.1278 }, // London
+        { lat: 40.7128,  lng: -74.0060 }, // New York
+        { lat:  1.3521,  lng: 103.8198 }, // Singapore
+        { lat: 35.6762,  lng: 139.6503 }, // Tokyo
+        { lat:-33.8688,  lng: 151.2093 }, // Sydney
+        { lat: 19.0760,  lng:  72.8777 }, // Mumbai
+        { lat: 41.0082,  lng:  28.9784 }, // Istanbul
+        { lat: 52.5200,  lng:  13.4050 }, // Berlin
+        { lat:-33.9249,  lng:  18.4241 }, // Cape Town
+        { lat:-22.9068,  lng: -43.1729 }, // Rio
+        { lat: 14.5995,  lng: 120.9842 }, // Manila
+    ];
+
+    const cityRings = [];
+    cities.forEach(c => {
+        const pos = latLngToVec3(c.lat, c.lng, 1.0);
+        c._pos = pos;
+
+        const marker = new THREE.Mesh(
+            new THREE.SphereGeometry(0.024, 12, 12),
+            new THREE.MeshBasicMaterial({ color: C.marker })
+        );
+        marker.position.copy(pos);
+        globe.add(marker);
+
+        const ring = new THREE.Mesh(
+            new THREE.RingGeometry(0.028, 0.045, 24),
+            new THREE.MeshBasicMaterial({ color: C.marker, side: THREE.DoubleSide, transparent: true, opacity: 0.45 })
+        );
+        ring.position.copy(pos);
+        ring.lookAt(pos.clone().multiplyScalar(2));
+        ring.userData.basePhase = Math.random() * Math.PI * 2;
+        globe.add(ring);
+        cityRings.push(ring);
+    });
+
+    // ═══ ARC CONNECTIONS ═══
+    let attempts = 0;
+    let arcCount = 0;
+    while (arcCount < 14 && attempts < 200) {
+        attempts++;
+        const a = cities[Math.floor(Math.random() * cities.length)];
+        const b = cities[Math.floor(Math.random() * cities.length)];
+        if (a === b) continue;
+        if (a._pos.distanceTo(b._pos) < 0.5) continue;
+
+        const distance = a._pos.distanceTo(b._pos);
+        const mid = a._pos.clone().add(b._pos).normalize().multiplyScalar(1.0 + distance * 0.45);
+        const curve = new THREE.QuadraticBezierCurve3(a._pos.clone(), mid, b._pos.clone());
+        const points = curve.getPoints(64);
+        const arcGeo = new THREE.BufferGeometry().setFromPoints(points);
+        globe.add(new THREE.Line(arcGeo, new THREE.LineBasicMaterial({
+            color: C.arc, transparent: true, opacity: 0.55
+        })));
+
+        arcCount++;
+    }
+
+    // ═══ STARFIELD ═══
+    const starCount = 220;
+    const starPos = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount; i++) {
+        const r = 6 + Math.random() * 4;
+        const phi = Math.acos(2 * Math.random() - 1);
+        const theta = Math.random() * Math.PI * 2;
+        starPos[i*3]     = r * Math.sin(phi) * Math.cos(theta);
+        starPos[i*3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+        starPos[i*3 + 2] = r * Math.cos(phi);
+    }
+    const starGeo = new THREE.BufferGeometry();
+    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+    const starField = new THREE.Points(starGeo, new THREE.PointsMaterial({
+        color: C.stars, size: 0.018, opacity: 0.35, transparent: true, depthWrite: false
+    }));
+    scene.add(starField);
+
+    // ═══ MOUSE PARALLAX (smooth lerp) ═══
+    let tx = 0, ty = 0, mx = 0, my = 0;
+    container.addEventListener('mousemove', e => {
+        const rect = container.getBoundingClientRect();
+        tx = (e.clientX - rect.left) / rect.width  - 0.5;
+        ty = (e.clientY - rect.top)  / rect.height - 0.5;
+    });
+    container.addEventListener('mouseleave', () => { tx = 0; ty = 0; });
+
+    // Initial tilt — slight top-down for "northern hemisphere visible" feel
+    globe.rotation.x = 0.2;
+
+    // ═══ SIZE + RESIZE ═══
+    sizeRenderer();
+    let resizeT;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeT);
+        resizeT = setTimeout(sizeRenderer, 120);
+    });
+
+    // ═══ ANIMATION LOOP (SLOW, premium) ═══
+    const clock = new THREE.Clock();
+    function tick(){
+        const t = clock.getElapsedTime();
+
+        // Parallax with lerp (sanft)
+        mx += (tx - mx) * 0.05;
+        my += (ty - my) * 0.05;
+
+        // VERY SLOW auto-rotation
+        globe.rotation.y += 0.0004;
+        globe.rotation.x = 0.2 + my * 0.25;
+
+        // Ring pulse — slow & subtle
+        cityRings.forEach(r => {
+            const s = 1 + Math.sin(t * 0.7 + r.userData.basePhase) * 0.12;
+            r.scale.set(s, s, s);
+            r.material.opacity = 0.25 + Math.sin(t * 0.7 + r.userData.basePhase) * 0.18;
+        });
+
+        // Stars: very slow background drift
+        starField.rotation.y -= 0.00008;
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(tick);
+    }
+    tick();
+
+    // ═══ FADE-IN ═══
+    requestAnimationFrame(() => canvas.classList.add('loaded'));
+})();

@@ -1,0 +1,195 @@
+/*
+ * MyJet24 — PNR / GDS Converter (client-side only).
+ * Parses Amadeus + Sabre segment lines into readable flights.
+ * Galileo/Worldspan: best-effort; unrecognised lines are shown as "could not parse".
+ * No network calls except a one-time lazy fetch of /airports.json for IATA -> city.
+ */
+(function () {
+  "use strict";
+
+  var MONTHS = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+  var CLASS_CABIN = { F: "First", A: "First", J: "Business", C: "Business", D: "Business",
+    I: "Business", W: "Premium Economy", P: "Premium Economy", Y: "Economy" };
+
+  var airlineMap = {};
+  try {
+    var mapEl = document.getElementById("pnr-airline-map");
+    if (mapEl) airlineMap = JSON.parse(mapEl.textContent || "{}");
+  } catch (e) { airlineMap = {}; }
+
+  var airports = null;        // { IATA: {city, country, name} }
+  var airportsPromise = null;
+
+  function loadAirports() {
+    if (airportsPromise) return airportsPromise;
+    airportsPromise = fetch("/airports.json")
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (list) {
+        airports = {};
+        (list || []).forEach(function (a) {
+          if (a && a.code) airports[a.code] = { city: a.city, country: a.country, name: a.name };
+        });
+        return airports;
+      })
+      .catch(function () { airports = {}; return airports; });
+    return airportsPromise;
+  }
+
+  function fmtDate(ddmmm) {
+    if (!ddmmm) return "";
+    var m = ddmmm.match(/^(\d{2})([A-Z]{3})$/);
+    if (!m) return ddmmm;
+    var month = m[2].charAt(0) + m[2].slice(1).toLowerCase();
+    return m[1] + " " + month;
+  }
+
+  function fmtTime(t) {
+    if (!t) return "";
+    // 12-hour Sabre format: 900A, 1130P, 1215P, 1200A
+    var m12 = t.match(/^(\d{1,2})(\d{2})([AP])$/);
+    if (m12) {
+      var h = parseInt(m12[1], 10) % 12;
+      if (m12[3] === "P") h += 12;
+      return ("0" + h).slice(-2) + ":" + m12[2];
+    }
+    t = ("000" + t).slice(-4);
+    return t.slice(0, 2) + ":" + t.slice(2);
+  }
+
+  // Parse a single GDS segment line. Returns {ok:true, ...} or {ok:false, raw}.
+  function parseSegment(raw) {
+    var s = (raw || "").trim();
+    if (!s) return null;
+    // strip a leading segment index like "1", "1.", "01)"
+    s = s.replace(/^\s*\d{1,3}[.\)]?\s+/, "");
+    var U = s.toUpperCase();
+
+    // carrier (2 chars) + flight (1-4 digits) + optional booking class, joined or spaced
+    var cf = U.match(/^([A-Z0-9]{2})\s*(\d{1,4})\s*([A-Z])?/);
+    if (!cf) return { ok: false, raw: raw };
+    var carrier = cf[1], flight = cf[2], bookingClass = cf[3] || "";
+
+    // date DDMMM
+    var dm = U.match(new RegExp("\\b(\\d{2}(?:" + MONTHS.join("|") + "))\\b"));
+    var date = dm ? dm[1] : "";
+
+    // airport pair: joined 6-letter block, else two standalone 3-letter tokens (minus months)
+    var origin = "", dest = "", pairStr = "";
+    var pair = U.match(/\b([A-Z]{3})([A-Z]{3})\b/);
+    if (pair) { origin = pair[1]; dest = pair[2]; pairStr = pair[0]; }
+    else {
+      var codes = (U.match(/\b[A-Z]{3}\b/g) || []).filter(function (c) { return MONTHS.indexOf(c) === -1; });
+      if (codes.length >= 2) { origin = codes[0]; dest = codes[1]; pairStr = codes[1]; }
+    }
+    if (!origin || !dest) return { ok: false, raw: raw };
+
+    // times: two 4-digit groups AFTER the airport pair (so a 4-digit flight number isn't mistaken for a time)
+    var afterIdx = pairStr ? U.indexOf(pairStr) + pairStr.length : 0;
+    var tail = U.slice(afterIdx);
+    // times: 24h (HHMM) or 12h Sabre (H(H)MM + A/P), after the airport pair
+    var times = tail.match(/\b(\d{4}|\d{3,4}[AP])\b/g) || [];
+    var depTime = times[0] || "", arrTime = times[1] || "";
+
+    // status token like HK1 / SS2 (appears right after the airport pair)
+    var st = tail.match(/\b([A-Z]{2}\d{0,2})\b/);
+    var status = st ? st[1] : "";
+
+    return {
+      ok: true, raw: raw, carrier: carrier, flight: flight, bookingClass: bookingClass,
+      date: date, origin: origin, dest: dest, depTime: depTime, arrTime: arrTime, status: status
+    };
+  }
+
+  function esc(x) {
+    return String(x == null ? "" : x).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  function portLabel(code) {
+    var a = airports && airports[code];
+    if (!a) return "";
+    return [a.city, a.country].filter(Boolean).join(", ");
+  }
+
+  function renderSegment(seg) {
+    var airline = airlineMap[seg.carrier] || (seg.carrier + " (airline)");
+    var cabin = seg.bookingClass && CLASS_CABIN[seg.bookingClass]
+      ? seg.bookingClass + " · " + CLASS_CABIN[seg.bookingClass] : (seg.bookingClass || "");
+    var oCity = portLabel(seg.origin), dCity = portLabel(seg.dest);
+    var meta = [];
+    if (seg.date) meta.push("<b>" + esc(fmtDate(seg.date)) + "</b>");
+    if (seg.depTime) meta.push("Dep <b>" + esc(fmtTime(seg.depTime)) + "</b>");
+    if (seg.arrTime) meta.push("Arr <b>" + esc(fmtTime(seg.arrTime)) + "</b>");
+    if (cabin) meta.push("Class <b>" + esc(cabin) + "</b>");
+    if (seg.status) meta.push("Status <b>" + esc(seg.status) + "</b>");
+
+    return '<div class="pnr-seg">' +
+      '<div class="pnr-seg-head">' +
+        '<span class="pnr-seg-carrier">' + esc(airline) + '</span>' +
+        '<span class="pnr-seg-flight">' + esc(seg.carrier) + " " + esc(seg.flight) + '</span>' +
+        '<span class="pnr-seg-badge">Flight</span>' +
+      '</div>' +
+      '<div class="pnr-seg-route">' +
+        '<div class="pnr-seg-port">' + esc(seg.origin) + (oCity ? '<small>' + esc(oCity) + '</small>' : '') + '</div>' +
+        '<div class="pnr-seg-arrow">✈</div>' +
+        '<div class="pnr-seg-port" style="text-align:right">' + esc(seg.dest) + (dCity ? '<small>' + esc(dCity) + '</small>' : '') + '</div>' +
+      '</div>' +
+      (meta.length ? '<div class="pnr-seg-meta">' + meta.join("") + '</div>' : '') +
+    '</div>';
+  }
+
+  function decode() {
+    var input = document.getElementById("pnr-input");
+    var out = document.getElementById("pnr-results");
+    if (!input || !out) return;
+    var lines = (input.value || "").split(/\r?\n/);
+    var html = [], any = false, parsedCount = 0;
+
+    lines.forEach(function (line) {
+      if (!line.trim()) return;
+      var seg = parseSegment(line);
+      if (!seg) return;
+      any = true;
+      if (seg.ok) { parsedCount++; html.push(renderSegment(seg)); }
+      else { html.push('<div class="pnr-unparsed">Could not parse this line: <code>' + esc(seg.raw.trim()) + '</code></div>'); }
+    });
+
+    if (!any) {
+      out.innerHTML = '<div class="pnr-empty">Nothing to decode — paste an Amadeus or Sabre itinerary above.</div>';
+      return;
+    }
+    var header = '<p class="pnr-note" style="text-align:left;margin:0 0 12px">Decoded <b>' + parsedCount + '</b> segment' + (parsedCount === 1 ? "" : "s") + '.</p>';
+    out.innerHTML = header + html.join("");
+  }
+
+  var EXAMPLES = {
+    amadeus: "1 LH 401 Y 15MAY 4 FRAJFK HK1 1015 1305\n2 UA 8840 Y 22MAY 4 JFKFRA HK1 1815 0740",
+    sabre: "1 LH401Y 15MAY FRAJFK HK1 1015 1305\n2 UA8840Y 22MAY JFKFRA HK1 1815 0740"
+  };
+
+  document.addEventListener("DOMContentLoaded", function () {
+    loadAirports(); // warm the cache; decode works even before it resolves
+
+    var decodeBtn = document.getElementById("pnr-decode");
+    var clearBtn = document.getElementById("pnr-clear");
+    var input = document.getElementById("pnr-input");
+    var out = document.getElementById("pnr-results");
+
+    if (decodeBtn) decodeBtn.addEventListener("click", function () {
+      // ensure airports are loaded before rendering city labels, but don't block long
+      if (airports) { decode(); }
+      else { loadAirports().then(decode); }
+    });
+    if (clearBtn) clearBtn.addEventListener("click", function () {
+      if (input) input.value = "";
+      if (out) out.innerHTML = '<div class="pnr-empty">Your decoded flight segments will appear here.</div>';
+    });
+    document.querySelectorAll("[data-example]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var ex = EXAMPLES[btn.getAttribute("data-example")];
+        if (ex && input) { input.value = ex; loadAirports().then(decode); }
+      });
+    });
+  });
+})();

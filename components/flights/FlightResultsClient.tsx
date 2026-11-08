@@ -301,12 +301,12 @@ export function FlightResultsClient({
       {/* Main Results Column */}
       <div className="lg:col-span-9 space-y-4">
         {/* Desktop Sorting Bar */}
-        <div className="hidden lg:flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-5 py-3 shadow-sm">
-          <p className="text-xs font-semibold text-slate-600">
+        <div className="hidden lg:flex items-center justify-between rounded-2xl border border-slate-200/90 bg-white px-5 py-3.5 shadow-sm">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
             Showing <strong className="text-navy-900">{filteredAndSorted.length}</strong>{' '}
-            available flight options
+            available flights
           </p>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 rounded-full bg-slate-100/90 p-1 border border-slate-200/60">
             {(
               [
                 { id: 'recommended', label: 'Recommended' },
@@ -320,10 +320,10 @@ export function FlightResultsClient({
                 key={tab.id}
                 type="button"
                 onClick={() => setSortBy(tab.id)}
-                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+                className={`rounded-full px-3.5 py-1.5 text-xs font-bold transition-all duration-200 ${
                   sortBy === tab.id
-                    ? 'bg-brand-600 text-white'
-                    : 'text-slate-600 hover:bg-slate-100'
+                    ? 'bg-brand-600 text-white shadow-sm'
+                    : 'text-slate-600 hover:text-navy-900 hover:bg-white/70'
                 }`}
               >
                 {tab.label}

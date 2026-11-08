@@ -38,10 +38,10 @@ export default function BlogListingPage() {
         {categories.map((cat, idx) => (
           <span
             key={cat}
-            className={`rounded-full px-3.5 py-1.5 text-xs font-semibold ${
+            className={`cursor-pointer rounded-full px-4 py-2 text-xs font-semibold transition-all duration-200 ${
               idx === 0
-                ? 'bg-brand-600 text-white'
-                : 'border border-slate-200 bg-white text-slate-700'
+                ? 'bg-brand-600 text-white shadow-sm'
+                : 'border border-slate-200/90 bg-white text-slate-700 hover:border-brand-300 hover:bg-slate-50'
             }`}
           >
             {cat}
@@ -53,15 +53,15 @@ export default function BlogListingPage() {
         {BLOG_POSTS.map((post) => (
           <article
             key={post.id}
-            className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-card transition-all hover:border-brand-500 hover:shadow-elevated"
+            className="flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-6 shadow-card transition-all duration-300 hover:border-brand-400 hover:shadow-card-hover hover:-translate-y-1"
           >
             <div>
-              <span className="inline-flex items-center gap-1 rounded-md bg-brand-50 px-2.5 py-1 text-[11px] font-bold text-brand-700">
+              <span className="inline-flex items-center gap-1.5 rounded-md bg-brand-50 px-2.5 py-1 text-[11px] font-bold text-brand-700">
                 <BookOpen className="h-3 w-3" />
                 {post.category}
               </span>
-              <h2 className="mt-3 text-lg font-bold text-navy-900">
-                <Link href={`/blog/${post.slug}`} className="hover:text-brand-600">
+              <h2 className="mt-3 text-lg font-bold text-navy-900 transition-colors hover:text-brand-600">
+                <Link href={`/blog/${post.slug}`}>
                   {post.title}
                 </Link>
               </h2>
@@ -76,9 +76,9 @@ export default function BlogListingPage() {
               </span>
               <Link
                 href={`/blog/${post.slug}`}
-                className="inline-flex items-center gap-1 font-bold text-brand-600 hover:underline"
+                className="group inline-flex items-center gap-1 font-bold text-brand-600 hover:underline"
               >
-                Read <ArrowRight className="h-3.5 w-3.5" />
+                Read <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
           </article>

@@ -63,7 +63,7 @@ export default async function BlogArticlePage(props: {
         <span className="text-navy-900 font-semibold truncate">{post.title}</span>
       </nav>
 
-      <article className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-10 shadow-card space-y-6">
+      <article className="rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-10 shadow-elevated space-y-6">
         <div className="space-y-3 border-b border-slate-100 pb-6">
           <span className="rounded-md bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-700">
             {post.category}

@@ -257,7 +257,7 @@ export default async function FlightDetailsPage(props: {
 
             <Link
               href={`/checkout/${offer.id}?${checkoutQuery.toString()}`}
-              className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-3 text-sm font-bold text-white shadow-sm hover:bg-brand-700"
+              className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 btn-shimmer px-5 py-3.5 text-sm font-black text-white shadow-lg shadow-brand-600/25 hover:bg-brand-700 hover:shadow-brand-600/40 hover:-translate-y-0.5 transition-all"
             >
               <span>Continue to Passenger Details</span>
               <ArrowRight className="h-4 w-4" />

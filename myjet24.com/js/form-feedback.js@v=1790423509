@@ -1,0 +1,222 @@
+/**
+ * Rückmeldung, wenn das Formular unvollständig abgeschickt wird.
+ *
+ * Ausgangslage, am 02.09.2026 im Browser gemessen — beide Knöpfe endeten für den Kunden
+ * gleich, nämlich in scheinbarer Reglosigkeit:
+ *
+ *   Gratis (type="submit"):  Die Prüfung des Browsers greift und springt zum ersten
+ *       leeren Feld, hinterlässt aber NICHTS Bleibendes. Die Sprechblase verschwindet
+ *       nach Sekunden, danach sieht die Seite wieder unauffällig aus.
+ *
+ *   Premium (type="button" + wire:click): Die Browserprüfung läuft gar nicht. Der Server
+ *       antwortet mit Meldungen, die erste stand 1.204 Pixel ÜBER dem sichtbaren Bereich.
+ *       Der Kunde stand am Knopf und sah nichts — kein Fehler, keine Bewegung.
+ *
+ * Deshalb hier drei Dinge: eine Bewegung, die auffällt; eine Markierung, die bleibt; und
+ * beim Premium-Pfad ein Sprung zur ersten Meldung, damit sie überhaupt im Bild ist.
+ *
+ * ZUSTAND HÄNGT AM html-Element, NICHT AN DEN FELDERN. Das ist keine Stilfrage: Livewire
+ * schreibt bei jedem Commit die Attribute der gemorphten Elemente auf den Serverstand
+ * zurück. Eine per JS gesetzte Klasse an einem Feld wäre beim nächsten Tastendruck im
+ * Flughafenfeld (wire:model.live.debounce) wieder weg. Am html-Element fasst der Morph nichts an.
+ *
+ * Die Färbung selbst macht deshalb `:invalid` — ein Zustand, den der Browser live pflegt.
+ * Füllt der Kunde ein Feld aus, wird es von allein wieder normal; dafür ist keine Zeile
+ * JavaScript nötig und es gibt nichts, was aus dem Tritt geraten könnte.
+ */
+(function () {
+    'use strict';
+
+    var ROOT = document.documentElement;
+    var CHECKED = 'fv-checked';   /* ab jetzt dürfen leere Pflichtfelder rot werden */
+    var SHAKE = 'fv-shake';
+
+    /* Die feste Navigation ist auf JEDER Breite 64 px hoch — .unav in
+       partials/nav-unified, bestaetigt durch .unav-spacer. Die frueheren 72 px ab 768 px
+       waren eine Annahme aus dem Kalender, kein gemessener Wert. */
+    function navHeight() {
+        return 64;
+    }
+
+    function motionReduced() {
+        return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    function shake() {
+        ROOT.classList.remove(SHAKE);
+        void ROOT.offsetWidth;        /* Reflow erzwingen, sonst startet sie nicht neu */
+        ROOT.classList.add(SHAKE);
+    }
+
+    document.addEventListener('animationend', function (e) {
+        if (e.animationName === 'fvShake') ROOT.classList.remove(SHAKE);
+    }, true);
+
+    /* Zu einer Meldung das Feld finden, zu dem sie gehoert.
+     *
+     * Am 04.09.2026 gemessen: der Sprung landete die MELDUNG auf y=88, aber das zugehoerige
+     * Eingabefeld auf y=25 — also hinter der Navigation. Die Meldung steht unter dem Feld;
+     * wer sie ins Bild holt, schiebt das Feld darueber hinaus. Der Kunde las einen roten
+     * Satz und sah nicht, worauf er sich bezieht. */
+    function feldZu(meldung) {
+        if (!meldung) return null;
+        var block = meldung.parentElement;
+        for (var i = 0; i < 3 && block; i++) {
+            var feld = block.querySelector('.inp, input, select, textarea');
+            if (feld) return feld;
+            block = block.parentElement;
+        }
+        return meldung;
+    }
+
+    function scrollTo(el) {
+        if (!el) return;
+        var top = el.getBoundingClientRect().top + window.scrollY - navHeight() - 24;
+        window.scrollTo({
+            top: Math.max(0, top),
+            behavior: motionReduced() ? 'auto' : 'smooth'
+        });
+    }
+
+    /* Das oberste Element von mehreren — nicht das erste im Quelltext.
+     *
+     * In den zweispaltigen Rastern (Abflug/Ankunft, Vorwahl/Nummer, Hin/Rueck) stehen zwei
+     * Meldungen auf derselben Hoehe, und in den RTL-Sprachen ist die erste im Quelltext die
+     * RECHTE. Die Position entscheidet, nicht die Reihenfolge. */
+    function oberstes(liste) {
+        var best = null, bestY = Infinity;
+        for (var i = 0; i < liste.length; i++) {
+            var r = liste[i].getBoundingClientRect();
+            if (r.width === 0 && r.height === 0) continue;   /* ausgeblendet */
+            var y = r.top + window.scrollY;
+            if (y < bestY) { bestY = y; best = liste[i]; }
+        }
+        return best;
+    }
+
+    /* ---------- Gratis-Knopf: die Prüfung des Browsers ---------- */
+
+    /* 'invalid' steigt nicht auf, also capture.
+     *
+     * preventDefault() BEWUSST NICHT: die native Sprechblase ist in der Sprache des
+     * Browsers, zeigt genau auf das Feld, und der Browser scrollt selbst dorthin. Sie zu
+     * unterdrücken hiesse, das alles in fünfzehn Sprachen nachzubauen. Wir ergänzen sie
+     * nur um etwas, das bleibt, wenn sie verschwunden ist. */
+    /* Der Gratis-Knopf: die Pruefung des Browsers — und unser Sprung dazu.
+     *
+     * Bis 04.09.2026 hat hier nur geschuettelt und markiert; das Scrollen ueberliess der
+     * Kommentar bewusst dem Browser. Gemessen: der Browser scrollt das Feld auf y=0, also
+     * komplett hinter die 64-px-Navigation. Das html{scroll-padding-top} repariert das in
+     * modernen Browsern schon; dieser Nachschlag ist der Guertel zum Hosentraeger und
+     * greift auch dort, wo der Browser den Abstand ignoriert.
+     *
+     * preventDefault() weiterhin NICHT: die native Sprechblase ist lokalisiert und soll
+     * bleiben. Wir korrigieren nur, wohin gescrollt wird. */
+    var ersteUngueltige = null;
+    var sprungGeplant = false;
+
+    document.addEventListener('invalid', function (e) {
+        ROOT.classList.add(CHECKED);
+        shake();
+
+        /* 'invalid' feuert einmal pro ungueltigem Feld, in Quelltextreihenfolge. Wir
+           sammeln und springen erst danach auf das oberste — ein Sprung, nicht acht. */
+        if (!ersteUngueltige) ersteUngueltige = [];
+        ersteUngueltige.push(e.target);
+
+        if (sprungGeplant) return;
+        sprungGeplant = true;
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                scrollTo(oberstes(ersteUngueltige));
+                ersteUngueltige = null;
+                sprungGeplant = false;
+            });
+        });
+    }, true);
+
+    /* ---------- Zweiter Klick auf den bereits gewählten Reiter ---------- */
+
+    /* Vorher passierte dort sichtbar nichts: switchTab() setzte den Wert unbedingt, Livewire
+     * rannte einmal im Kreis und renderte dasselbe zurück. Der Kunde klickte weiter und ging.
+     * Jetzt bekommt er dieselbe Antwort wie beim Absenden mit leerem Formular — die Felder,
+     * um die es geht, werden markiert. */
+    /* Der zweite Klick loest dieselbe Antwort aus wie ein Absende-Versuch mit leerem
+     * Formular: die Pflichtfelder werden markiert und die Karte schuettelt. Kein Text —
+     * die roten Felder SIND die Aussage, und sie bleiben, wenn das Schuetteln vorbei ist.
+     * Gemessen: 77 ms vom Klick bis hierher, 17 px Ausschlag, 8 markierte Felder. */
+    window.addEventListener('tab-already-active', function () {
+        ROOT.classList.add(CHECKED);
+        requestAnimationFrame(shake);
+    });
+
+    /* ---------- Der Hinweiskasten ueber dem Formular ---------- */
+
+    /* 13.09.2026, vom Auftraggeber am Handy gemeldet: der Kasten "Enter your own travel
+     * details ..." (hub-content/livewire/partials/plan-banner.blade.php) sieht aus wie ein
+     * Eingabefeld, ein Tippen darauf tat nichts. Jetzt bekommt das Tippen dieselbe Antwort
+     * wie ein leeres Absenden: die echte Pruefung auf dem Server (HotelBookingForm::pruefeNur,
+     * dieselbe Regelliste wie beim Absenden). Faellt sie durch, schickt der Server
+     * 'form-invalid' und der Zweig unten uebernimmt — rote Meldungen, Ruetteln, Sprung.
+     *
+     * #hbv (/hotel-booking) ist ausgenommen: dort fuehrt der erste Klick bewusst ohne Rot
+     * zum Feld, erst der zweite prueft (seo/hotel-booking/neu.blade.php). Zwei Zuhoerer
+     * auf demselben Kasten wuerden dort doppelt pruefen.
+     *
+     * Am DOKUMENT gehorcht: Livewire tauscht die Kinder der Komponente beim Morph aus. */
+    function hinweisPruefen(kasten) {
+        var knoten = kasten.closest('[wire\\:id]');
+        var kennung = knoten && knoten.getAttribute('wire:id');
+        var komponente = kennung && window.Livewire && window.Livewire.find(kennung);
+        if (komponente && typeof komponente.call === 'function') {
+            komponente.call('pruefeNur');
+        } else {
+            /* Ohne Livewire bleibt wenigstens die Faerbung und das Ruetteln. */
+            window.dispatchEvent(new Event('tab-already-active'));
+        }
+    }
+
+    function hinweisAusEreignis(e) {
+        var kasten = e.target && e.target.closest ? e.target.closest('.mj-plan') : null;
+        if (!kasten || kasten.closest('#hbv')) return null;
+        return kasten;
+    }
+
+    document.addEventListener('click', function (e) {
+        var kasten = hinweisAusEreignis(e);
+        if (kasten) hinweisPruefen(kasten);
+    });
+
+    /* Der Kasten traegt role="button" und tabindex="0" — dann gehoert auch die Tastatur dazu. */
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        var kasten = hinweisAusEreignis(e);
+        if (!kasten) return;
+        e.preventDefault();
+        hinweisPruefen(kasten);
+    });
+
+    /* ---------- Premium-Knopf: die Meldungen des Servers ---------- */
+
+    window.addEventListener('form-invalid', function () {
+        ROOT.classList.add(CHECKED);
+
+        /* Die Meldungen stehen erst nach dem Morph im DOM. Zwei Frames, weil der erste
+           nur den Morph anstösst und der Abstand zum Seitenanfang sonst noch der alte ist. */
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                shake();
+
+                /* Zum FELD springen, nicht zur Meldung — und zum obersten sichtbaren,
+                   nicht zum ersten im Quelltext. Faellt beides aus (eine Regel ohne
+                   Meldung), bleibt als letzter Halt irgendein ungueltiges Feld: die Seite
+                   soll sich in JEDEM Fall bewegen. Vorher lief scrollTo(null) still ins
+                   Leere und der Kunde sah gar keine Reaktion. */
+                var meldung = oberstes(document.querySelectorAll('.field-error'));
+                var ziel = feldZu(meldung)
+                        || oberstes(document.querySelectorAll('.form-card :invalid'));
+                scrollTo(ziel);
+            });
+        });
+    });
+})();

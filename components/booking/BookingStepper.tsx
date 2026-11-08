@@ -31,9 +31,25 @@ export function BookingStepper({
   return (
     <nav
       aria-label="Booking Progress"
-      className="rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
+      className="rounded-2xl border border-slate-200/90 bg-white p-3.5 sm:p-4 shadow-sm"
     >
-      <ol className="flex flex-wrap items-center justify-between gap-2">
+      {/* Top micro progress bar */}
+      <div className="flex items-center gap-1.5 mb-3">
+        {STEPS.map((step, idx) => (
+          <div
+            key={`bar-${step.id}`}
+            className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
+              idx < activeIdx
+                ? 'bg-verified-500'
+                : idx === activeIdx
+                ? 'bg-brand-600 shadow-sm shadow-brand-500/50'
+                : 'bg-slate-100'
+            }`}
+          />
+        ))}
+      </div>
+
+      <ol className="flex items-center justify-between gap-1 overflow-x-auto scroll-slim">
         {STEPS.map((step, index) => {
           const isCompleted = index < activeIdx;
           const isCurrent = index === activeIdx;
@@ -41,21 +57,23 @@ export function BookingStepper({
           return (
             <li
               key={step.id}
-              className="flex flex-1 items-center gap-2 min-w-[110px]"
+              className={`flex items-center gap-2 shrink-0 ${
+                isCurrent ? 'opacity-100' : isCompleted ? 'opacity-90' : 'opacity-60'
+              }`}
             >
               <span
-                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-extrabold transition-all ${
+                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-black transition-all ${
                   isCompleted
-                    ? 'bg-verified-600 text-white'
+                    ? 'bg-verified-600 text-white shadow-sm'
                     : isCurrent
-                    ? 'bg-brand-600 text-white ring-4 ring-brand-100'
+                    ? 'bg-brand-600 text-white ring-4 ring-brand-100 shadow-sm'
                     : 'bg-slate-100 text-slate-500'
                 }`}
               >
-                {isCompleted ? <Check className="h-3.5 w-3.5" /> : index + 1}
+                {isCompleted ? <Check className="h-3.5 w-3.5 stroke-[3]" /> : index + 1}
               </span>
               <span
-                className={`text-xs font-bold truncate ${
+                className={`text-xs font-bold whitespace-nowrap ${
                   isCurrent
                     ? 'text-brand-700'
                     : isCompleted
@@ -67,8 +85,8 @@ export function BookingStepper({
               </span>
               {index < STEPS.length - 1 && (
                 <div
-                  className={`hidden sm:block h-0.5 flex-1 rounded ${
-                    isCompleted ? 'bg-verified-500' : 'bg-slate-200'
+                  className={`hidden md:block h-0.5 w-6 sm:w-10 rounded ${
+                    isCompleted ? 'bg-verified-400' : 'bg-slate-200'
                   }`}
                 />
               )}

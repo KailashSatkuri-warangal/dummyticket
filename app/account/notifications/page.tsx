@@ -30,7 +30,7 @@ export default function AccountNotificationsPage() {
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-5">
+    <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-card space-y-5">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-extrabold text-navy-900">

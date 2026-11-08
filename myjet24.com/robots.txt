@@ -1,0 +1,161 @@
+User-agent: *
+Allow: /
+# Blog social-preview images (og:image, twitter:image, BlogPosting schema image)
+# resolve to /storage/blog/... — they must stay crawlable. Listed before the
+# /storage/ Disallow for first-match crawlers; Google and Bing use longest-match,
+# where /storage/blog/ (14 chars) beats /storage/ (9 chars) either way.
+Allow: /storage/blog/
+Disallow: /admin/
+Disallow: /api/
+# /storage/og-cache/ stays blocked: 40k+ generated PNGs served publicly via the
+# /og/ routes instead, never linked directly as an og:image URL.
+Disallow: /storage/
+
+# AI / LLM crawlers — explicit allowlist for AEO/AIO citation visibility
+#
+# 10.09.2026: Jede Gruppe hier traegt jetzt AUCH die Disallow-Zeilen. Eine eigene
+# User-agent-Gruppe erbt NICHTS von der *-Gruppe — ein Crawler, der seine eigene
+# Gruppe findet, liest ausschliesslich diese. Bis heute stand hier nur "Allow: /",
+# und damit war GPTBot, ClaudeBot, PerplexityBot und den uebrigen /admin/, /api/
+# und /storage/ ausdruecklich erlaubt. Kein Datenleck (/admin leitet auf den Login,
+# /api liefert 404, /storage/og-cache/ liefert 403), aber 40.000+ generierte PNGs
+# und ein Login-Formular kosten Crawl-Budget, das den Inhaltsseiten fehlt.
+#
+# Claude-User ist neu: das ist der Bot fuer Nutzeranfragen in Claude. Claude-Web
+# darunter ist sein abgekuendigter Vorgaenger und bleibt vorerst stehen.
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: Claude-User
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: CCBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: cohere-ai
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: Bytespider
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: DuckAssistBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: Meta-ExternalAgent
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: Amazonbot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+User-agent: YouBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Allow: /storage/blog/
+
+# Sitemaps
+Sitemap: https://myjet24.com/sitemap.xml
+Sitemap: https://myjet24.com/sitemap-tools.xml

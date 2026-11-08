@@ -64,7 +64,7 @@ export default async function PaymentSuccessPage(props: {
       <BookingStepper currentStep="confirmation" />
 
       {/* Verified Banner */}
-      <div className="rounded-2xl border border-verified-500/40 bg-verified-50 p-6 shadow-card">
+      <div className="rounded-3xl border border-verified-500/40 bg-verified-50/90 p-6 sm:p-8 shadow-elevated">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-start gap-3.5">
             <CheckCircle2 className="h-8 w-8 text-verified-600 shrink-0 mt-0.5" />
@@ -72,7 +72,7 @@ export default async function PaymentSuccessPage(props: {
               <span className="text-xs font-bold uppercase tracking-wider text-verified-700">
                 Server-Verified Razorpay Transaction
               </span>
-              <h1 className="text-2xl font-extrabold text-navy-900">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-navy-900">
                 Booking {booking.bookingReference} Confirmed
               </h1>
               <p className="mt-1 text-xs text-slate-700">
@@ -91,21 +91,21 @@ export default async function PaymentSuccessPage(props: {
           <div className="flex flex-wrap gap-2">
             <a
               href={`/api/tickets/${booking.bookingReference}/pdf`}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-coral-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-coral-700"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-coral-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-coral-700 transition-colors"
             >
               <Download className="h-4 w-4" />
               Download Itinerary PDF
             </a>
             <a
               href={`/api/tickets/${booking.bookingReference}/pdf?type=receipt`}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-brand-700"
+              className="btn-shimmer inline-flex items-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-brand-700 transition-colors"
             >
               <FileText className="h-4 w-4" />
               Download Payment Receipt PDF
             </a>
             <Link
               href={`/ticket/${booking.bookingReference}`}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs font-bold text-navy-900 hover:bg-slate-50"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs font-bold text-navy-900 hover:bg-slate-50 transition-colors"
             >
               Full Ticket Page
               <ExternalLink className="h-3.5 w-3.5" />

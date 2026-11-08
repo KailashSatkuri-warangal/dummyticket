@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 280" fill="none">
+  <!-- Card background -->
+  <rect width="160" height="280" rx="16" fill="#f5f3ff"/>
+
+  <!-- Sky glow -->
+  <ellipse cx="80" cy="85" rx="65" ry="48" fill="#ede9fe"/>
+
+  <!-- DISTANT LANDSCAPE — soft hills -->
+  <path d="M0,172 Q25,158 55,165 Q80,158 105,165 Q130,158 160,165 L160,178 L0,178 Z" fill="#ddd6fe" opacity="0.45"/>
+
+  <!-- REFLECTING POOL (the famous chahar bagh water channel) -->
+  <rect x="62" y="200" width="36" height="38" rx="2" fill="#c4b5fd" opacity="0.35"/>
+  <!-- Pool reflection shimmer lines -->
+  <line x1="65" y1="206" x2="95" y2="206" stroke="#a78bfa" stroke-width="0.6" opacity="0.5"/>
+  <line x1="65" y1="212" x2="95" y2="212" stroke="#a78bfa" stroke-width="0.6" opacity="0.4"/>
+  <line x1="65" y1="218" x2="95" y2="218" stroke="#a78bfa" stroke-width="0.6" opacity="0.35"/>
+  <line x1="65" y1="224" x2="95" y2="224" stroke="#a78bfa" stroke-width="0.6" opacity="0.3"/>
+  <!-- Reflected dome silhouette in pool -->
+  <ellipse cx="80" cy="230" rx="10" ry="5" fill="#8b5cf6" opacity="0.2"/>
+
+  <!-- PLATFORM / PLINTH (the raised marble terrace) -->
+  <rect x="20" y="170" width="120" height="10" rx="2" fill="#6d28d9"/>
+  <!-- Plinth decorative band -->
+  <rect x="20" y="170" width="120" height="3" rx="1" fill="#8b5cf6" opacity="0.6"/>
+
+  <!-- FOUR MINARETS (corner towers) — left pair -->
+  <!-- Far-left minaret -->
+  <rect x="22" y="120" width="10" height="52" rx="2" fill="#7c3aed"/>
+  <!-- Far-left minaret balcony -->
+  <rect x="20" y="138" width="14" height="3" rx="1" fill="#6d28d9"/>
+  <!-- Far-left minaret top bulb -->
+  <ellipse cx="27" cy="119" rx="5" ry="7" fill="#8b5cf6"/>
+  <line x1="27" y1="112" x2="27" y2="104" stroke="#5b21b6" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="27" cy="103" r="1.5" fill="#5b21b6"/>
+
+  <!-- Near-left minaret -->
+  <rect x="42" y="128" width="10" height="44" rx="2" fill="#8b5cf6"/>
+  <!-- Near-left minaret balcony -->
+  <rect x="40" y="144" width="14" height="3" rx="1" fill="#7c3aed"/>
+  <!-- Near-left minaret top bulb -->
+  <ellipse cx="47" cy="127" rx="5" ry="7" fill="#a78bfa"/>
+  <line x1="47" y1="120" x2="47" y2="112" stroke="#6d28d9" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="47" cy="111" r="1.5" fill="#6d28d9"/>
+
+  <!-- Far-right minaret -->
+  <rect x="128" y="120" width="10" height="52" rx="2" fill="#7c3aed"/>
+  <!-- Far-right minaret balcony -->
+  <rect x="126" y="138" width="14" height="3" rx="1" fill="#6d28d9"/>
+  <!-- Far-right minaret top bulb -->
+  <ellipse cx="133" cy="119" rx="5" ry="7" fill="#8b5cf6"/>
+  <line x1="133" y1="112" x2="133" y2="104" stroke="#5b21b6" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="133" cy="103" r="1.5" fill="#5b21b6"/>
+
+  <!-- Near-right minaret -->
+  <rect x="108" y="128" width="10" height="44" rx="2" fill="#8b5cf6"/>
+  <!-- Near-right minaret balcony -->
+  <rect x="106" y="144" width="14" height="3" rx="1" fill="#7c3aed"/>
+  <!-- Near-right minaret top bulb -->
+  <ellipse cx="113" cy="127" rx="5" ry="7" fill="#a78bfa"/>
+  <line x1="113" y1="120" x2="113" y2="112" stroke="#6d28d9" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="113" cy="111" r="1.5" fill="#6d28d9"/>
+
+  <!-- MAIN TAJ MAHAL STRUCTURE -->
+  <!-- Lower octagonal base -->
+  <rect x="52" y="148" width="56" height="24" rx="3" fill="#8b5cf6"/>
+  <!-- Lower arched niches (decorative iwan) -->
+  <rect x="68" y="152" width="24" height="16" rx="1" fill="#7c3aed"/>
+  <path d="M68,160 Q80,152 92,160" fill="#6d28d9"/>
+
+  <!-- Side arch niches on lower base -->
+  <rect x="55" y="156" width="10" height="12" rx="1" fill="#7c3aed" opacity="0.8"/>
+  <path d="M55,162 Q60,156 65,162" fill="#6d28d9" opacity="0.8"/>
+  <rect x="95" y="156" width="10" height="12" rx="1" fill="#7c3aed" opacity="0.8"/>
+  <path d="M95,162 Q100,156 105,162" fill="#6d28d9" opacity="0.8"/>
+
+  <!-- DRUM (octagonal collar below main dome) -->
+  <rect x="58" y="126" width="44" height="24" rx="3" fill="#7c3aed"/>
+  <!-- Drum decorative arch windows -->
+  <rect x="62" y="130" width="9" height="14" rx="1.5" fill="#ede9fe" opacity="0.5"/>
+  <rect x="75" y="130" width="9" height="14" rx="1.5" fill="#ede9fe" opacity="0.5"/>
+  <rect x="89" y="130" width="9" height="14" rx="1.5" fill="#ede9fe" opacity="0.5"/>
+  <!-- Drum decorative band -->
+  <rect x="58" y="148" width="44" height="2" rx="0.5" fill="#c4b5fd" opacity="0.6"/>
+
+  <!-- MAIN ONION DOME (the iconic bulbous dome) -->
+  <!-- Dome base ring -->
+  <rect x="63" y="118" width="34" height="10" rx="2" fill="#6d28d9"/>
+  <!-- The bulbous dome shape -->
+  <path d="M58,118 Q58,95 70,82 Q80,72 90,82 Q102,95 102,118 Z" fill="#8b5cf6"/>
+  <!-- Dome highlight (lighter centre) -->
+  <path d="M68,118 Q68,99 76,88 Q80,82 84,88 Q92,99 92,118 Z" fill="#a78bfa" opacity="0.4"/>
+  <!-- Dome finial stem -->
+  <line x1="80" y1="72" x2="80" y2="55" stroke="#5b21b6" stroke-width="2" stroke-linecap="round"/>
+  <!-- Finial base sphere -->
+  <circle cx="80" cy="71" r="3" fill="#6d28d9"/>
+  <!-- Finial tip -->
+  <circle cx="80" cy="54" r="2" fill="#5b21b6"/>
+  <!-- Finial cross-bar (the Hindu/Islamic combined spire motif) -->
+  <line x1="74" y1="60" x2="86" y2="60" stroke="#5b21b6" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="76" y1="57" x2="84" y2="57" stroke="#5b21b6" stroke-width="0.8" stroke-linecap="round"/>
+
+  <!-- Small flanking chattris (cupolas) on drum -->
+  <ellipse cx="62" cy="126" rx="4" ry="5" fill="#7c3aed"/>
+  <line x1="62" y1="121" x2="62" y2="115" stroke="#5b21b6" stroke-width="1" stroke-linecap="round"/>
+  <circle cx="62" cy="114" r="1" fill="#5b21b6"/>
+  <ellipse cx="98" cy="126" rx="4" ry="5" fill="#7c3aed"/>
+  <line x1="98" y1="121" x2="98" y2="115" stroke="#5b21b6" stroke-width="1" stroke-linecap="round"/>
+  <circle cx="98" cy="114" r="1" fill="#5b21b6"/>
+
+  <!-- DECORATIVE BANDS on structure -->
+  <rect x="52" y="147" width="56" height="2" rx="0.5" fill="#c4b5fd" opacity="0.5"/>
+  <rect x="58" y="124" width="44" height="2" rx="0.5" fill="#c4b5fd" opacity="0.4"/>
+
+  <!-- GARDEN PATH (chahar bagh: the four-garden symmetrical layout) -->
+  <rect x="0" y="238" width="160" height="10" rx="0" fill="#ddd6fe" opacity="0.5"/>
+  <!-- Cypress tree silhouettes (yew-like trees flanking path) -->
+  <path d="M10,238 L14,210 L18,238 Z" fill="#7c3aed" opacity="0.45"/>
+  <path d="M26,238 L30,215 L34,238 Z" fill="#8b5cf6" opacity="0.4"/>
+  <path d="M126,238 L130,215 L134,238 Z" fill="#8b5cf6" opacity="0.4"/>
+  <path d="M142,238 L146,210 L150,238 Z" fill="#7c3aed" opacity="0.45"/>
+
+  <!-- Decorative sparkles -->
+  <circle cx="140" cy="50" r="2" fill="#a78bfa" opacity="0.5"/>
+  <circle cx="150" cy="80" r="1.5" fill="#c4b5fd" opacity="0.4"/>
+  <circle cx="12" cy="50" r="1.5" fill="#a78bfa" opacity="0.4"/>
+  <circle cx="8" cy="80" r="1" fill="#c4b5fd" opacity="0.35"/>
+
+  <!-- LABEL -->
+  <text x="80" y="256" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#5b21b6">Taj Mahal</text>
+  <text x="80" y="269" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9.5" fill="#7c3aed" opacity="0.85">Agra · India</text>
+</svg>

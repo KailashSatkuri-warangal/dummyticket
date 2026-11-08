@@ -226,58 +226,58 @@ export function FlightSearchPanel({
       <form
         onSubmit={handleSubmit}
         aria-label="Flight Search Form"
-        className={`rounded-2xl border border-slate-200 bg-white shadow-elevated ${
-          compact ? 'p-4 sm:p-5' : 'p-5 sm:p-7'
+        className={`relative rounded-3xl border border-slate-200/90 bg-white shadow-elevated transition-all ${
+          compact ? 'p-4 sm:p-5' : 'p-5 sm:p-8'
         }`}
       >
         {/* Top Row: Trip Type & Cabin Class */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
-        <div
-          role="radiogroup"
-          aria-label="Trip Type"
-          className="inline-flex rounded-lg bg-slate-100 p-1"
-        >
-          {(
-            [
-              { id: 'one_way', label: 'One-Way' },
-              { id: 'round_trip', label: 'Round-Trip' },
-              { id: 'multi_city', label: 'Multi-City' },
-            ] as const
-          ).map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              role="radio"
-              aria-checked={tripType === item.id}
-              onClick={() => setTripType(item.id)}
-              className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
-                tripType === item.id
-                  ? 'bg-white text-brand-700 shadow-sm'
-                  : 'text-slate-600 hover:text-navy-900'
-              }`}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
+          <div
+            role="radiogroup"
+            aria-label="Trip Type"
+            className="inline-flex rounded-full bg-slate-100/90 p-1 border border-slate-200/70"
+          >
+            {(
+              [
+                { id: 'one_way', label: 'One-Way' },
+                { id: 'round_trip', label: 'Round-Trip' },
+                { id: 'multi_city', label: 'Multi-City' },
+              ] as const
+            ).map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                role="radio"
+                aria-checked={tripType === item.id}
+                onClick={() => setTripType(item.id)}
+                className={`rounded-full px-4 py-1.5 text-xs font-bold transition-all duration-200 ${
+                  tripType === item.id
+                    ? 'bg-brand-600 text-white shadow-sm'
+                    : 'text-slate-600 hover:text-navy-900'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <label className="flex items-center gap-2 text-xs font-medium text-slate-600">
-            <span>Cabin Class:</span>
-            <select
-              value={cabin}
-              onChange={(e) => setCabin(e.target.value as CabinClass)}
-              aria-label="Cabin Class"
-              className="select-field"
-            >
-              <option value="economy">Economy</option>
-              <option value="premium_economy">Premium Economy</option>
-              <option value="business">Business</option>
-              <option value="first">First Class</option>
-            </select>
-          </label>
+          <div className="flex flex-wrap items-center gap-3">
+            <label className="flex items-center gap-2 text-xs font-bold text-slate-700">
+              <span className="text-slate-500 uppercase tracking-wider text-[11px]">Cabin:</span>
+              <select
+                value={cabin}
+                onChange={(e) => setCabin(e.target.value as CabinClass)}
+                aria-label="Cabin Class"
+                className="select-field rounded-full py-1.5 px-3 text-xs font-bold text-navy-900 bg-slate-50 border border-slate-200 hover:border-brand-400 focus:border-brand-600 transition-colors"
+              >
+                <option value="economy">Economy</option>
+                <option value="premium_economy">Premium Economy</option>
+                <option value="business">Business</option>
+                <option value="first">First Class</option>
+              </select>
+            </label>
+          </div>
         </div>
-      </div>
 
       {/* Main Search Grid */}
       <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-12 items-start">
@@ -583,7 +583,7 @@ export function FlightSearchPanel({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="btn btn-primary px-6 py-3 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2"
+          className="btn btn-primary btn-shimmer px-7 py-3.5 text-sm font-extrabold rounded-xl shadow-lg shadow-brand-600/25 hover:shadow-brand-600/40 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 transition-all"
         >
           {isSubmitting ? (
             <>

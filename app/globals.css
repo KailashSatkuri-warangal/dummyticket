@@ -3,16 +3,30 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --brand-primary: #e11d48;
+    --brand-dark: #be123c;
+    --brand-glow: rgba(225, 29, 72, 0.2);
+    --card-border: #fce7f3;
+    --bg-page: #ffffff;
+    --text-main: #0B1120;
+    --text-muted: #64748B;
+  }
+
   html {
     scroll-behavior: smooth;
-    color: #0f172a;
-    background-color: #f8fafc;
+    scroll-padding-top: 88px;
+    color: #0B1120;
+    background-color: #ffffff;
     -webkit-tap-highlight-color: transparent;
     text-size-adjust: 100%;
+    overflow-x: hidden;
   }
 
   body {
     text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+    max-width: 100%;
   }
 
   :focus-visible {
@@ -21,7 +35,7 @@
   }
 
   @media (max-width: 640px) {
-    /* iOS Safari zooms the viewport when an input with font-size < 16px is focused */
+    /* iOS Safari zooms viewport when input font-size < 16px */
     input,
     select,
     textarea {
@@ -55,58 +69,58 @@
 
   /* Buttons */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl text-sm font-bold transition-colors disabled:pointer-events-none disabled:opacity-60;
+    @apply relative inline-flex items-center justify-center gap-2 rounded-xl text-sm font-bold transition-all duration-200 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
   }
 
   .btn-primary {
-    @apply bg-brand-600 text-white shadow-sm hover:bg-brand-700;
+    @apply bg-brand-600 text-white shadow-sm hover:bg-brand-700 hover:shadow-card-hover hover:-translate-y-0.5;
   }
 
   .btn-secondary {
-    @apply border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-50;
+    @apply border border-slate-200 bg-white text-slate-700 shadow-sm hover:border-brand-300 hover:bg-brand-50/50 hover:text-brand-700 hover:-translate-y-0.5;
   }
 
   .btn-ghost {
-    @apply text-slate-600 hover:bg-slate-100 hover:text-navy-900;
+    @apply text-slate-600 hover:bg-slate-100/80 hover:text-navy-900;
   }
 
   .btn-dark {
-    @apply border border-slate-700 bg-navy-800 text-slate-200 hover:bg-slate-800;
+    @apply border border-slate-700 bg-navy-900 text-slate-200 hover:bg-navy-800 hover:text-white hover:-translate-y-0.5;
   }
 
   /* Form controls */
   .form-label {
-    @apply mb-1 block text-xs font-semibold text-slate-700;
+    @apply mb-1.5 block text-xs font-bold text-slate-700 uppercase tracking-wide;
   }
 
   .input-field {
-    @apply w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm font-medium text-navy-900 placeholder:font-normal placeholder:text-slate-400 transition-colors focus:border-brand-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-600/20 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2.5 text-sm font-medium text-navy-900 placeholder:font-normal placeholder:text-slate-400 transition-all duration-200 focus:border-brand-600 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-600/10 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .select-field {
-    @apply w-full cursor-pointer rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-navy-900 transition-colors focus:border-brand-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-600/20 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply w-full cursor-pointer rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2.5 text-xs font-semibold text-navy-900 transition-all duration-200 focus:border-brand-600 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-600/10 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .form-error {
-    @apply mt-1 text-xs font-medium text-red-600;
+    @apply mt-1.5 text-xs font-medium text-red-600 flex items-center gap-1;
   }
 
   /* Surfaces */
   .card {
-    @apply rounded-2xl border border-slate-200 bg-white shadow-card;
+    @apply rounded-2xl border border-slate-200/90 bg-white shadow-card transition-all duration-200;
   }
 
   .card-interactive {
-    @apply transition-all duration-200 hover:border-brand-400 hover:shadow-elevated;
+    @apply hover:border-brand-300 hover:shadow-card-hover hover:-translate-y-1;
   }
 
   /* Badges */
   .badge {
-    @apply inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[11px] font-semibold;
+    @apply inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-bold tracking-tight transition-colors;
   }
 
   .badge-brand {
-    @apply border-brand-200 bg-brand-50 text-brand-700;
+    @apply border-brand-200/80 bg-brand-50 text-brand-700;
   }
 
   .badge-amber {
@@ -114,7 +128,7 @@
   }
 
   .badge-green {
-    @apply border-verified-100 bg-verified-50 text-verified-700;
+    @apply border-verified-200 bg-verified-50 text-verified-700;
   }
 
   .badge-slate {
@@ -123,11 +137,11 @@
 
   /* Typography helpers */
   .eyebrow {
-    @apply text-xs font-bold uppercase tracking-wider text-brand-600;
+    @apply inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-brand-600;
   }
 
   .section-heading {
-    @apply text-2xl font-bold text-navy-900;
+    @apply text-2xl sm:text-3xl font-extrabold tracking-tight text-navy-900;
   }
 
   /* Loading skeleton shimmer */
@@ -149,6 +163,205 @@
   }
 }
 
+/* --------------------------------------------------------------------------
+   Modern Reference Utilities inspired by myjet24.com
+   -------------------------------------------------------------------------- */
+
+/* Animated Light Runner around Primary CTA (hero-cta-glow) */
+.hero-cta-glow {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.hero-cta-glow::before {
+  content: '';
+  position: absolute;
+  z-index: -2;
+  left: 50%;
+  top: 50%;
+  width: 160%;
+  aspect-ratio: 1;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255, 255, 255, 0) 0deg,
+    rgba(225, 29, 72, 0.25) 150deg,
+    rgba(251, 113, 133, 0.75) 265deg,
+    #ffffff 340deg,
+    rgba(251, 113, 133, 0.55) 356deg,
+    rgba(255, 255, 255, 0) 360deg
+  );
+  animation: heroSnake 3.5s linear infinite;
+}
+.hero-cta-glow::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 2px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+  transition: background 0.2s;
+}
+.hero-cta-glow:hover::after {
+  background: linear-gradient(135deg, #be123c 0%, #9f1239 100%);
+}
+
+@keyframes heroSnake {
+  from {
+    transform: translate(-50%, -50%) rotate(0turn);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(1turn);
+  }
+}
+
+/* Subtle Shimmer Sweep on Buttons */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.6s ease;
+}
+.btn-shimmer:hover::before {
+  left: 100%;
+}
+
+/* Card Breathing Halo (mj-card-halo) */
+.mj-card-halo {
+  position: relative;
+}
+.mj-card-halo::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    0 0 0 2px rgba(225, 29, 72, 0.4),
+    0 0 20px 4px rgba(225, 29, 72, 0.15);
+  animation: mjPulse 3s ease-in-out infinite;
+  z-index: 0;
+}
+
+/* Interactive Pill Tags / Chips (.country-chip) */
+.country-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #ffffff;
+  border: 1px solid #fce7f3;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0B1120;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.country-chip:hover {
+  border-color: #e11d48;
+  background: #fdf2f8;
+  color: #be123c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.12);
+}
+
+@keyframes skeletonShimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Continuous Marquee Ticker (myjet24 style oc-tw-slide) */
+@keyframes marqueeSlide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes marqueeSlideRev {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.animate-marquee {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marqueeSlide 36s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+.animate-marquee-rev {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marqueeSlideRev 36s linear infinite;
+}
+.animate-marquee-rev:hover {
+  animation-play-state: paused;
+}
+
+/* Floating Levitation (myjet24 dt-float) */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.animate-float {
+  animation: floatSlow 5.5s ease-in-out infinite;
+}
+
+/* Subtle Text Glow Pulse (myjet24 oc-jrny-glow) */
+@keyframes textGlowPulse {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(0, 98, 224, 0.16);
+  }
+  50% {
+    text-shadow: 0 0 24px rgba(0, 98, 224, 0.5);
+  }
+}
+.animate-text-glow {
+  animation: textGlowPulse 2.8s ease-in-out infinite;
+}
+
+/* Form Shake on Error (myjet24 fvShake) */
+@keyframes fvShake {
+  0%, 100% { transform: translateX(0); }
+  14% { transform: translateX(-8px); }
+  28% { transform: translateX(7px); }
+  42% { transform: translateX(-5px); }
+  56% { transform: translateX(4px); }
+  70% { transform: translateX(-2px); }
+  84% { transform: translateX(1px); }
+}
+.animate-shake {
+  animation: fvShake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
 @layer utilities {
   .scroll-slim {
     scrollbar-width: thin;
@@ -166,14 +379,5 @@
 
   .scroll-slim::-webkit-scrollbar-thumb {
     @apply rounded-full bg-slate-300;
-  }
-}
-
-@keyframes skeletonShimmer {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(100%);
   }
 }

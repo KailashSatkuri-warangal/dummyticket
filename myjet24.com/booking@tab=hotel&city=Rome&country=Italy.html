@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light">
+<script>document.documentElement.setAttribute("data-theme",localStorage.getItem("theme")||"light")</script>
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) — deferred for performance -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      function loadGtag(){
+        if(window._gtagLoaded) return;var cc=document.cookie.match(/mj24_consent=([^;]+)/);if(!cc||cc[1]!=='all')return;
+        window._gtagLoaded=true;
+        var s=document.createElement('script');
+        s.src='https://www.googletagmanager.com/gtag/js?id=G-TPMSBEKSZB';
+        s.async=true;
+        document.head.appendChild(s);
+        gtag('js', new Date());
+        gtag('config', 'G-TPMSBEKSZB');
+      }
+      setTimeout(loadGtag, 3000);
+      ['click','scroll','keydown','touchstart'].forEach(function(e){
+        document.addEventListener(e, loadGtag, {once:true,passive:true});
+      });
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create your reservation</title>
+    
+    <meta name="description" content="Build your flight or hotel reservation step by step. Free PDF, or a premium version for $7.90.">
+        <meta name="robots" content="noindex, follow">
+    <meta name="theme-color" content="#7c3aed">
+    <meta name="application-name" content="MyJet24">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MyJet24">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+        <link rel="canonical" href="booking.html">
+    <meta property="og:title" content="Create your reservation">
+    <meta property="og:description" content="Build your flight or hotel reservation step by step. Free PDF, or a premium version for $7.90.">
+    <meta property="og:url" content="https://myjet24.com/booking">
+    <meta property="og:type" content="website">
+        <meta property="og:image" content="https://myjet24.com/og/generic/home.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+        <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="MyJet24">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Create your reservation">
+    <meta name="twitter:description" content="Build your flight or hotel reservation step by step. Free PDF, or a premium version for $7.90.">
+    <meta name="twitter:image" content="https://myjet24.com/og/generic/home.png">
+    
+        <link rel="stylesheet" href="css/tailwind.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet"></noscript>
+        <style>
+        :root {
+            --bg: #ffffff; --bg2: #f8f5ff; --bg3: #f0ebff;
+            --text: #0f0a1e; --text2: #6b7280;
+            --border: #e5e0f5; --card-bg: #ffffff; --card-border: #ede9fe;
+            --purple: #7c3aed; --purple2: #6d28d9;
+            --purple-light: #ede9fe; --purple-glow: rgba(124,58,237,0.15);
+        }
+        [data-theme="dark"] {
+            --bg: #0c0818; --bg2: #130f24; --bg3: #1a1430;
+            --text: #f5f3ff; --text2: #9ca3af;
+            --border: #2a2040; --card-bg: #130f24; --card-border: #2a2040;
+            --purple: #a78bfa; --purple2: #8b5cf6;
+            --purple-light: rgba(167,139,250,0.1); --purple-glow: rgba(167,139,250,0.2);
+        }
+        
+        * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
+        html { overflow-x: hidden; max-width: 100%; }
+        /* Wohin ein Sprung scrollt, damit das Ziel nicht hinter der festen Navigation
+           landet. Am 04.09.2026 gemessen: der Browser scrollte ein ungueltiges Feld beim
+           Gratis-Knopf auf y=0 — vollstaendig unter die 64 px hohe .unav. Es gab im ganzen
+           Repo kein scroll-padding-top. Diese eine Zeile repariert den browser-eigenen
+           Sprung und macht ausserdem scroll-margin-top erstmals wirksam. */
+        html { scroll-padding-top: 88px; }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; padding-top: 0; margin: 0; }
+
+        /* NAV */
+        .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.92); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); height: 72px; display: flex; align-items: center; transition: background 0.3s; }
+        [data-theme="dark"] .nav { background: rgba(12,8,24,0.92); }
+        [data-theme="dark"] .hero-cta, [data-theme="dark"] .nav-cta { background: #7c3aed; }
+        [data-theme="dark"] .hero-cta:hover, [data-theme="dark"] .nav-cta:hover { background: #6d28d9; }
+        .nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+        .logo { font-size: 1.5rem; font-weight: 900; color: var(--purple); text-decoration: none; letter-spacing: -0.5px; }
+        .logo span { color: var(--text); }
+        .nav-links { display: flex; gap: 0.25rem; align-items: center; }
+        .nav-link { color: var(--text2); text-decoration: none; font-weight: 600; font-size: 0.88rem; padding: 0.45rem 0.7rem; border-radius: 8px; transition: all 0.2s; }
+        .nav-link:hover { color: var(--purple); background: var(--purple-light); }
+        .nav-cta { background: var(--purple); color: #fff; padding: 0.55rem 1.1rem; border-radius: 10px; font-weight: 700; font-size: 0.88rem; text-decoration: none; transition: all 0.2s; white-space: nowrap; box-shadow: 0 4px 12px var(--purple-glow); display: flex; align-items: center; gap: 0.4rem; }
+        .nav-cta:hover { background: var(--purple2); transform: translateY(-1px); }
+        .theme-btn { width: 48px; height: 26px; background: var(--border); border-radius: 13px; position: relative; cursor: pointer; border: none; transition: background 0.3s; flex-shrink: 0; }
+        .theme-dot { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: var(--purple); border-radius: 50%; transition: transform 0.3s; }
+        [data-theme="dark"] .theme-dot { transform: translateX(22px); }
+
+        /* SHARED CARDS & ELEMENTS */
+        .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 1.75rem; transition: all 0.3s; }
+        .card:hover { border-color: var(--purple); box-shadow: 0 8px 28px var(--purple-glow); }
+        .card-sm { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 1.25rem; }
+        .section-tag { display: inline-block; color: var(--purple); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.5rem; }
+        .section-h2 { font-size: clamp(1.4rem, 2.5vw, 2rem); font-weight: 900; letter-spacing: -0.5px; color: var(--text); margin: 0 0 0.75rem; }
+        .badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+        .badge-purple { background: var(--purple-light); color: var(--purple); border: 1px solid rgba(124,58,237,0.2); }
+        .badge-green { background: #d1fae5; color: #065f46; }
+        [data-theme="dark"] .badge-green { background: rgba(16,185,129,0.15); color: #34d399; }
+        .btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--purple); color: #fff; padding: 0.9rem 1.75rem; border-radius: 12px; font-weight: 800; font-size: 0.95rem; text-decoration: none; transition: all 0.2s; box-shadow: 0 6px 20px var(--purple-glow); }
+        .btn-primary:hover { background: var(--purple2); transform: translateY(-2px); box-shadow: 0 12px 28px var(--purple-glow); }
+        .btn-secondary { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--purple-light); color: var(--purple); padding: 0.9rem 1.75rem; border-radius: 12px; font-weight: 800; font-size: 0.95rem; text-decoration: none; transition: all 0.2s; border: 1px solid rgba(124,58,237,0.2); }
+        .btn-secondary:hover { background: var(--purple); color: #fff; transform: translateY(-2px); }
+        .chip { display: inline-flex; align-items: center; gap: 0.35rem; background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text); padding: 0.4rem 0.9rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; text-decoration: none; transition: all 0.2s; }
+        .chip:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
+        .chip.active { background: var(--purple); color: #fff; border-color: var(--purple); }
+        .divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
+
+        /* INFO GRID */
+        .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+        .info-cell { border-radius: 12px; padding: 0.9rem 1rem; }
+        .info-label { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.2rem; opacity: 0.7; }
+        .info-value { font-size: 0.95rem; font-weight: 800; color: var(--text); }
+
+        /* CTA BANNER */
+        .cta-banner { background: linear-gradient(135deg, var(--purple) 0%, var(--purple2) 100%); border-radius: 24px; padding: 2.5rem; text-align: center; margin: 2rem 0; }
+        .cta-banner h2 { font-size: 1.5rem; font-weight: 900; color: white; margin-bottom: 0.5rem; }
+        .cta-banner p { color: rgba(255,255,255,0.8); margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .cta-banner .trust { display: flex; justify-content: center; gap: 1.25rem; flex-wrap: wrap; margin-top: 1rem; }
+        .cta-banner .trust-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; color: rgba(255,255,255,0.75); font-weight: 600; }
+        .btn-white { display: inline-flex; align-items: center; gap: 0.5rem; background: white; color: var(--purple); padding: 0.9rem 2rem; border-radius: 12px; font-weight: 800; text-decoration: none; transition: all 0.2s; }
+        .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+
+        /* ALERT CARD */
+        .alert-card { border-radius: 16px; padding: 1.25rem 1.5rem; border: 1px solid; }
+        .alert-amber { background: #fffbeb; border-color: #fcd34d; }
+        [data-theme="dark"] .alert-amber { background: rgba(251,191,36,0.08); border-color: rgba(251,191,36,0.3); }
+        .alert-amber .alert-title { color: #92400e; font-weight: 800; font-size: 0.95rem; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; }
+        [data-theme="dark"] .alert-amber .alert-title { color: #fbbf24; }
+        .alert-amber .alert-body { color: #78350f; font-size: 0.9rem; line-height: 1.6; }
+        [data-theme="dark"] .alert-amber .alert-body { color: #fde68a; opacity: 0.85; }
+        .alert-purple { background: #f5f3ff; border-color: #ddd6fe; }
+        [data-theme="dark"] .alert-purple { background: rgba(124,58,237,0.10); border-color: rgba(167,139,250,0.32); }
+        .alert-purple .alert-title { color: #5b21b6; font-weight: 800; font-size: 0.95rem; margin-bottom: 0.4rem; display: flex; align-items: flex-start; gap: 0.55rem; line-height: 1.4; }
+        [data-theme="dark"] .alert-purple .alert-title { color: #c4b5fd; }
+        .alert-purple .alert-title svg { flex-shrink: 0; margin-top: 0.15rem; }
+        .alert-purple .alert-body { color: #4c1d95; font-size: 0.9rem; line-height: 1.6; }
+        [data-theme="dark"] .alert-purple .alert-body { color: #ddd6fe; opacity: 0.85; }
+
+        /* RESOURCE HUB — full-bleed dark band, glass cards, custom SVG icons (brand-consistent) */
+        .thr-band{ position:relative; overflow:hidden; width:100vw; margin-inline:calc(50% - 50vw); padding:4rem 1.5rem 4.25rem; background:radial-gradient(95% 130% at 50% -25%, #4a2da0 0%, #2a1c63 38%, #160f33 72%, #100a26 100%); }
+        .thr-band::before{ content:''; position:absolute; inset:0; background:radial-gradient(60% 80% at 85% 110%, rgba(168,85,247,0.20), transparent 70%); pointer-events:none; }
+        .thr-inner{ position:relative; max-width:1080px; margin:0 auto; }
+        .thr-eyebrow{ display:inline-flex; align-items:center; gap:0.6rem; font-size:0.72rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:#c4b5fd; margin-bottom:0.95rem; }
+        .thr-eyebrow::before{ content:''; width:26px; height:2px; border-radius:2px; background:linear-gradient(90deg,#a855f7,#7c3aed); }
+        .thr-h2{ color:#fff; font-size:clamp(1.45rem,2.8vw,1.95rem); font-weight:800; letter-spacing:-0.02em; line-height:1.12; margin:0 0 0.5rem; }
+        .thr-sub{ color:rgba(237,233,254,0.62); font-size:0.95rem; line-height:1.65; margin:0 0 1.75rem; max-width:560px; }
+        .thr-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:0.85rem; }
+        .thr-card{ position:relative; overflow:hidden; display:flex; flex-direction:column; align-items:flex-start; text-align:left; text-decoration:none; color:#fff; padding:1.2rem 1.2rem 1.1rem; border-radius:16px; background:linear-gradient(180deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.028) 100%); border:1px solid rgba(255,255,255,0.12); box-shadow:0 1px 0 rgba(255,255,255,0.08) inset; transition:transform .28s cubic-bezier(.2,.7,.2,1), box-shadow .28s, border-color .28s, background .28s; }
+        .thr-card::after{ content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg, transparent, rgba(196,181,253,0.7), transparent); opacity:0; transition:opacity .28s; }
+        .thr-card:hover{ transform:translateY(-6px); border-color:rgba(196,181,253,0.55); background:linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 100%); box-shadow:0 20px 42px rgba(0,0,0,0.48), 0 0 0 1px rgba(196,181,253,0.22); }
+        .thr-card:hover::after{ opacity:1; }
+        .thr-ico{ width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; margin-bottom:0.85rem; color:#c4b5fd; background:linear-gradient(140deg, rgba(167,139,250,0.28), rgba(124,58,237,0.12)); border:1px solid rgba(167,139,250,0.32); transition:transform .28s, color .28s; }
+        .thr-card:hover .thr-ico{ transform:scale(1.07) rotate(-3deg); color:#fff; }
+        .thr-ico svg{ width:20px; height:20px; }
+        .thr-title{ font-size:0.95rem; font-weight:800; line-height:1.25; margin-bottom:0.3rem; letter-spacing:-0.2px; color:#fff; }
+        .thr-desc{ font-size:0.8rem; color:rgba(237,233,254,0.6); line-height:1.5; margin-bottom:0.9rem; }
+        .thr-foot{ margin-top:auto; width:100%; display:flex; align-items:center; justify-content:flex-end; }
+        .thr-arrow{ width:28px; height:28px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); transition:background .28s, color .28s, transform .28s; }
+        .thr-arrow svg{ width:13px; height:13px; }
+        .thr-card:hover .thr-arrow{ background:#fff; color:#6d28d9; transform:translateX(4px); }
+        .thr-cta-wrap{ text-align:center; margin-top:2.6rem; }
+        .thr-cta-label{ display:block; color:rgba(237,233,254,0.66); font-size:0.95rem; font-weight:600; margin-bottom:1.1rem; }
+        .thr-cta{ display:inline-flex; align-items:center; gap:0.55rem; position:relative; overflow:hidden; background:rgba(255,255,255,0.1); -webkit-backdrop-filter:blur(14px) saturate(170%); backdrop-filter:blur(14px) saturate(170%); border:1px solid rgba(255,255,255,0.28); color:#fff; padding:0.95rem 1.9rem; border-radius:14px; font-weight:800; font-size:0.98rem; text-decoration:none; box-shadow:0 8px 26px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.28); transition:transform .22s, box-shadow .22s, background .22s, border-color .22s; }
+        .thr-cta svg{ width:18px; height:18px; color:#c4b5fd; transition:transform .25s; }
+        .thr-cta::before{ content:''; position:absolute; top:0; left:-130%; width:55%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.38), transparent); transform:skewX(-20deg); transition:left .6s ease; pointer-events:none; }
+        .thr-cta:hover{ transform:translateY(-2px); background:rgba(255,255,255,0.17); border-color:rgba(196,181,253,0.6); box-shadow:0 16px 36px rgba(124,58,237,0.42), inset 0 1px 0 rgba(255,255,255,0.38); }
+        .thr-cta:hover svg{ transform:translateX(4px); }
+        .thr-cta:hover::before{ left:150%; }
+        @media(max-width:900px){ .thr-grid{ grid-template-columns:repeat(2,1fr); } }
+        @media(max-width:540px){ .thr-grid{ grid-template-columns:1fr; } .thr-band{ padding:3.75rem 1.25rem 4rem; } }
+
+        /* FAQ */
+        .faq-item { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; overflow: hidden; transition: border-color 0.2s; }
+        .faq-item:hover { border-color: var(--purple); }
+        .faq-q:focus-visible { outline: 2px solid var(--purple); outline-offset: -2px; border-radius: 14px; }
+        .faq-q:focus { outline: none; }
+        .faq-q { padding: 1.1rem 1.25rem; cursor: pointer; font-weight: 700; font-size: 0.95rem; color: var(--text); display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+        .faq-icon { width: 26px; height: 26px; background: var(--purple-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.3s; }
+        .faq-item.open .faq-icon { transform: rotate(45deg); }
+        .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s; color: var(--text2); font-size: 0.9rem; line-height: 1.7; padding: 0 1.25rem; }
+        .faq-item.open .faq-a { max-height: 200px; padding-bottom: 1.1rem; }
+
+        /* FOOTER */
+        footer { background: #0c0818; color: #94a3b8; padding: 4rem 1.5rem 2rem; margin-top: 5rem; }
+        .footer-inner { max-width: 1280px; margin: 0 auto; }
+        .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; padding-bottom: 3rem; border-bottom: 1px solid #1e1640; }
+        .footer-brand { font-size: 1.4rem; font-weight: 900; color: #a78bfa; margin-bottom: 0.75rem; }
+        .footer-tagline { font-size: 0.85rem; line-height: 1.6; }
+        .footer-col-title { font-size: 0.75rem; font-weight: 800; color: #e2e8f0; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+        .footer-links { display: flex; flex-direction: column; gap: 0.5rem; }
+        .footer-links a { color: #94a3b8; text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+        .footer-links a:hover { color: #a78bfa; }
+        .footer-bottom { padding-top: 2rem; text-align: center; font-size: 0.8rem; }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+            body { padding-top: 0; }
+            .nav { height: 64px; }
+            .nav-links .nav-link { display: none; }
+            .info-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+            .blog-link-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 480px) {
+            .footer-top { grid-template-columns: 1fr; }
+            .cta-banner { padding: 1.75rem 1.25rem; }
+        }
+
+        /* UNIVERSAL RESPONSIVE BACKSTOP — collapses two-column content/sidebar
+           layouts site-wide so no page depends on JS for mobile reflow. */
+        @media (max-width: 1023px) {
+            #main-grid, #city-grid { grid-template-columns: 1fr !important; }
+            #sidebar, #city-sidebar { position: static !important; width: auto !important; top: auto !important; }
+            #main-grid > *, #city-grid > * { min-width: 0; }
+        }
+
+        /* Innere Zwei-Spalten-Raster (Werkzeugkarten, Merkmalskacheln, Vergleiche).
+           Sie stehen als Inline-Stil `grid-template-columns:1fr 1fr` in den Vorlagen.
+
+           `1fr` ist `minmax(auto, 1fr)`, und `auto` als MINIMUM ist min-content: ein
+           einziges langes Wort — "Einladungsschreiben", "Сопроводительное" — macht die
+           Spur breiter als ihren Anteil, statt umzubrechen. Zwei Spuren passen dann
+           nicht mehr nebeneinander und die Karten laufen rechts aus dem Kasten.
+           `html,body{overflow-x:hidden}` verdeckt das: es entsteht keine Scrollleiste,
+           der Text wird still abgeschnitten.
+
+           Gemessen am 07.09.2026 bei 390 px Viewport:
+             /de/dummy-ticket            293 px Ueberhang
+             /de/free-dummy-ticket       293 px
+             /fr/dummy-ticket            133 px
+             /de/onward-ticket            98 px
+             /de/dummy-ticket/thailand    49 px und 63 px
+             /dummy-ticket                47 px  (schon auf Englisch)
+             /hotel-booking/usa           13 px  (schon auf Englisch)
+
+           minmax(0,1fr) nimmt der Spur den min-content-Mindestwert, min-width:0 dem
+           Kind, overflow-wrap bricht das Wort im Notfall um. Damit ist ein Ueberlauf
+           bei JEDER Breite ausgeschlossen, nicht nur unterhalb des Umbruchpunkts.
+           Der Umbruch auf eine Spalte ab 768 px ist die Hausregel "inner 1fr 1fr -> 1fr"
+           und stand bereits in seo/dummy-ticket/country.blade.php — dort aber an
+           #main-grid verankert, und genau daran ist er vorbeigelaufen: auf mehreren
+           Sprachfassungen schliesst ein ueberzaehliges </div> aus den Country-Content-
+           Dateien das Raster #main-grid zu frueh, die betroffenen Karten haengen dann
+           direkt an <body>. Deshalb steht die Regel hier ohne Vorfahren-Anker.
+
+           Beide Schreibweisen stehen da: setzt JavaScript den Wert, normalisiert der
+           Browser ihn zu "grid-template-columns: 1fr 1fr" MIT Leerzeichen; ohne die
+           zweite Zeile fiele so ein Element still aus der Regel. */
+        div[style*="grid-template-columns:1fr 1fr"],
+        div[style*="grid-template-columns: 1fr 1fr"] {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+        /* Und dasselbe fuer JEDES inline gesetzte Raster, unabhaengig von der
+           Spaltenangabe: die automatische Mindestgroesse eines Raster-Kindes ist
+           min-content, und genau die blaeht die Spur auf. Ein ausdrueckliches
+           min-width:0 hebt sie auf, ohne feste Spuren (`1fr 320px`) anzutasten —
+           dieselbe Regel steht seit jeher fuer #main-grid im Backstop darueber.
+           Betraf zuletzt einspaltige Raster wie den UAE-Ablauf (/de/dummy-ticket/uae,
+           4 px) und die Kennzahlen-Kacheln .info-grid (/de/hotel-booking/cuba, 12 px). */
+        [style*="display:grid"] > *,
+        [style*="display: grid"] > *,
+        .info-grid > * {
+            min-width: 0;
+            overflow-wrap: break-word;
+        }
+        @media (max-width: 768px) {
+            div[style*="grid-template-columns:1fr 1fr"],
+            div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+        }
+
+        /* MOBILE BOTTOM CTA BAR */
+        .mobile-cta-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; background: var(--purple); padding: 0.85rem 1.25rem; align-items: center; justify-content: space-between; gap: 0.75rem; box-shadow: 0 -4px 20px rgba(0,0,0,0.3); }
+        .mobile-cta-bar-label { font-size: 0.88rem; font-weight: 700; color: white; line-height: 1.3; }
+        .mobile-cta-bar-btn { display: inline-flex; align-items: center; gap: 0.4rem; background: white; color: var(--purple); padding: 0.6rem 1.1rem; border-radius: 9px; font-weight: 800; font-size: 0.85rem; text-decoration: none; white-space: nowrap; flex-shrink: 0; }
+        /* Der Knopf soll auffallen. Ein langsamer, weicher Lichthof statt eines harten
+           Blinkens — die Leiste steht dauerhaft im Bild, alles Schnellere nervt dort. */
+        @keyframes ctaPulse {
+              0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.55); }
+             60%       { box-shadow: 0 0 0 10px rgba(255,255,255,0); }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-cta-bar { display: flex; }
+            /* 67 px, nicht 64: die Leiste ist gemessen 67 px hoch — in allen 15 Sprachen,
+               weil die Beschriftung abgeschnitten statt umgebrochen wird. Mit 64 lagen die
+               letzten 3 px Seiteninhalt unter der Leiste. */
+            body { padding-bottom: 67px; }
+
+            .mobile-cta-bar-btn { animation: ctaPulse 2.6s ease-out infinite; }
+
+            /* Das Chat-Symbol lag ueber dem Generate-Knopf: es sitzt fix auf bottom:20px,
+               die Leiste ist 67 px hoch. Gemessen 54 x 39 px Ueberlappung, auf 360 px war
+               sogar die MITTE des Knopfes verdeckt — und der Chat gewinnt mit
+               z-index:2147483000 gegen die 200 der Leiste um zehn Millionen Stufen.
+               "body #lena-widget" statt "#lena-widget": eine Stufe mehr Spezifitaet, damit
+               die Regel gegen das @media(max-width:430px) des Widgets gewinnt, das spaeter
+               im Dokument steht. Ohne !important. */
+            body #lena-widget { bottom: 79px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .mobile-cta-bar-btn { animation: none; }
+        }
+
+        /* ── Livewire booking form (hotel-booking-form component) ── */
+        .form-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 24px; padding: 3rem; box-shadow: 0 4px 24px rgba(124,58,237,0.06); }
+        .input-label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+        .inp { width: 100%; background: var(--bg); border: 2px solid var(--border); color: var(--text); padding: 0.9rem 1.1rem; border-radius: 12px; font-size: 1rem; font-family: inherit; transition: all 0.2s; outline: none; box-sizing: border-box; }
+        .inp:focus { border-color: var(--purple); box-shadow: 0 0 0 4px rgba(124,58,237,0.08); }
+        .inp::placeholder { color: var(--text2); }
+        .submit-btn { width: 100%; background: var(--purple); color: white; border: none; padding: 1.1rem; border-radius: 14px; font-size: 1.1rem; font-weight: 800; cursor: pointer; font-family: inherit; box-shadow: 0 8px 24px var(--purple-glow); transition: all 0.2s; position: relative; overflow: hidden; }
+        .submit-btn:hover { background: var(--purple2); transform: translateY(-2px); box-shadow: 0 14px 32px var(--purple-glow); }
+        .inner-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; }
+        .radio-group { display: flex; gap: 1rem; }
+        .radio-opt { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-weight: 600; color: var(--text); font-size: 0.95rem; }
+        .pax-row { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+        .pax-row:last-child { border-bottom: none; }
+        .pax-btn { width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer; font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; justify-content: center; transition: all 0.2s; line-height: 1; }
+        .pax-minus { background: var(--border); color: var(--text); }
+        .pax-minus:hover { background: #d1d5db; }
+        .pax-plus { background: var(--purple); color: white; }
+        .pax-plus:hover { background: var(--purple2); }
+        .search-results { max-height: 280px; overflow-y: auto; }
+        .result-item { padding: 0.85rem 1rem; cursor: pointer; border-bottom: 1px solid var(--border); transition: all 0.15s; }
+        .result-item:hover { background: var(--purple-light); }
+        .result-item:last-child { border-bottom: none; }
+        @media (max-width: 768px) {
+            .form-card { padding: 1.5rem; }
+            .inp { font-size: 16px; }
+            .submit-btn { padding: 1rem; font-size: 1rem; }
+            .radio-group { flex-direction: column; gap: 0.5rem; }
+            .form-card div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+        }
+    </style>
+
+    
+        <!-- Livewire Styles --><style >[wire\:loading][wire\:loading], [wire\:loading\.delay][wire\:loading\.delay], [wire\:loading\.list-item][wire\:loading\.list-item], [wire\:loading\.inline-block][wire\:loading\.inline-block], [wire\:loading\.inline][wire\:loading\.inline], [wire\:loading\.block][wire\:loading\.block], [wire\:loading\.flex][wire\:loading\.flex], [wire\:loading\.table][wire\:loading\.table], [wire\:loading\.grid][wire\:loading\.grid], [wire\:loading\.inline-flex][wire\:loading\.inline-flex] {display: none;}[wire\:loading\.delay\.none][wire\:loading\.delay\.none], [wire\:loading\.delay\.shortest][wire\:loading\.delay\.shortest], [wire\:loading\.delay\.shorter][wire\:loading\.delay\.shorter], [wire\:loading\.delay\.short][wire\:loading\.delay\.short], [wire\:loading\.delay\.default][wire\:loading\.delay\.default], [wire\:loading\.delay\.long][wire\:loading\.delay\.long], [wire\:loading\.delay\.longer][wire\:loading\.delay\.longer], [wire\:loading\.delay\.longest][wire\:loading\.delay\.longest] {display: none;}[wire\:offline][wire\:offline] {display: none;}[wire\:dirty]:not(textarea):not(input):not(select) {display: none;}:root {--livewire-progress-bar-color: #2299dd;}[x-cloak] {display: none !important;}[wire\:cloak] {display: none !important;}dialog#livewire-error::backdrop {background-color: rgba(0, 0, 0, .6);}</style>
+
+<!-- Organization Schema (E-E-A-T) -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://myjet24.com/#organization",
+    "name": "MyJet24",
+    "url": "https://myjet24.com",
+    "sameAs": ["https://www.youtube.com/@myjet24"],
+    "logo": {
+        "@type": "ImageObject",
+        "url": "https://myjet24.com/images/og-default.png",
+        "width": 1200,
+        "height": 630
+    },
+    "description": "MyJet24 is a dummy ticket and flight reservation generator used by travelers worldwide for visa applications and proof of onward travel.",
+    "foundingDate": "2021",
+    "founder": [
+        {
+            "@type": "Person",
+            "@id": "https://myjet24.com/#marc-hoffmann",
+            "name": "Marc Hoffmann",
+            "jobTitle": "Senior Visa Consultant & Founder",
+            "sameAs": ["https://www.linkedin.com/in/marc-hoffmann-myjet24"],
+            "knowsAbout": ["Visa Applications", "Dummy Flight Tickets", "Schengen Visa Requirements", "Proof of Onward Travel", "Embassy Documentation", "Travel Document Verification"]
+        },
+        {
+            "@type": "Person",
+            "@id": "https://myjet24.com/#james-mitchell",
+            "name": "James Mitchell",
+            "jobTitle": "CEO & Founder",
+            "sameAs": ["https://www.linkedin.com/in/james-mitchell-myjet24"],
+            "knowsAbout": ["Travel Technology", "Visa Applications", "Digital Travel Tools", "Flight Reservation Systems", "International Travel Documentation"]
+        }
+    ],
+    "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "London",
+        "addressCountry": "GB"
+    },
+    "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "email": "support@myjet24.com",
+        "availableLanguage": ["English", "German", "Spanish", "French", "Portuguese", "Indonesian", "Russian", "Chinese", "Hebrew", "Hindi", "Urdu", "Japanese", "Korean", "Arabic", "Turkish"]
+    },
+    "knowsAbout": ["Dummy Flight Tickets", "Onward Ticket Requirements", "Visa Application Documentation", "Flight Reservations for Visa", "Proof of Onward Travel", "Immigration Requirements"]
+}
+</script>
+
+
+
+<!-- WebSite Schema (site entity for brand/knowledge-graph). No SearchAction:
+     the site has no general search-results page to target. -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://myjet24.com/#website",
+    "name": "MyJet24",
+    "url": "https://myjet24.com",
+    "inLanguage": "en",
+    "publisher": {"@id": "https://myjet24.com/#organization"}
+}
+</script>
+
+<!-- flag-icons CDN — for country flag rendering across hub pages (Schengen members, etc.) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css"></noscript>
+<style id="mj-container-system">
+    :root{
+        --mj-max: 1280px;
+        --mj-gutter: clamp(1rem, 4vw, 1.5rem);
+    }
+    .mj-container{
+        width: 100%;
+        max-width: var(--mj-max);
+        margin-inline: auto;
+        padding-inline: var(--mj-gutter);
+        box-sizing: border-box;
+    }
+    .mj-container--md{ --mj-max: 1100px; }
+    .mj-container--sm{ --mj-max: 980px; }
+    .mj-container--xs{ --mj-max: 680px; }
+    .mj-bleed{
+        width: 100vw;
+        margin-inline: calc(50% - 50vw);
+    }
+
+    /* ---- Phase A: gutter unification (horizontal only) --------------------
+       Force the shared gutter on uniquely-named page-container classes.
+       padding-inline = left/right ONLY → vertical padding & max-width are
+       untouched (widths deferred to Phase B). !important defeats the per-
+       document duplicate definitions + body-level <style> ordering.
+       NOTE: deliberately NOT targeting generic names (.container = Tailwind
+       utility, .section = used on full-bleed bands) to avoid collateral. */
+    .nav-inner,
+    .unav-inner,
+    .vrc-container,
+    .wizard-container{
+        padding-inline: var(--mj-gutter) !important;
+    }
+</style>
+<style id="mj-tippziele" data-quelle="app/Http/Middleware/Tippziele.php">@media(max-width:767px){.post-footer .read-more{min-height:26px}.post-footer a[href="/#bookingForm"]{min-height:26px}.guide-hero-inner nav a{display:inline-flex;align-items:center;min-height:26px}.footer-kontakt a{display:inline-flex;align-items:center;min-height:26px}.cc-links a{display:inline-flex;align-items:center;min-height:26px}.dt-textlink{display:inline-flex;align-items:center;min-height:26px}.vc-offres-links a{display:inline-flex;align-items:center;min-height:26px}nav.breadcrumb a{display:inline-flex;align-items:center;min-height:26px}.mj-tippziel{min-height:26px}}</style><style id="mj-footer-grid" data-quelle="app/Http/Middleware/FusszeilenLayout.php">footer{background:#0c0818;color:#94a3b8}.footer-brand{color:#a78bfa}.footer-tagline,.footer-links a,.footer-kontakt a{color:#94a3b8}.footer-col-title{color:#e2e8f0}.footer-links a:hover,.footer-kontakt a:hover{color:#a78bfa}.footer-bottom{color:#94a3b8}.footer-top{border-bottom:1px solid #1e1640}@layer mj-fuss{footer{padding:4rem 1.5rem 2rem;margin-top:5rem}.footer-inner{max-width:1280px;margin:0 auto}.footer-top{display:grid;gap:3rem;padding-bottom:3rem}.footer-brand{font-size:1.4rem;font-weight:900;margin-bottom:.75rem}.footer-tagline{font-size:.875rem;line-height:1.6}.footer-col-title{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:1rem}.footer-links{display:flex;flex-direction:column}.footer-links a{text-decoration:none}.footer-bottom{padding-top:2rem;text-align:center;font-size:.8rem}}.footer-top:has(>:nth-child(5)){grid-template-columns:2fr 1fr 1fr 1fr 1fr}.footer-top:has(>:nth-child(6)){grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr}@media(max-width:1024px){.footer-top:has(>:nth-child(5)),.footer-top:has(>:nth-child(6)){grid-template-columns:1fr 1fr 1fr}}@media(max-width:768px){.footer-top:has(>:nth-child(5)),.footer-top:has(>:nth-child(6)){grid-template-columns:1fr 1fr}}@media(max-width:480px){.footer-top:has(>:nth-child(5)),.footer-top:has(>:nth-child(6)){grid-template-columns:1fr}}.footer-head{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:3rem;align-items:start;padding-bottom:2.5rem}.footer-head .footer-tagline{max-width:42ch;font-size:.875rem;line-height:1.6}.footer-top.footer-gleich{grid-template-columns:repeat(5,minmax(0,1fr));gap:2rem}@media(max-width:1024px){.footer-top.footer-gleich{grid-template-columns:repeat(3,minmax(0,1fr))}.footer-head{grid-template-columns:minmax(0,1fr);gap:2rem}}@media(max-width:768px){.footer-top.footer-gleich{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:480px){.footer-top.footer-gleich{grid-template-columns:minmax(0,1fr)}}.footer-links{gap:.35rem}.footer-links a{line-height:1.7;padding:2px 0;font-size:.875rem}.footer-news-titel{font-size:.875rem;font-weight:600;color:#e2e8f0;margin-bottom:.35rem}.footer-news-text{font-size:.875rem;color:#94a3b8;line-height:1.6;margin-bottom:.75rem}.footer-news-hinweis,.footer-klein{font-size:.75rem;color:#64748b;margin-top:.5rem}.footer-news-fehler{font-size:.75rem;color:#f87171;margin-top:.25rem}.footer-news-ok{display:flex;align-items:center;gap:.5rem;color:#4ade80;font-size:.875rem}.footer-news-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;font-size:.875rem}.footer-news-form{display:flex;gap:.5rem;flex-wrap:wrap}.footer-news-feld{flex:1;min-width:11rem;padding:.6rem .75rem;background:#1a1230;border:1px solid #2d2250;border-radius:8px;font-size:.875rem;color:#e2e8f0;outline:none}.footer-news-feld:focus{border-color:#a78bfa}.footer-news-knopf{padding:.6rem 1.1rem;background:#7c3aed;color:#fff;font-size:.875rem;font-weight:600;border:none;border-radius:8px;cursor:pointer}.footer-news-knopf:hover{background:#6d28d9}.footer-kontakt{display:flex;align-items:center;justify-content:center;gap:1.25rem;margin-bottom:1.25rem}.footer-kontakt a{color:#94a3b8;text-decoration:none;font-size:.875rem}.footer-kontakt a:hover{color:#a78bfa}.footer-sozial-link{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#1a1230;border:1px solid #2d2250}.footer-sozial-link:hover{border-color:#ff0000;color:#ff0000}.footer-integritaet{margin:1rem auto 0;max-width:80ch;font-size:.75rem;color:#64748b;line-height:1.7}</style>
+    <!-- Microsoft Clarity — consent-gated (mj24_consent=all), loaded after window.load -->
+    <script>
+      (function(){
+        function startClarity(){
+          if(window._clarityLoaded) return;
+          var cc=document.cookie.match(/mj24_consent=([^;]+)/);
+          if(!cc||cc[1]!=='all') return;
+          window._clarityLoaded=true;
+          (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+          })(window,document,"clarity","script","ybipw2apji");
+        }
+        window.loadClarity=startClarity;
+        if(document.readyState==='complete'){startClarity();}
+        else{window.addEventListener('load',startClarity,{once:true});}
+      })();
+    </script>
+<script>
+    /* Synchron und vor dem ersten Paint — genau wie das data-theme in Zeile 3 der
+       Startseiten. Der Zustand hängt am html-Element, NICHT an Attributen gemorphter Elemente:
+       damit sind Server-HTML und Live-DOM immer gleich und der Livewire-Morph ist für den
+       Kalender ein No-Op. Ohne JS bleibt die Klasse aus und das native Feld sichtbar. */
+    document.documentElement.classList.add('js');
+</script>
+<script src="js/date-picker.js@v=1788388740" defer></script>
+<style>
+/* ---------- Das native Feld ---------- */
+
+/* 24.09.2026: Auf iPhone-Safari ragte das Kalendersymbol des nativen Feldes rechts
+   aus dem Rahmen und wurde am Bildschirmrand gekappt. Chromium bei 390 px zeigt
+   dagegen keinen Ueberlauf (Feld 292 px im 292-px-Rahmen, intrinsisch nur 197 px) -
+   der Fehler entsteht erst, weil appearance:auto WebKit eigene Metriken fuer das
+   Steuerelement erlaubt.
+
+   Am TYP angehaengt, nicht an .inp: die vier Visa-Werkzeuge benutzen form-input
+   bzw. gar keine Klasse und blieben sonst ungeschuetzt - dort liegt zudem kein
+   Knopf ueber dem Feld, ein Ueberlauf waere voll sichtbar.
+
+   KEINE Engine-Weiche: alle Engines bekommen denselben Wert, in Chromium ist er
+   messbar wirkungslos. Kein ::-webkit-calendar-picker-indicator{display:none} -
+   das waere eine Praefix-Regel ueber Sichtbarkeit (verboten seit 02.09.2026) und
+   naehme dem offenen Geburtsdatumsfeld die Zeigerbedienung. */
+input[type="date"] {
+    -webkit-appearance: none;   /* iOS vor 15.4 kennt nur die Praefix-Schreibweise */
+    appearance: none;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.inp[type="date"] {
+    position: relative;
+    min-height: 52px;                 /* type=date hat andere intrinsische Höhe als text */
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: right 1rem center;
+    /* Physisch, nicht logisch: Datumsfelder erzwingen intern LTR, die logische Auflösung
+       kippt dadurch in RTL — gemessen am 02.09.2026. */
+    padding-right: 3rem;
+}
+
+[dir="rtl"] .inp[type="date"] {
+    background-position: left 1rem center;
+    padding-left: 3rem;
+    padding-right: 1.1rem;
+}
+
+/* color-scheme färbt das native Kalender-Panel selbst. Ohne das klappt auf der
+   nachtschwarzen Seite ein grelles weisses Panel auf — das bleibt für den Fall wichtig,
+   dass das JS nicht lädt und das native Feld übernimmt. */
+[data-theme="dark"] .inp[type="date"] {
+    color-scheme: dark;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23a78bfa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cpath d='M16 2v4M8 2v4M3 10h18'/%3E%3C/svg%3E");
+}
+
+[data-theme="light"] .inp[type="date"] {
+    color-scheme: light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%237c3aed' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cpath d='M16 2v4M8 2v4M3 10h18'/%3E%3C/svg%3E");
+}
+
+/* ---------- Der Auslöser ---------- */
+
+.date-field { position: relative; }
+
+/* Ohne JS unsichtbar: das native Feld bleibt dann die vollwertige Bedienung.
+   Der Knopf ersetzt das Feld NICHT — es behält required, min/max und wire:model,
+   damit die Formularprüfung des Browsers und Livewire unangetastet bleiben. */
+html:not(.js) .dp-trigger { display: none; }
+
+html.js .dp-native {
+    /* Text unsichtbar, Feld bleibt im Fluss und validierbar. */
+    color: transparent;
+}
+
+html.js .dp-trigger {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: start;
+    cursor: pointer;
+    touch-action: manipulation;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.dp-trigger .dp-trigger-text { flex: 1; }
+.dp-trigger .dp-placeholder { color: var(--text2); }
+
+/* ---------- Das Panel ---------- */
+
+.dp-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+    /* Feste, kompakte Breite — bewusst NICHT die Feldbreite: am Rechner ist das Feld
+       702 px breit, ein Kalender in dieser Breite sähe verloren aus. Auf dem Handy ist
+       340 px umgekehrt breiter als das 292 px schmale Feld und ergibt ~46 px je Spalte
+       statt 38. Der Deckel auf 100vw-28px verhindert, dass body{overflow-x:hidden} das
+       Panel seitlich abschneidet. */
+    width: min(340px, calc(100vw - 28px));
+    /* Über dem Flughafen-Vorschlag (50), unter der festen Navigation (100). */
+    z-index: 60;
+    overflow-y: auto;
+    padding: 0.85rem;
+    border-radius: 16px;
+    background: var(--card-bg, #14102b);
+    border: 1px solid var(--card-border, var(--border));
+    box-shadow: 0 18px 48px rgba(10, 4, 30, 0.55);
+}
+
+[dir="rtl"] .dp-panel { transform: translateX(50%); }
+
+.dp-panel.dp-above { top: auto; bottom: calc(100% + 8px); }
+
+.dp-head { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.6rem; }
+.dp-caption { flex: 1; display: flex; gap: 0.35rem; justify-content: center; }
+
+.dp-sel {
+    background: transparent; color: var(--text); border: 1px solid transparent;
+    border-radius: 8px; padding: 0.25rem 0.4rem; font: inherit; font-weight: 700; cursor: pointer;
+}
+.dp-sel:hover, .dp-sel:focus-visible { border-color: var(--border); outline: none; }
+
+.dp-nav {
+    display: flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 10px;
+    background: transparent; border: 1px solid var(--border); color: var(--text); cursor: pointer;
+}
+.dp-nav:hover:not(:disabled) { border-color: var(--purple); color: var(--purple); }
+.dp-nav:disabled { opacity: 0.3; cursor: default; }
+/* Ein einziges Chevron, in RTL gespiegelt — die DOM-Reihenfolge dreht der Fluss selbst. */
+.dp-nav[data-dp-step="1"] svg { transform: rotate(180deg); }
+[dir="rtl"] .dp-nav svg { transform: scaleX(-1); }
+[dir="rtl"] .dp-nav[data-dp-step="1"] svg { transform: scaleX(-1) rotate(180deg); }
+
+.dp-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.dp-wd span {
+    display: flex; align-items: center; justify-content: center;
+    height: 30px; font-size: 0.72rem; font-weight: 700; color: var(--text2);
+}
+
+.dp-day {
+    display: flex; align-items: center; justify-content: center;
+    aspect-ratio: 1 / 1; min-height: 40px;
+    border: none; border-radius: 10px; background: transparent;
+    color: var(--text); font: inherit; font-size: 0.9rem; cursor: pointer;
+}
+.dp-day:hover:not(:disabled) { background: rgba(124, 58, 237, 0.18); }
+.dp-day:focus-visible { outline: 2px solid var(--purple); outline-offset: -2px; }
+.dp-day.dp-out { color: var(--text2); opacity: 0.45; }
+.dp-day:disabled { opacity: 0.25; cursor: default; }
+.dp-day.dp-today { box-shadow: inset 0 0 0 1px var(--purple); }
+.dp-day.dp-selected { background: var(--purple); color: #fff; font-weight: 800; }
+
+@media (max-width: 768px) {
+    .dp-day { min-height: 44px; }
+}
+</style>
+    
+<script src="js/form-feedback.js@v=1790423509" defer></script>
+<style>
+/* ---------- Die Bewegung ---------- */
+
+@keyframes fvShake {
+      0%, 100% { transform: translateX(0); }
+     14%       { transform: translateX(-9px); }
+     28%       { transform: translateX(8px); }
+     42%       { transform: translateX(-6px); }
+     56%       { transform: translateX(5px); }
+     70%       { transform: translateX(-3px); }
+     84%       { transform: translateX(2px); }
+}
+
+/* Der Schalter sitzt am html-Element, die Animation an der Karte: so überlebt sie den
+   Livewire-Morph, der die Attribute der Karte selbst zurückschreiben würde. */
+html.fv-shake .form-card {
+    animation: fvShake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* Wer Bewegung abbestellt hat, bekommt sie nicht. Markierung und Sprung bleiben — die
+   sind die eigentliche Information, die Bewegung ist nur der Weckruf. */
+@media (prefers-reduced-motion: reduce) {
+    html.fv-shake .form-card { animation: none; }
+}
+
+/* ---------- Die Markierung ---------- */
+
+/* Erst NACH dem ersten Versuch. Ein Formular, das schon beim Öffnen rot ist, erzieht
+   den Kunden dazu, Rot zu übersehen. */
+html.fv-checked .inp:invalid,
+html.fv-checked .inp:invalid:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.16);
+}
+
+/* Beim Datumsfeld liegt der Knopf über dem nativen Feld — die Umrandung, die man sieht,
+   ist seine. Der Knopf ist das direkt folgende Geschwister, deshalb reicht '+' und es
+   braucht kein :has(). */
+html.fv-checked .dp-native:invalid + .dp-trigger {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.16);
+}
+
+/* ---------- Die Meldungen des Servers ---------- */
+
+.field-error {
+    display: block;
+    margin-top: 0.4rem;
+    color: #ef4444;
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+/* Genug Abstand über der Meldung, damit der Sprung sie nicht an den oberen Rand klebt. */
+.field-error { scroll-margin-top: 96px; }
+
+/* ---------- Die Reiseart: zwei Zeilen statt einer, und rot wenn ungewählt ----------
+
+   Seit 04.09.2026 ist nichts vorausgewählt, damit die Wahl bewusst getroffen wird. Damit
+   ein Fehlversuch dort genauso aussieht wie überall sonst, braucht es zwei Dinge, die es
+   bisher nicht gab:
+
+   1. Eine Regel, die die GRUPPE rot macht. `html.fv-checked .inp:invalid` greift nicht —
+      Radios tragen die Klasse .inp nicht.
+   2. Platz für die Erklärzeile. .radio-group ist am Rechner eine Flex-Zeile ohne Umbruch
+      (gemessen: 702 px breit, 23 px hoch); mit Unterzeile wird daraus ein zweispaltiges
+      Raster. Als eigene Modifier-Klasse, damit .radio-opt anderswo unberührt bleibt. */
+.radio-group--explained { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.radio-group--explained .radio-opt {
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.75rem 0.85rem;
+    border: 1.5px solid var(--card-border);
+    border-radius: 12px;
+    transition: border-color .18s, background .18s;
+}
+.radio-group--explained .radio-opt:hover { border-color: var(--purple); }
+.radio-group--explained .radio-opt:focus-within { border-color: var(--purple); }
+.radio-group--explained input[type="radio"] { margin-top: 2px; flex-shrink: 0; }
+.radio-txt { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+.radio-t { font-weight: 700; color: var(--text); line-height: 1.25; }
+.radio-s { font-weight: 400; font-size: 0.78rem; color: var(--text2); line-height: 1.4; }
+/* Gewählt: sichtbar gewählt, nicht nur ein Punkt. */
+.radio-group--explained .radio-opt:has(input:checked) {
+    border-color: var(--purple);
+    background: rgba(124, 58, 237, 0.06);
+}
+/* Rot kommt vom Server, nicht aus :has(:invalid).
+   Am 04.09.2026 gemessen: die Radios meldeten :invalid = false, obwohl required gesetzt und
+   nichts gewählt war — ohne gemeinsames name= sind es gar keine Gruppe. Das name= ist jetzt
+   da, aber die Markierung hängt trotzdem an derselben Quelle wie die Meldung: der
+   Server-Fehler setzt .is-wrong. Eine Wahrheit statt zweier. */
+.radio-group--explained.is-wrong .radio-opt { border-color: #ef4444; }
+html.fv-checked .radio-group--explained:has(input:invalid) .radio-opt { border-color: #ef4444; }
+@media (max-width: 768px) {
+    .radio-group--explained { grid-template-columns: 1fr; gap: 0.5rem; }
+}
+</style>
+    
+<script src="js/funnel-events.js@v=1788517877" defer></script>
+    
+
+</head>
+<body>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    /* Yandex.Metrika — consent-gated (mj24_consent=all). webvisor:true nimmt Sitzungen auf,
+       darf also nicht vor der Einwilligung starten — gleiche Logik wie gtag und Clarity. */
+    function loadYandex(){
+        if(window._ymLoaded) return;
+        var cc=document.cookie.match(/mj24_consent=([^;]+)/);
+        if(!cc||cc[1]!=='all') return;
+        window._ymLoaded=true;
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=109376279', 'ym');
+        ym(109376279, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+    }
+    if(document.readyState==='complete'){loadYandex();}
+    else{window.addEventListener('load',loadYandex,{once:true});}
+</script>
+<!-- /Yandex.Metrika counter -->
+
+<style>
+/* === UNIFIED NAV === */
+.unav { position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,0.98);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(124,58,237,0.12);box-shadow:0 1px 12px rgba(0,0,0,0.08);height:64px;display:flex;align-items:center;transition:background 0.3s; }
+[data-theme="dark"] .unav { background:rgba(12,8,24,0.92); }
+
+.unav-inner { max-width:1280px;margin:0 auto;padding:0 1.5rem;width:100%;display:flex;justify-content:space-between;align-items:center;gap:1rem; }
+
+.unav-logo { font-size:1.5rem;font-weight:900;color:var(--purple,#7c3aed);text-decoration:none;letter-spacing:-0.5px;white-space:nowrap; }
+.unav-logo span { color:var(--text,#1a1a2e); }
+[data-theme="dark"] .unav-logo span { color:#fff; }
+
+/* Desktop links */
+.unav-links { display:flex;gap:0.15rem;align-items:center; }
+.unav-link { color:var(--text2,#64748b);text-decoration:none;font-weight:600;font-size:0.88rem;padding:0.45rem 0.7rem;border-radius:8px;transition:all 0.2s;white-space:nowrap;cursor:pointer;background:none;border:none;font-family:inherit;display:inline-flex;align-items:center;gap:4px; }
+.unav-link:hover { color:var(--purple,#7c3aed);background:var(--purple-light,rgba(124,58,237,0.08)); }
+.unav-link.active { color:var(--purple,#7c3aed);font-weight:700; }
+.unav-chevron { transition:transform 0.2s;width:10px;height:10px; }
+
+/* Right side */
+.unav-right { display:flex;align-items:center;gap:0.75rem; }
+.unav-cta { background:var(--purple,#7c3aed);color:#fff !important;padding:0.5rem 1.1rem;border-radius:10px;font-weight:700;font-size:0.88rem;text-decoration:none;transition:all 0.2s;white-space:nowrap;box-shadow:0 4px 12px var(--purple-glow,rgba(124,58,237,0.25));display:inline-flex;align-items:center;gap:6px; }
+.unav-cta:hover { background:var(--purple2,#6d28d9);transform:translateY(-1px);box-shadow:0 8px 20px var(--purple-glow,rgba(124,58,237,0.3)); }
+[data-theme="dark"] .unav-cta { background:#7c3aed; }
+[data-theme="dark"] .unav-cta:hover { background:#6d28d9; }
+
+/* Theme toggle */
+.unav-theme { width:44px;height:24px;background:var(--border,#e5e7eb);border-radius:12px;position:relative;cursor:pointer;border:none;transition:background 0.3s;flex-shrink:0; }
+.unav-theme-dot { position:absolute;top:3px;left:3px;width:18px;height:18px;background:var(--purple,#7c3aed);border-radius:50%;transition:transform 0.3s;display:flex;align-items:center;justify-content:center;color:#fff; }
+.unav-ico { width:11px;height:11px;display:block; }
+.unav-ico-mond { display:none; }
+[data-theme="dark"] .unav-ico-sonne { display:none; }
+[data-theme="dark"] .unav-ico-mond { display:block; }
+[data-theme="dark"] .unav-theme-dot { transform:translateX(20px); }
+
+/* Burger */
+.unav-burger { display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px;width:36px;height:36px;align-items:center;justify-content:center; }
+.unav-burger span { display:block;width:20px;height:2px;background:var(--text,#1a1a2e);border-radius:2px;transition:all 0.3s; }
+[data-theme="dark"] .unav-burger span { background:#fff; }
+.unav-burger.open span:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+.unav-burger.open span:nth-child(2) { opacity:0; }
+.unav-burger.open span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
+
+/* === DROPDOWN PANELS === */
+.unav-dd-wrap { position:relative; }
+.unav-dd-panel { display:none;position:absolute;top:calc(100% + 12px);left:50%;transform:translateX(-50%);background:var(--card-bg,#fff);border:1px solid var(--border,#e5e7eb);border-radius:16px;padding:1.25rem;box-shadow:0 20px 60px rgba(0,0,0,0.15);z-index:9999;opacity:0;transition:opacity 0.2s; }
+[data-theme="dark"] .unav-dd-panel { background:var(--card-bg,#1e1b2e);border-color:rgba(255,255,255,0.1); }
+.unav-dd-panel.show { display:grid;opacity:1; }
+
+/* Countries dropdown: 3 columns */
+.unav-dd-countries { width:580px;grid-template-columns:1fr 1fr 1fr;gap:0.75rem; }
+
+/* Tools dropdown: 2 columns */
+.unav-dd-tools { width:480px;grid-template-columns:1fr 1fr;gap:0.75rem; }
+
+.unav-dd-col-title { font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--text2,#94a3b8);padding:0 0.5rem 0.4rem;border-bottom:1px solid var(--border,#e5e7eb);margin-bottom:0.4rem; }
+
+.unav-dd-item { display:flex;align-items:flex-start;gap:0.6rem;padding:0.5rem;border-radius:10px;text-decoration:none;color:var(--text,#1a1a2e);transition:all 0.15s; }
+.unav-dd-item:hover { background:var(--purple-light,rgba(124,58,237,0.08)); }
+.unav-dd-item:hover .unav-dd-name { color:var(--purple,#7c3aed); }
+[data-theme="dark"] .unav-dd-item { color:#e2e8f0; }
+
+.unav-dd-icon { flex-shrink:0;width:20px;height:20px;display:flex;align-items:center;justify-content:center;margin-top:1px; }
+.unav-dd-icon svg { width:18px;height:18px; }
+.unav-dd-name { font-size:0.85rem;font-weight:600;line-height:1.2; }
+.unav-dd-desc { font-size:0.72rem;color:var(--text2,#94a3b8);line-height:1.3;margin-top:1px; }
+
+/* Country flag mini icons */
+.unav-flag { width:20px;height:14px;border-radius:2px;flex-shrink:0;margin-top:2px;display:block;overflow:hidden;position:relative;box-shadow:0 0 0 1px rgba(0,0,0,0.08); }
+
+.unav-dd-viewall { display:block;text-align:center;padding:0.6rem;margin-top:0.5rem;font-size:0.8rem;font-weight:700;color:var(--purple,#7c3aed);text-decoration:none;border-top:1px solid var(--border,#e5e7eb);grid-column:1/-1; }
+.unav-dd-viewall:hover { text-decoration:underline; }
+
+/* Tool icon circles */
+.unav-tool-ic { width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+.unav-tool-ic svg { width:16px;height:16px; }
+
+/* === MOBILE MENU === */
+.unav-mobile { display:none;position:fixed;top:64px;left:0;right:0;bottom:0;background:var(--bg,#fff);z-index:999;overflow-y:auto;padding:1rem;flex-direction:column;gap:0.25rem; }
+[data-theme="dark"] .unav-mobile { background:var(--bg,#0c0818); }
+.unav-mobile.open { display:flex; }
+
+.unav-mob-link { color:var(--text,#1a1a2e);text-decoration:none;font-size:0.95rem;font-weight:600;padding:0.75rem 1rem;border-radius:10px;transition:background 0.2s;display:flex;align-items:center;justify-content:space-between;background:none;border:none;width:100%;font-family:inherit;cursor:pointer; }
+[data-theme="dark"] .unav-mob-link { color:#e2e8f0; }
+.unav-mob-link:hover { background:var(--bg2,#f8fafc); }
+[data-theme="dark"] .unav-mob-link:hover { background:rgba(255,255,255,0.05); }
+.unav-mob-link.active { color:var(--purple,#7c3aed); }
+
+.unav-mob-section { font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text2,#94a3b8);padding:0.75rem 1rem 0.25rem;margin-top:0.25rem; }
+
+.unav-mob-sub { display:none;flex-direction:column;padding:0 0.5rem; }
+.unav-mob-sub.open { display:flex; }
+.unav-mob-sub a { color:var(--text,#1a1a2e);text-decoration:none;font-size:0.9rem;font-weight:500;padding:0.6rem 1rem;border-radius:8px;transition:background 0.15s;display:flex;align-items:center;gap:0.5rem; }
+[data-theme="dark"] .unav-mob-sub a { color:#cbd5e1; }
+.unav-mob-sub a:hover { background:var(--bg2,#f8fafc); }
+[data-theme="dark"] .unav-mob-sub a:hover { background:rgba(255,255,255,0.05); }
+.unav-mob-sub .unav-flag { width:18px;height:13px; }
+.unav-mob-sub .unav-mob-ic { width:16px;height:16px;flex-shrink:0;opacity:0.6; }
+
+.unav-mob-cta { display:flex;align-items:center;justify-content:center;gap:0.5rem;background:var(--purple,#7c3aed);color:#fff !important;padding:0.85rem;border-radius:12px;font-weight:700;font-size:0.95rem;text-decoration:none;margin-top:1rem;box-shadow:0 4px 12px var(--purple-glow,rgba(124,58,237,0.25)); }
+
+/* === RESPONSIVE === */
+@media (max-width:899px) {
+    .unav-links { display:none; }
+    .unav-burger { display:flex; }
+}
+@media (min-width:900px) {
+    .unav-mobile { display:none !important; }
+}
+@media (max-width:430px) {
+    .unav-right { gap:0.4rem; }
+    .unav-cta { padding:0.45rem 0.7rem;font-size:0.78rem;gap:4px; }
+    .unav-cta svg { width:13px;height:13px;flex-shrink:0; }
+}
+
+/* Spacer */
+.unav-spacer { height:64px; }
+</style>
+
+
+<nav class="unav" role="navigation" aria-label="Main navigation">
+    <div class="unav-inner">
+
+        
+        <a href="index.html" class="unav-logo">MyJet<span>24</span></a>
+
+        
+        <div class="unav-links">
+
+            
+            <a href="dummy-ticket.html" class="unav-link ">Dummy Ticket</a>
+
+            
+
+            
+            <div class="unav-dd-wrap" id="unavCountriesWrap">
+                <button class="unav-link "
+                        onclick="unavToggle('countries')" aria-expanded="false" aria-haspopup="true">
+                    Countries
+                    <svg class="unav-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l3 3 3-3"/></svg>
+                </button>
+                <div class="unav-dd-panel unav-dd-countries" id="unavDdCountries">
+                    
+                    <div>
+                        <div class="unav-dd-col-title">Popular Destinations</div>
+                        <a href="onward-ticket-usa.html" class="unav-dd-item">
+                            <svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="14" fill="#B22234"/><rect y="2" width="20" height="2" fill="#fff"/><rect y="6" width="20" height="2" fill="#fff"/><rect y="10" width="20" height="2" fill="#fff"/><rect width="8" height="8" fill="#3C3B6E"/></svg>
+                            <span class="unav-dd-name">USA</span>
+                        </a>
+                        <a href="onward-ticket-uk.html" class="unav-dd-item">
+                            <svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="14" fill="#012169"/><path d="M0 0L20 14M20 0L0 14" stroke="#fff" stroke-width="2.5"/><path d="M0 0L20 14M20 0L0 14" stroke="#C8102E" stroke-width="1.5"/><path d="M10 0v14M0 7h20" stroke="#fff" stroke-width="4"/><path d="M10 0v14M0 7h20" stroke="#C8102E" stroke-width="2.5"/></svg>
+                            <span class="unav-dd-name">United Kingdom</span>
+                        </a>
+                        <a href="onward-ticket-thailand.html" class="unav-dd-item">
+                            <svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="14" fill="#A51931"/><rect y="2.3" width="20" height="9.4" fill="#F4F5F8"/><rect y="4.7" width="20" height="4.6" fill="#2D2A4A"/></svg>
+                            <span class="unav-dd-name">Thailand</span>
+                        </a>
+                        <a href="onward-ticket-india.html" class="unav-dd-item">
+                            <svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="4.67" fill="#FF9933"/><rect y="4.67" width="20" height="4.67" fill="#fff"/><rect y="9.33" width="20" height="4.67" fill="#138808"/><circle cx="10" cy="7" r="1.8" fill="none" stroke="#000080" stroke-width="0.5"/></svg>
+                            <span class="unav-dd-name">India</span>
+                        </a>
+                        <a href="onward-ticket-philippines.html" class="unav-dd-item">
+                            <svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="7" fill="#0038A8"/><rect y="7" width="20" height="7" fill="#CE1126"/><polygon points="0,0 8,7 0,14" fill="#fff"/><circle cx="3" cy="7" r="1.2" fill="#FCD116" stroke="#FCD116" stroke-width="0.3"/></svg>
+                            <span class="unav-dd-name">Philippines</span>
+                        </a>
+                        <a href="onward-ticket-turkey.html" class="unav-dd-item">
+                            <svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="14" fill="#E30A17"/><circle cx="8" cy="7" r="3" fill="#fff"/><circle cx="9" cy="7" r="2.4" fill="#E30A17"/><polygon points="11.5,7 10.2,6.2 10.2,7.8" fill="#fff" transform="rotate(-18 11 7)"/></svg>
+                            <span class="unav-dd-name">Turkey</span>
+                        </a>
+                        <a href="onward-ticket-germany.html" class="unav-dd-item">
+                            <svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="4.67" fill="#000"/><rect y="4.67" width="20" height="4.67" fill="#DD0000"/><rect y="9.33" width="20" height="4.67" fill="#FFCC00"/></svg>
+                            <span class="unav-dd-name">Germany</span>
+                        </a>
+                        <a href="onward-ticket-australia.html" class="unav-dd-item">
+                            <svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="14" fill="#00008B"/><rect width="8" height="6" fill="#00008B"/><path d="M0 0L8 6M8 0L0 6" stroke="#fff" stroke-width="1.2"/><path d="M0 0L8 6M8 0L0 6" stroke="#C8102E" stroke-width="0.6"/><path d="M4 0v6M0 3h8" stroke="#fff" stroke-width="2"/><path d="M4 0v6M0 3h8" stroke="#C8102E" stroke-width="1"/><circle cx="15" cy="4" r="0.6" fill="#fff"/><circle cx="17" cy="6" r="0.5" fill="#fff"/><circle cx="14" cy="8" r="0.5" fill="#fff"/><circle cx="16" cy="10" r="0.5" fill="#fff"/><circle cx="12" cy="10" r="0.6" fill="#fff"/></svg>
+                            <span class="unav-dd-name">Australia</span>
+                        </a>
+                    </div>
+                    
+                    <div>
+                        <div class="unav-dd-col-title">Regions</div>
+                        <a href="dummy-ticket-schengen-visa.html" class="unav-dd-item">
+                            <svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="14" fill="#003399"/><circle cx="10" cy="7" r="4" fill="none" stroke="#FFCC00" stroke-width="0.8"/><g fill="#FFCC00"><rect x="9.6" y="2.5" width="0.8" height="1.2" rx="0.2" transform="rotate(0 10 7)"/><rect x="9.6" y="2.5" width="0.8" height="1.2" rx="0.2" transform="rotate(30 10 7)"/><rect x="9.6" y="2.5" width="0.8" height="1.2" rx="0.2" transform="rotate(60 10 7)"/><rect x="9.6" y="2.5" width="0.8" height="1.2" rx="0.2" transform="rotate(90 10 7)"/><rect x="9.6" y="2.5" width="0.8" height="1.2" rx="0.2" transform="rotate(120 10 7)"/><rect x="9.6" y="2.5" width="0.8" height="1.2" rx="0.2" transform="rotate(150 10 7)"/><rect x="9.6" y="2.5" width="0.8" height="1.2" rx="0.2" transform="rotate(180 10 7)"/><rect x="9.6" y="2.5" width="0.8" height="1.2" rx="0.2" transform="rotate(210 10 7)"/><rect x="9.6" y="2.5" width="0.8" height="1.2" rx="0.2" transform="rotate(240 10 7)"/><rect x="9.6" y="2.5" width="0.8" height="1.2" rx="0.2" transform="rotate(270 10 7)"/><rect x="9.6" y="2.5" width="0.8" height="1.2" rx="0.2" transform="rotate(300 10 7)"/><rect x="9.6" y="2.5" width="0.8" height="1.2" rx="0.2" transform="rotate(330 10 7)"/></g></svg>
+                            <div>
+                                <div class="unav-dd-name">Schengen Zone</div>
+                                <div class="unav-dd-desc">29 Countries</div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div>
+                        <div class="unav-dd-col-title">Resources</div>
+                        <a href="proof-of-onward-travel.html" class="unav-dd-item">
+                            <span class="unav-dd-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                            </span>
+                            <div>
+                                <div class="unav-dd-name">All 195 Countries</div>
+                                <div class="unav-dd-desc">Complete directory</div>
+                            </div>
+                        </a>
+                        
+                        <a href="onward-ticket.html" class="unav-dd-item">
+                            <span class="unav-dd-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                            </span>
+                            <div>
+                                <div class="unav-dd-name">Onward ticket</div>
+                                
+                                <div class="unav-dd-desc">Required at check-in</div>
+                            </div>
+                        </a>
+                        <a href="proof-of-onward-travel.html" class="unav-dd-item">
+                            <span class="unav-dd-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+                            </span>
+                            <div>
+                                <div class="unav-dd-name">Proof of Onward Travel</div>
+                                <div class="unav-dd-desc">Everything you need to know</div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <a href="proof-of-onward-travel.html" class="unav-dd-viewall">View All Countries &rarr;</a>
+                </div>
+            </div>
+
+            
+            <div class="unav-dd-wrap" id="unavToolsWrap">
+                <button class="unav-link "
+                        onclick="unavToggle('tools')" aria-expanded="false" aria-haspopup="true">
+                    Tools
+                    <svg class="unav-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l3 3 3-3"/></svg>
+                </button>
+                <div class="unav-dd-panel unav-dd-tools" id="unavDdTools">
+                    
+                    <div>
+                        <div class="unav-dd-col-title">Research Tools</div>
+                        <a href="visa-checker.html" class="unav-dd-item">
+                            <span class="unav-tool-ic" style="background:rgba(168,85,247,0.1);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            </span>
+                            <div>
+                                <div class="unav-dd-name">Visa Checker</div>
+                                <div class="unav-dd-desc">Check requirements for any passport</div>
+                            </div>
+                        </a>
+                        <a href="embassy-finder.html" class="unav-dd-item">
+                            <span class="unav-tool-ic" style="background:rgba(59,130,246,0.1);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/><line x1="9" y1="10" x2="9" y2="10.01"/><line x1="15" y1="10" x2="15" y2="10.01"/><line x1="9" y1="14" x2="9" y2="14.01"/><line x1="15" y1="14" x2="15" y2="14.01"/></svg>
+                            </span>
+                            <div>
+                                <div class="unav-dd-name">Embassy Finder</div>
+                                <div class="unav-dd-desc">Embassies &amp; consulates worldwide</div>
+                            </div>
+                        </a>
+                        <a href="visa-cost-calculator.html" class="unav-dd-item">
+                            <span class="unav-tool-ic" style="background:rgba(16,185,129,0.1);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            </span>
+                            <div>
+                                <div class="unav-dd-name">Visa Cost Calculator</div>
+                                <div class="unav-dd-desc">Exact fees &amp; processing times</div>
+                            </div>
+                        </a>
+                        <a href="visa-risk-check.html" class="unav-dd-item">
+                            <span class="unav-tool-ic" style="background:rgba(239,68,68,0.1);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                            </span>
+                            <div>
+                                <div class="unav-dd-name">Visa Risk Checker</div>
+                                <div class="unav-dd-desc">Check your approval chances</div>
+                            </div>
+                        </a>
+                        <a href="hotel-booking.html" class="unav-dd-item">
+                            <span class="unav-tool-ic" style="background:rgba(59,130,246,0.1);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+                            </span>
+                            <div>
+                                <div class="unav-dd-name">Hotel Booking</div>
+                                <div class="unav-dd-desc">Free accommodation proof for visa</div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div>
+                        <div class="unav-dd-col-title">Document Generators</div>
+                        <a href="visa-letter.html" class="unav-dd-item">
+                            <span class="unav-tool-ic" style="background:rgba(245,158,11,0.1);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            </span>
+                            <div>
+                                <div class="unav-dd-name">Visa Support Letter</div>
+                                <div class="unav-dd-desc">For any country</div>
+                            </div>
+                        </a>
+                        <a href="invitation-letter.html" class="unav-dd-item">
+                            <span class="unav-tool-ic" style="background:rgba(236,72,153,0.1);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            </span>
+                            <div>
+                                <div class="unav-dd-name">Invitation Letter</div>
+                                <div class="unav-dd-desc">Official format</div>
+                            </div>
+                        </a>
+                        <a href="travel-itinerary.html" class="unav-dd-item">
+                            <span class="unav-tool-ic" style="background:rgba(6,182,212,0.1);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+                            </span>
+                            <div>
+                                <div class="unav-dd-name">Travel Itinerary</div>
+                                <div class="unav-dd-desc">Day-by-day plans</div>
+                            </div>
+                        </a>
+                        <a href="embassy-letter.html" class="unav-dd-item">
+                            <span class="unav-tool-ic" style="background:rgba(99,102,241,0.1);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>
+                            </span>
+                            <div>
+                                <div class="unav-dd-name">Embassy Cover Letter</div>
+                                <div class="unav-dd-desc">Professional template</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            
+            <a href="blog.html" class="unav-link ">Blog</a>
+
+            
+            <a href="about.html" class="unav-link ">About</a>
+        </div>
+
+        
+        <div class="unav-right">
+            <button class="unav-theme" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                <div class="unav-theme-dot"><svg class="unav-ico unav-ico-sonne" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 1.8v2.2M12 20v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M1.8 12h2.2M20 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg><svg class="unav-ico unav-ico-mond" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 13.3A9.2 9.2 0 1 1 10.7 2.4a7.2 7.2 0 0 0 10.9 10.9z"/></svg></div>
+            </button>
+            <a href="index.html#bookingForm" class="unav-cta" onclick="unavGoToForm(event)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 11v2"/><path d="M13 17v2"/></svg>
+                Free Ticket
+            </a>
+            <button class="unav-burger" id="unavBurger" onclick="unavToggleMobile()" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+
+<div class="unav-mobile" id="unavMobile" role="navigation" aria-label="Mobile navigation">
+
+    
+    <a href="dummy-ticket.html" class="unav-mob-link ">Dummy Ticket</a>
+
+    
+
+    
+    <button class="unav-mob-link " onclick="unavMobToggle('countries')">
+        Countries
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="unav-mob-sub" id="unavMobCountries">
+        <div class="unav-mob-section">Popular Destinations</div>
+        <a href="onward-ticket-usa.html"><svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="14" fill="#B22234"/><rect y="2" width="20" height="2" fill="#fff"/><rect y="6" width="20" height="2" fill="#fff"/><rect y="10" width="20" height="2" fill="#fff"/><rect width="8" height="8" fill="#3C3B6E"/></svg> USA</a>
+        <a href="onward-ticket-uk.html"><svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="14" fill="#012169"/><path d="M0 0L20 14M20 0L0 14" stroke="#fff" stroke-width="2.5"/><path d="M0 0L20 14M20 0L0 14" stroke="#C8102E" stroke-width="1.5"/><path d="M10 0v14M0 7h20" stroke="#fff" stroke-width="4"/><path d="M10 0v14M0 7h20" stroke="#C8102E" stroke-width="2.5"/></svg> United Kingdom</a>
+        <a href="onward-ticket-thailand.html"><svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="14" fill="#A51931"/><rect y="2.3" width="20" height="9.4" fill="#F4F5F8"/><rect y="4.7" width="20" height="4.6" fill="#2D2A4A"/></svg> Thailand</a>
+        <a href="onward-ticket-india.html"><svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="4.67" fill="#FF9933"/><rect y="4.67" width="20" height="4.67" fill="#fff"/><rect y="9.33" width="20" height="4.67" fill="#138808"/><circle cx="10" cy="7" r="1.8" fill="none" stroke="#000080" stroke-width="0.5"/></svg> India</a>
+        <a href="onward-ticket-philippines.html"><svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="7" fill="#0038A8"/><rect y="7" width="20" height="7" fill="#CE1126"/><polygon points="0,0 8,7 0,14" fill="#fff"/><circle cx="3" cy="7" r="1.2" fill="#FCD116"/></svg> Philippines</a>
+        <a href="onward-ticket-turkey.html"><svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="14" fill="#E30A17"/><circle cx="8" cy="7" r="3" fill="#fff"/><circle cx="9" cy="7" r="2.4" fill="#E30A17"/></svg> Turkey</a>
+        <a href="onward-ticket-germany.html"><svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="4.67" fill="#000"/><rect y="4.67" width="20" height="4.67" fill="#DD0000"/><rect y="9.33" width="20" height="4.67" fill="#FFCC00"/></svg> Germany</a>
+        <a href="onward-ticket-australia.html"><svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="14" fill="#00008B"/><rect width="8" height="6" fill="#00008B"/><path d="M0 0L8 6M8 0L0 6" stroke="#fff" stroke-width="1.2"/><path d="M4 0v6M0 3h8" stroke="#fff" stroke-width="2"/><path d="M4 0v6M0 3h8" stroke="#C8102E" stroke-width="1"/></svg> Australia</a>
+        <div class="unav-mob-section">Regions &amp; Resources</div>
+        <a href="dummy-ticket-schengen-visa.html"><svg class="unav-flag" viewBox="0 0 20 14"><rect width="20" height="14" fill="#003399"/><circle cx="10" cy="7" r="4" fill="none" stroke="#FFCC00" stroke-width="0.8"/></svg> Schengen Zone</a>
+        <a href="proof-of-onward-travel.html"><svg class="unav-mob-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> All 195 Countries</a>
+        <a href="proof-of-onward-travel.html"><svg class="unav-mob-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg> Proof of Onward Travel</a>
+    </div>
+
+    
+    <button class="unav-mob-link " onclick="unavMobToggle('tools')">
+        Tools
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="unav-mob-sub" id="unavMobTools">
+        <div class="unav-mob-section">Free Tools</div>
+        <a href="visa-checker.html"><svg class="unav-mob-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Visa Checker</a>
+        <a href="embassy-finder.html"><svg class="unav-mob-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg> Embassy Finder</a>
+        <a href="visa-cost-calculator.html"><svg class="unav-mob-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Visa Cost Calculator</a>
+        <a href="visa-risk-check.html"><svg class="unav-mob-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg> Visa Risk Checker</a>
+        <a href="hotel-booking.html"><svg class="unav-mob-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg> Hotel Booking</a>
+        <div class="unav-mob-section">Premium Tools</div>
+        <a href="visa-letter.html"><svg class="unav-mob-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Visa Support Letter</a>
+        <a href="invitation-letter.html"><svg class="unav-mob-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Invitation Letter</a>
+        <a href="travel-itinerary.html"><svg class="unav-mob-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg> Travel Itinerary</a>
+        <a href="embassy-letter.html"><svg class="unav-mob-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg> Embassy Cover Letter</a>
+    </div>
+
+    
+    <a href="blog.html" class="unav-mob-link ">Blog</a>
+
+    
+    <a href="about.html" class="unav-mob-link ">About</a>
+
+    
+    <a href="index.html#bookingForm" class="unav-mob-cta" onclick="unavGoToForm(event)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+        Free Ticket
+    </a>
+</div>
+
+
+<div class="unav-spacer"></div>
+
+
+<script>
+/* Unified Nav JS */
+/* Theme toggle - must be global for onclick */
+window.toggleTheme = function() {
+    var h = document.documentElement;
+    var current = h.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    h.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+};
+
+(function(){
+    /* Desktop dropdowns */
+    window.unavToggle = function(which) {
+        var panels = { countries: 'unavDdCountries', tools: 'unavDdTools' };
+        var wraps = { countries: 'unavCountriesWrap', tools: 'unavToolsWrap' };
+        var panel = document.getElementById(panels[which]);
+        var btn = document.querySelector('#' + wraps[which] + ' button');
+        var isOpen = panel.classList.contains('show');
+
+        // Close all first
+        Object.keys(panels).forEach(function(k) {
+            var p = document.getElementById(panels[k]);
+            var b = document.querySelector('#' + wraps[k] + ' button');
+            if (p) p.classList.remove('show');
+            if (b) b.setAttribute('aria-expanded', 'false');
+        });
+
+        if (!isOpen) {
+            panel.classList.add('show');
+            btn.setAttribute('aria-expanded', 'true');
+        }
+    };
+
+    /* Close dropdowns on outside click */
+    document.addEventListener('click', function(e) {
+        var wraps = document.querySelectorAll('.unav-dd-wrap');
+        var clickedInside = false;
+        wraps.forEach(function(w) { if (w.contains(e.target)) clickedInside = true; });
+        if (!clickedInside) {
+            document.querySelectorAll('.unav-dd-panel').forEach(function(p) { p.classList.remove('show'); });
+            document.querySelectorAll('.unav-dd-wrap button').forEach(function(b) { b.setAttribute('aria-expanded', 'false'); });
+        }
+    });
+
+    /* Mobile menu */
+    window.unavToggleMobile = function() {
+        var menu = document.getElementById('unavMobile');
+        var burger = document.getElementById('unavBurger');
+        menu.classList.toggle('open');
+        burger.classList.toggle('open');
+        document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+    };
+
+    /* Mobile accordions */
+    window.unavMobToggle = function(which) {
+        var sub = document.getElementById('unavMob' + which.charAt(0).toUpperCase() + which.slice(1));
+        sub.classList.toggle('open');
+    };
+    window.unavCloseMobile = function(){var m=document.getElementById('unavMobile'),b=document.getElementById('unavBurger');if(m)m.classList.remove('open');if(b)b.classList.remove('open');document.body.style.overflow='';};
+    window.unavGoToForm = function(e){window.unavCloseMobile();var f=document.getElementById('bookingForm');if(f){if(e)e.preventDefault();setTimeout(function(){f.scrollIntoView({behavior:'smooth',block:'start'});},60);}};
+})();
+</script>
+
+<main id="main-content">
+
+<style>
+.bk-wrap { max-width: 720px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+.bk-head { text-align: center; margin-bottom: 2rem; }
+.bk-head h1 { font-size: clamp(1.5rem, 4vw, 2.1rem); font-weight: 900; color: var(--text);
+              margin: 0 0 0.5rem; line-height: 1.2; }
+.bk-head p { color: var(--text2); font-size: 1rem; margin: 0; }
+/* Vertrauenszeile statt Verkaufstext: drei Tatsachen, keine Versprechen. */
+.bk-trust { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1.25rem;
+            margin-top: 1rem; font-size: 0.82rem; color: var(--text2); }
+.bk-trust span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.bk-trust svg { color: var(--purple); flex-shrink: 0; }
+@media (max-width: 560px) { .bk-wrap { padding: 1.5rem 1rem 3rem; } }
+</style>
+
+<div class="bk-wrap" id="wizard">
+    <div class="bk-head">
+        <h1>Create your reservation</h1>
+        <p>Build your flight or hotel reservation step by step. Free PDF, or a premium version for $7.90.</p>
+        <div class="bk-trust">
+            <span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Download Free (with watermark)
+            </span>
+            <span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Stripe
+            </span>
+        </div>
+    </div>
+
+    <div wire:key="lw-3411451660-0" wire:snapshot="{&quot;data&quot;:{&quot;currentStep&quot;:2,&quot;activeTab&quot;:&quot;hotel&quot;,&quot;plan&quot;:&quot;&quot;,&quot;flight_type&quot;:&quot;&quot;,&quot;departure_airport&quot;:&quot;&quot;,&quot;arrival_airport&quot;:&quot;&quot;,&quot;departure_date&quot;:&quot;&quot;,&quot;return_date&quot;:&quot;&quot;,&quot;adults&quot;:1,&quot;children&quot;:0,&quot;infants&quot;:0,&quot;flight_email&quot;:&quot;&quot;,&quot;flight_whatsapp&quot;:&quot;&quot;,&quot;flight_phone_code&quot;:&quot;&quot;,&quot;notes&quot;:&quot;&quot;,&quot;passengers&quot;:[[[{&quot;name&quot;:&quot;&quot;,&quot;passport&quot;:&quot;&quot;},{&quot;s&quot;:&quot;arr&quot;}]],{&quot;s&quot;:&quot;arr&quot;}],&quot;herkunftsseite&quot;:&quot;\/booking&quot;,&quot;aufStartseite&quot;:false,&quot;departure_results&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;arrival_results&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;flight_phone_search&quot;:&quot;&quot;,&quot;show_flight_phone_dropdown&quot;:false,&quot;out_stop_enabled&quot;:false,&quot;via_airport&quot;:&quot;&quot;,&quot;via_results&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;ret_stop_enabled&quot;:false,&quot;return_via_airport&quot;:&quot;&quot;,&quot;return_via_results&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;city&quot;:&quot;Rome&quot;,&quot;country&quot;:&quot;Italy&quot;,&quot;checkin_date&quot;:&quot;&quot;,&quot;checkout_date&quot;:&quot;&quot;,&quot;room_type&quot;:&quot;Standard Room&quot;,&quot;rooms&quot;:1,&quot;hotel_adults&quot;:1,&quot;hotel_children&quot;:0,&quot;hotel_email&quot;:&quot;&quot;,&quot;hotel_whatsapp&quot;:&quot;&quot;,&quot;hotel_phone_code&quot;:&quot;&quot;,&quot;hotel_guests&quot;:[[[{&quot;name&quot;:&quot;&quot;,&quot;passport&quot;:&quot;&quot;,&quot;dob&quot;:&quot;&quot;,&quot;nationality&quot;:&quot;&quot;},{&quot;s&quot;:&quot;arr&quot;}]],{&quot;s&quot;:&quot;arr&quot;}],&quot;phone_search&quot;:&quot;&quot;,&quot;country_search&quot;:&quot;&quot;,&quot;city_search&quot;:&quot;&quot;,&quot;country_code&quot;:&quot;&quot;,&quot;show_countries&quot;:false,&quot;show_cities&quot;:false,&quot;country_results&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;city_results&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;show_phone_dropdown&quot;:false,&quot;all_country_codes&quot;:[[[{&quot;code&quot;:&quot;+93&quot;,&quot;country&quot;:&quot;Afghanistan&quot;,&quot;flag&quot;:&quot;\ud83c\udde6\ud83c\uddeb&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+355&quot;,&quot;country&quot;:&quot;Albania&quot;,&quot;flag&quot;:&quot;\ud83c\udde6\ud83c\uddf1&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+213&quot;,&quot;country&quot;:&quot;Algeria&quot;,&quot;flag&quot;:&quot;\ud83c\udde9\ud83c\uddff&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+54&quot;,&quot;country&quot;:&quot;Argentina&quot;,&quot;flag&quot;:&quot;\ud83c\udde6\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+61&quot;,&quot;country&quot;:&quot;Australia&quot;,&quot;flag&quot;:&quot;\ud83c\udde6\ud83c\uddfa&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+43&quot;,&quot;country&quot;:&quot;Austria&quot;,&quot;flag&quot;:&quot;\ud83c\udde6\ud83c\uddf9&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+994&quot;,&quot;country&quot;:&quot;Azerbaijan&quot;,&quot;flag&quot;:&quot;\ud83c\udde6\ud83c\uddff&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+973&quot;,&quot;country&quot;:&quot;Bahrain&quot;,&quot;flag&quot;:&quot;\ud83c\udde7\ud83c\udded&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+880&quot;,&quot;country&quot;:&quot;Bangladesh&quot;,&quot;flag&quot;:&quot;\ud83c\udde7\ud83c\udde9&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+32&quot;,&quot;country&quot;:&quot;Belgium&quot;,&quot;flag&quot;:&quot;\ud83c\udde7\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+55&quot;,&quot;country&quot;:&quot;Brazil&quot;,&quot;flag&quot;:&quot;\ud83c\udde7\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+1&quot;,&quot;country&quot;:&quot;Canada&quot;,&quot;flag&quot;:&quot;\ud83c\udde8\ud83c\udde6&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+56&quot;,&quot;country&quot;:&quot;Chile&quot;,&quot;flag&quot;:&quot;\ud83c\udde8\ud83c\uddf1&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+86&quot;,&quot;country&quot;:&quot;China&quot;,&quot;flag&quot;:&quot;\ud83c\udde8\ud83c\uddf3&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+57&quot;,&quot;country&quot;:&quot;Colombia&quot;,&quot;flag&quot;:&quot;\ud83c\udde8\ud83c\uddf4&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+506&quot;,&quot;country&quot;:&quot;Costa Rica&quot;,&quot;flag&quot;:&quot;\ud83c\udde8\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+385&quot;,&quot;country&quot;:&quot;Croatia&quot;,&quot;flag&quot;:&quot;\ud83c\udded\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+420&quot;,&quot;country&quot;:&quot;Czech Republic&quot;,&quot;flag&quot;:&quot;\ud83c\udde8\ud83c\uddff&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+45&quot;,&quot;country&quot;:&quot;Denmark&quot;,&quot;flag&quot;:&quot;\ud83c\udde9\ud83c\uddf0&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+20&quot;,&quot;country&quot;:&quot;Egypt&quot;,&quot;flag&quot;:&quot;\ud83c\uddea\ud83c\uddec&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+358&quot;,&quot;country&quot;:&quot;Finland&quot;,&quot;flag&quot;:&quot;\ud83c\uddeb\ud83c\uddee&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+33&quot;,&quot;country&quot;:&quot;France&quot;,&quot;flag&quot;:&quot;\ud83c\uddeb\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+995&quot;,&quot;country&quot;:&quot;Georgia&quot;,&quot;flag&quot;:&quot;\ud83c\uddec\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+49&quot;,&quot;country&quot;:&quot;Germany&quot;,&quot;flag&quot;:&quot;\ud83c\udde9\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+233&quot;,&quot;country&quot;:&quot;Ghana&quot;,&quot;flag&quot;:&quot;\ud83c\uddec\ud83c\udded&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+30&quot;,&quot;country&quot;:&quot;Greece&quot;,&quot;flag&quot;:&quot;\ud83c\uddec\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+36&quot;,&quot;country&quot;:&quot;Hungary&quot;,&quot;flag&quot;:&quot;\ud83c\udded\ud83c\uddfa&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+91&quot;,&quot;country&quot;:&quot;India&quot;,&quot;flag&quot;:&quot;\ud83c\uddee\ud83c\uddf3&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+62&quot;,&quot;country&quot;:&quot;Indonesia&quot;,&quot;flag&quot;:&quot;\ud83c\uddee\ud83c\udde9&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+98&quot;,&quot;country&quot;:&quot;Iran&quot;,&quot;flag&quot;:&quot;\ud83c\uddee\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+964&quot;,&quot;country&quot;:&quot;Iraq&quot;,&quot;flag&quot;:&quot;\ud83c\uddee\ud83c\uddf6&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+353&quot;,&quot;country&quot;:&quot;Ireland&quot;,&quot;flag&quot;:&quot;\ud83c\uddee\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+972&quot;,&quot;country&quot;:&quot;Israel&quot;,&quot;flag&quot;:&quot;\ud83c\uddee\ud83c\uddf1&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+39&quot;,&quot;country&quot;:&quot;Italy&quot;,&quot;flag&quot;:&quot;\ud83c\uddee\ud83c\uddf9&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+81&quot;,&quot;country&quot;:&quot;Japan&quot;,&quot;flag&quot;:&quot;\ud83c\uddef\ud83c\uddf5&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+962&quot;,&quot;country&quot;:&quot;Jordan&quot;,&quot;flag&quot;:&quot;\ud83c\uddef\ud83c\uddf4&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+254&quot;,&quot;country&quot;:&quot;Kenya&quot;,&quot;flag&quot;:&quot;\ud83c\uddf0\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+965&quot;,&quot;country&quot;:&quot;Kuwait&quot;,&quot;flag&quot;:&quot;\ud83c\uddf0\ud83c\uddfc&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+961&quot;,&quot;country&quot;:&quot;Lebanon&quot;,&quot;flag&quot;:&quot;\ud83c\uddf1\ud83c\udde7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+60&quot;,&quot;country&quot;:&quot;Malaysia&quot;,&quot;flag&quot;:&quot;\ud83c\uddf2\ud83c\uddfe&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+960&quot;,&quot;country&quot;:&quot;Maldives&quot;,&quot;flag&quot;:&quot;\ud83c\uddf2\ud83c\uddfb&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+52&quot;,&quot;country&quot;:&quot;Mexico&quot;,&quot;flag&quot;:&quot;\ud83c\uddf2\ud83c\uddfd&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+212&quot;,&quot;country&quot;:&quot;Morocco&quot;,&quot;flag&quot;:&quot;\ud83c\uddf2\ud83c\udde6&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+95&quot;,&quot;country&quot;:&quot;Myanmar&quot;,&quot;flag&quot;:&quot;\ud83c\uddf2\ud83c\uddf2&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+977&quot;,&quot;country&quot;:&quot;Nepal&quot;,&quot;flag&quot;:&quot;\ud83c\uddf3\ud83c\uddf5&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+31&quot;,&quot;country&quot;:&quot;Netherlands&quot;,&quot;flag&quot;:&quot;\ud83c\uddf3\ud83c\uddf1&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+64&quot;,&quot;country&quot;:&quot;New Zealand&quot;,&quot;flag&quot;:&quot;\ud83c\uddf3\ud83c\uddff&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+234&quot;,&quot;country&quot;:&quot;Nigeria&quot;,&quot;flag&quot;:&quot;\ud83c\uddf3\ud83c\uddec&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+47&quot;,&quot;country&quot;:&quot;Norway&quot;,&quot;flag&quot;:&quot;\ud83c\uddf3\ud83c\uddf4&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+968&quot;,&quot;country&quot;:&quot;Oman&quot;,&quot;flag&quot;:&quot;\ud83c\uddf4\ud83c\uddf2&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+92&quot;,&quot;country&quot;:&quot;Pakistan&quot;,&quot;flag&quot;:&quot;\ud83c\uddf5\ud83c\uddf0&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+507&quot;,&quot;country&quot;:&quot;Panama&quot;,&quot;flag&quot;:&quot;\ud83c\uddf5\ud83c\udde6&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+51&quot;,&quot;country&quot;:&quot;Peru&quot;,&quot;flag&quot;:&quot;\ud83c\uddf5\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+63&quot;,&quot;country&quot;:&quot;Philippines&quot;,&quot;flag&quot;:&quot;\ud83c\uddf5\ud83c\udded&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+48&quot;,&quot;country&quot;:&quot;Poland&quot;,&quot;flag&quot;:&quot;\ud83c\uddf5\ud83c\uddf1&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+351&quot;,&quot;country&quot;:&quot;Portugal&quot;,&quot;flag&quot;:&quot;\ud83c\uddf5\ud83c\uddf9&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+974&quot;,&quot;country&quot;:&quot;Qatar&quot;,&quot;flag&quot;:&quot;\ud83c\uddf6\ud83c\udde6&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+40&quot;,&quot;country&quot;:&quot;Romania&quot;,&quot;flag&quot;:&quot;\ud83c\uddf7\ud83c\uddf4&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+7&quot;,&quot;country&quot;:&quot;Russia&quot;,&quot;flag&quot;:&quot;\ud83c\uddf7\ud83c\uddfa&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+966&quot;,&quot;country&quot;:&quot;Saudi Arabia&quot;,&quot;flag&quot;:&quot;\ud83c\uddf8\ud83c\udde6&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+65&quot;,&quot;country&quot;:&quot;Singapore&quot;,&quot;flag&quot;:&quot;\ud83c\uddf8\ud83c\uddec&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+27&quot;,&quot;country&quot;:&quot;South Africa&quot;,&quot;flag&quot;:&quot;\ud83c\uddff\ud83c\udde6&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+82&quot;,&quot;country&quot;:&quot;South Korea&quot;,&quot;flag&quot;:&quot;\ud83c\uddf0\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+34&quot;,&quot;country&quot;:&quot;Spain&quot;,&quot;flag&quot;:&quot;\ud83c\uddea\ud83c\uddf8&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+94&quot;,&quot;country&quot;:&quot;Sri Lanka&quot;,&quot;flag&quot;:&quot;\ud83c\uddf1\ud83c\uddf0&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+46&quot;,&quot;country&quot;:&quot;Sweden&quot;,&quot;flag&quot;:&quot;\ud83c\uddf8\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+41&quot;,&quot;country&quot;:&quot;Switzerland&quot;,&quot;flag&quot;:&quot;\ud83c\udde8\ud83c\udded&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+886&quot;,&quot;country&quot;:&quot;Taiwan&quot;,&quot;flag&quot;:&quot;\ud83c\uddf9\ud83c\uddfc&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+255&quot;,&quot;country&quot;:&quot;Tanzania&quot;,&quot;flag&quot;:&quot;\ud83c\uddf9\ud83c\uddff&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+66&quot;,&quot;country&quot;:&quot;Thailand&quot;,&quot;flag&quot;:&quot;\ud83c\uddf9\ud83c\udded&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+216&quot;,&quot;country&quot;:&quot;Tunisia&quot;,&quot;flag&quot;:&quot;\ud83c\uddf9\ud83c\uddf3&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+90&quot;,&quot;country&quot;:&quot;Turkey&quot;,&quot;flag&quot;:&quot;\ud83c\uddf9\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+256&quot;,&quot;country&quot;:&quot;Uganda&quot;,&quot;flag&quot;:&quot;\ud83c\uddfa\ud83c\uddec&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+380&quot;,&quot;country&quot;:&quot;Ukraine&quot;,&quot;flag&quot;:&quot;\ud83c\uddfa\ud83c\udde6&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+971&quot;,&quot;country&quot;:&quot;UAE&quot;,&quot;flag&quot;:&quot;\ud83c\udde6\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+44&quot;,&quot;country&quot;:&quot;United Kingdom&quot;,&quot;flag&quot;:&quot;\ud83c\uddec\ud83c\udde7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+1&quot;,&quot;country&quot;:&quot;USA&quot;,&quot;flag&quot;:&quot;\ud83c\uddfa\ud83c\uddf8&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+598&quot;,&quot;country&quot;:&quot;Uruguay&quot;,&quot;flag&quot;:&quot;\ud83c\uddfa\ud83c\uddfe&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+58&quot;,&quot;country&quot;:&quot;Venezuela&quot;,&quot;flag&quot;:&quot;\ud83c\uddfb\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+84&quot;,&quot;country&quot;:&quot;Vietnam&quot;,&quot;flag&quot;:&quot;\ud83c\uddfb\ud83c\uddf3&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+967&quot;,&quot;country&quot;:&quot;Yemen&quot;,&quot;flag&quot;:&quot;\ud83c\uddfe\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+263&quot;,&quot;country&quot;:&quot;Zimbabwe&quot;,&quot;flag&quot;:&quot;\ud83c\uddff\ud83c\uddfc&quot;},{&quot;s&quot;:&quot;arr&quot;}]],{&quot;s&quot;:&quot;arr&quot;}]},&quot;memo&quot;:{&quot;id&quot;:&quot;Zg5uZarWl6vrVYrfEcMn&quot;,&quot;name&quot;:&quot;booking-wizard&quot;,&quot;path&quot;:&quot;booking&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;release&quot;:&quot;a-a-a&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[&quot;3749110491-0&quot;,&quot;1060370182-0&quot;,&quot;4245122738-0&quot;],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;,&quot;islands&quot;:[]},&quot;checksum&quot;:&quot;f4bd533632701b0c57f68445a6292b2b187cb043ce8ab9efa04ac3eab6801e1c&quot;}" wire:effects="{&quot;listeners&quot;:[&quot;plan-selected&quot;]}" wire:id="Zg5uZarWl6vrVYrfEcMn" wire:name="booking-wizard">
+            
+    
+    <style>
+    .wz-progress { display:flex; align-items:center; gap:0.35rem; margin-bottom:1.75rem; }
+    .wz-dot { flex:1; height:4px; border-radius:2px; background:var(--border); transition:background .3s; }
+    .wz-dot.done, .wz-dot.now { background:var(--purple); }
+    .wz-dot.now { box-shadow:0 0 10px var(--purple-glow); }
+    .wz-count { font-size:0.78rem; font-weight:700; color:var(--text2); letter-spacing:0.3px;
+                margin-bottom:0.5rem; text-transform:uppercase; }
+    .wz-h { font-size:clamp(1.3rem,3.5vw,1.75rem); font-weight:900; color:var(--text);
+            margin:0 0 0.35rem; line-height:1.25; }
+    .wz-sub { color:var(--text2); font-size:0.92rem; margin:0 0 1.5rem; }
+    .wz-nav { display:flex; gap:0.75rem; margin-top:1.75rem; }
+    .wz-next { flex:1; background:var(--purple); color:#fff; border:none; border-radius:12px;
+               padding:1rem 1.5rem; font-family:inherit; font-weight:800; font-size:1rem;
+               cursor:pointer; box-shadow:0 10px 26px var(--purple-glow); transition:transform .18s; }
+    .wz-next:hover { transform:translateY(-2px); }
+    .wz-back { background:transparent; color:var(--text2); border:1.5px solid var(--border);
+               border-radius:12px; padding:1rem 1.4rem; font-family:inherit; font-weight:700;
+               font-size:0.95rem; cursor:pointer; }
+    .wz-back:hover { color:var(--purple); border-color:var(--purple); }
+    /* Die Produktwahl: zwei grosse Flächen statt einer Reiterleiste. */
+    .wz-pick { display:grid; gap:0.9rem; }
+    .wz-pick button { display:flex; align-items:flex-start; gap:0.9rem; text-align:start;
+                      background:var(--card-bg); border:1.5px solid var(--card-border);
+                      border-radius:16px; padding:1.25rem; font-family:inherit; cursor:pointer;
+                      transition:border-color .2s, box-shadow .2s, transform .18s; }
+    .wz-pick button:hover { border-color:var(--purple); box-shadow:0 10px 30px var(--purple-glow);
+                            transform:translateY(-2px); }
+    .wz-pick svg { flex-shrink:0; color:var(--purple); margin-top:2px; }
+    .wz-pick-t { display:block; font-weight:800; color:var(--text); font-size:1.05rem; }
+    .wz-pick-s { display:block; color:var(--text2); font-size:0.85rem; margin-top:0.25rem; line-height:1.45; }
+    .wz-sum { background:var(--bg3); border:1px solid var(--border); border-radius:12px;
+              padding:0.9rem 1.1rem; margin-bottom:1.25rem; font-size:0.88rem; color:var(--text2); }
+    .wz-sum b { color:var(--text); font-weight:700; }
+/* Quittung auf die Preiskarte, bevor die erste Frage kommt. */
+.wz-plan { display:flex; flex-wrap:wrap; align-items:center; gap:0.4rem 0.6rem;
+           border:1px solid var(--border); border-radius:12px; padding:0.6rem 0.85rem;
+           margin-bottom:1.25rem; font-size:0.85rem; color:var(--text2); }
+.wz-plan[data-plan="premium"] { border-color:rgba(124,58,237,0.35);
+           background:linear-gradient(135deg,rgba(124,58,237,0.07) 0%,rgba(124,58,237,0.02) 100%); }
+.wz-plan[data-plan="free"] { border-color:rgba(16,185,129,0.3); }
+.wz-plan-name { font-weight:800; text-transform:uppercase; letter-spacing:0.4px;
+                font-size:0.68rem; padding:2px 8px; border-radius:20px;
+                background:rgba(124,58,237,0.12); color:var(--purple); }
+.wz-plan[data-plan="free"] .wz-plan-name { background:rgba(16,185,129,0.1); color:#10b981; }
+.wz-plan-price { font-weight:900; color:var(--text); }
+
+/* ---------- Die Reiseart: zwei Flaechen, keine Vorauswahl ----------
+   Der Radioknopf selbst bleibt im Markup (Tastatur, Screenreader, required), wird aber
+   durch einen eigenen Punkt ersetzt — der native ist auf dem Handy zu klein, um als
+   Entscheidung wahrgenommen zu werden. */
+.wz-choice { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
+.wz-choice-opt { position:relative; display:flex; align-items:center; gap:0.6rem;
+                 padding:0.95rem 0.9rem; border:1.5px solid var(--card-border);
+                 border-radius:14px; background:var(--card-bg); cursor:pointer;
+                 transition:border-color .18s, background .18s, box-shadow .18s; }
+.wz-choice-opt:hover { border-color:var(--purple); }
+.wz-choice-opt input { position:absolute; opacity:0; width:1px; height:1px; margin:0; }
+.wz-choice-dot { flex-shrink:0; width:20px; height:20px; border-radius:50%;
+                 border:2px solid var(--text2); transition:border-color .18s; position:relative; }
+.wz-choice-t { display:block; font-weight:800; color:var(--text); font-size:0.95rem; line-height:1.2; }
+.wz-choice-s { display:block; font-weight:400; font-size:0.76rem; color:var(--text2);
+               line-height:1.35; margin-top:0.2rem; }
+.wz-choice-ic { margin-inline-start:auto; color:var(--text2); flex-shrink:0; transition:color .18s; }
+/* Gewaehlt: Rand, Flaeche und ein gefuellter Punkt — drei Signale, nicht eines. */
+.wz-choice-opt.is-on { border-color:var(--purple); background:rgba(124,58,237,0.08);
+                       box-shadow:0 0 0 3px var(--purple-glow); }
+.wz-choice-opt.is-on .wz-choice-dot { border-color:var(--purple); }
+.wz-choice-opt.is-on .wz-choice-dot::after { content:''; position:absolute; inset:3px;
+                       border-radius:50%; background:var(--purple); }
+.wz-choice-opt.is-on .wz-choice-ic { color:var(--purple); }
+/* Tastaturbedienung muss sichtbar bleiben, auch wenn der Knopf selbst unsichtbar ist. */
+.wz-choice-opt:focus-within { border-color:var(--purple); box-shadow:0 0 0 3px var(--purple-glow); }
+@media (max-width:400px) { .wz-choice { grid-template-columns:1fr; } }
+    </style>
+
+    <div class="form-card">
+
+        <!--[if BLOCK]><![endif]-->        <div class="wz-progress" aria-hidden="true">
+            <!--[if BLOCK]><![endif]-->                <div class="wz-dot done"></div>
+                            <div class="wz-dot now"></div>
+                            <div class="wz-dot "></div>
+                            <div class="wz-dot "></div>
+                            <div class="wz-dot "></div>
+            <!--[if ENDBLOCK]><![endif]-->        </div>
+        <div class="wz-count">Step 2 of 5 &middot; Destination</div>
+        <!--[if ENDBLOCK]><![endif]-->
+        
+        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+        
+        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+        
+        <!--[if BLOCK]><![endif]-->        <div wire:key="step-2-hotel">
+            <h2 class="wz-h">Where are you staying?</h2>
+            <div style="display:flex;flex-direction:column;gap:1.25rem;">
+                <div>
+                    <label class="input-label">Country</label>
+                    <div style="position:relative;">
+                        <input type="text" wire:model.live.debounce.300ms="country_search" required placeholder="e.g. Germany, Egypt, Turkey..." autocomplete="off" class="inp">
+                        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                    </div>
+                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                </div>
+                <div>
+                    <label class="input-label">City</label>
+                    <div style="position:relative;">
+                        <input type="text" wire:model.live.debounce.300ms="city_search" required
+                            placeholder="Select a country first"
+                            autocomplete="off" class="inp"  disabled style="opacity:0.5;cursor:not-allowed;" >
+                        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                    </div>
+                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div>
+    <label class="input-label" for="checkin_date" id="checkin_date_label">Check-in Date</label>
+    <div class="date-field"
+         data-dp-panel="checkin_date_panel"
+                  >
+
+        <input type="date" id="checkin_date" wire:model.blur="checkin_date"
+                required                min="2026-11-06" max="2028-11-07"
+               class="inp dp-native">
+
+        <button type="button" class="inp dp-trigger" id="checkin_date_trigger"
+                aria-haspopup="dialog" aria-expanded="false"
+                aria-controls="checkin_date_panel"
+                aria-labelledby="checkin_date_label checkin_date_trigger_text">
+            <span class="dp-trigger-text dp-placeholder" id="checkin_date_trigger_text"
+                  data-dp-placeholder="Select a date">Select a date</span>
+        </button>
+    </div>
+    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]--></div>
+                    <div>
+    <label class="input-label" for="checkout_date" id="checkout_date_label">Check-out Date</label>
+    <div class="date-field"
+         data-dp-panel="checkout_date_panel"
+          data-dp-min-from="checkin_date"           data-dp-min-exclusive >
+
+        <input type="date" id="checkout_date" wire:model.blur="checkout_date"
+                required                min="2026-11-06" max="2028-11-07"
+               class="inp dp-native">
+
+        <button type="button" class="inp dp-trigger" id="checkout_date_trigger"
+                aria-haspopup="dialog" aria-expanded="false"
+                aria-controls="checkout_date_panel"
+                aria-labelledby="checkout_date_label checkout_date_trigger_text">
+            <span class="dp-trigger-text dp-placeholder" id="checkout_date_trigger_text"
+                  data-dp-placeholder="Select a date">Select a date</span>
+        </button>
+    </div>
+    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]--></div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div>
+                        <label class="input-label">Room Type</label>
+                        <select wire:model="room_type" class="inp">
+                            <option value="Standard Room">Standard Room (3-Star)</option>
+                            <option value="Superior Room">Superior Room (3-4 Star)</option>
+                            <option value="Deluxe Room">Deluxe Room (4-Star)</option>
+                            <option value="Junior Suite">Junior Suite (4-5 Star)</option>
+                            <option value="Suite">Suite (5-Star)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="input-label">Rooms</label>
+                        <select wire:model="rooms" class="inp">
+                            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--[if ENDBLOCK]><![endif]-->
+        
+        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+        
+        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+        
+        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+        
+        <!--[if BLOCK]><![endif]-->        <div class="wz-nav">
+            <button type="button" wire:click="previousStep" class="wz-back">Back</button>
+            <!--[if BLOCK]><![endif]-->            <button type="button" wire:click="nextStep" class="wz-next" wire:loading.attr="disabled">
+                <span wire:loading.remove wire:target="nextStep">Continue</span>
+                <span wire:loading wire:target="nextStep">…</span>
+            </button>
+            <!--[if ENDBLOCK]><![endif]-->        </div>
+        <!--[if ENDBLOCK]><![endif]-->
+    </div>
+</div>
+</div>
+
+<script src="vendor/livewire/livewire.min.js@id=6b3709b1"   data-csrf="LcZh28J8Tap4nZAj7zlFeSFnbamkIRiBNOEybQXf" data-module-url="https://myjet24.com/livewire-7c0a661d" data-update-uri="https://myjet24.com/livewire-7c0a661d/update" data-navigate-once="true"></script>
+</main>
+
+
+
+
+
+
+<footer>
+    <div class="footer-inner">
+
+        <div class="footer-head">
+            <div>
+                <div class="footer-brand">MyJet24</div>
+                <p class="footer-tagline">Free dummy ticket generator for visa applications and proof of onward travel. Trusted by travelers in 195+ countries.</p>
+            </div>
+
+            <div class="footer-news">
+                <div class="footer-news-titel">Stay Updated</div>
+                <p class="footer-news-text">Visa tips, country guides &amp; travel updates — no spam, ever.</p>
+
+                                    <form action="https://myjet24.com/newsletter/subscribe" method="POST" class="footer-news-form">
+                        <input type="hidden" name="_token" value="LcZh28J8Tap4nZAj7zlFeSFnbamkIRiBNOEybQXf" autocomplete="off">                        <label class="footer-news-label" for="footer-news-mail">Stay Updated</label>
+                        <input id="footer-news-mail" class="footer-news-feld" type="email" name="email" required
+                               placeholder="your@email.com">
+                        <button class="footer-news-knopf" type="submit">Subscribe</button>
+                    </form>
+                                    
+                <p class="footer-news-hinweis">Visa tips and country updates. Unsubscribe anytime.</p>
+            </div>
+        </div>
+
+        <div class="footer-top footer-gleich">
+                            <div>
+                    <div class="footer-col-title">Dummy Tickets</div>
+                    <div class="footer-links">
+                                                    <a href="dummy-ticket.html">Dummy Ticket Guide</a>
+                                                    <a href="onward-ticket.html">Onward Ticket</a>
+                                                    <a href="proof-of-onward-travel.html">Proof of Onward Travel</a>
+                                                    <a href="flight-itinerary-for-visa.html">Flight Itinerary for Visa</a>
+                                                    <a href="temporary-flight-reservation.html">Temporary Reservation</a>
+                                            </div>
+                </div>
+                            <div>
+                    <div class="footer-col-title">Research Tools</div>
+                    <div class="footer-links">
+                                                    <a href="visa-checker.html">Visa Checker</a>
+                                                    <a href="embassy-finder.html">Embassy Finder</a>
+                                                    <a href="visa-cost-calculator.html">Visa Cost Calculator</a>
+                                                    <a href="visa-risk-check.html">Visa Risk Checker</a>
+                                                    <a href="hotel-booking.html">Hotel Booking</a>
+                                            </div>
+                </div>
+                            <div>
+                    <div class="footer-col-title">Document Generators</div>
+                    <div class="footer-links">
+                                                    <a href="visa-letter.html">Visa Support Letter</a>
+                                                    <a href="invitation-letter.html">Invitation Letter</a>
+                                                    <a href="travel-itinerary.html">Travel Itinerary</a>
+                                                    <a href="embassy-letter.html">Embassy Cover Letter</a>
+                                            </div>
+                </div>
+                            <div>
+                    <div class="footer-col-title">Popular</div>
+                    <div class="footer-links">
+                                                    <a href="dummy-ticket-schengen-visa.html">Schengen Visa</a>
+                                                    <a href="onward-ticket-thailand.html">Thailand</a>
+                                                    <a href="onward-ticket-usa.html">USA</a>
+                                                    <a href="proof-of-onward-travel.html">All 195 Countries</a>
+                                            </div>
+                </div>
+                            <div>
+                    <div class="footer-col-title">Company</div>
+                    <div class="footer-links">
+                                                    <a href="about.html">About Us</a>
+                                                    <a href="index.html">How It Works</a>
+                                                    <a href="blog.html">Blog</a>
+                                                    <a href="editorial-policy.html">Editorial Policy</a>
+                                                    <a href="privacy-policy.html#cookies">Cookies</a>
+                                                    <a href="privacy-policy.html">Privacy Policy</a>
+                                                    <a href="terms.html">Terms of Service</a>
+                                            </div>
+                </div>
+                    </div>
+
+        <div class="footer-bottom">
+            <div class="footer-kontakt">
+                <a href="mailto:support@myjet24.com">Contact</a>
+                <a class="footer-sozial-link" href="https://www.youtube.com/@myjet24" target="_blank" rel="noopener noreferrer" aria-label="MyJet24 · YouTube">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+                </a>
+            </div>
+            <p>© 2026 MyJet24 — Free Dummy Ticket Generator for Visa Applications & Proof of Onward Travel</p>
+            <p class="footer-klein">Professional flight itineraries for visa applications worldwide. Not an airline or travel agency.</p>
+            <p class="footer-klein">MyJet24 Ltd · Company No. 1213458 · London, United Kingdom</p>
+            <p class="footer-integritaet">MyJet24 provides flight reservations as supporting documents for visa applications and border control. Each document is a reservation and is identifiable as one — it is not a paid ticket and is not sold as one. We follow airline booking rules and do not support repeated speculative bookings.</p>
+        </div>
+    </div>
+
+</footer>
+
+
+<div id="lena-widget"
+     data-endpoint="https://myjet24.com/support-chat"
+     data-csrf="LcZh28J8Tap4nZAj7zlFeSFnbamkIRiBNOEybQXf"
+     data-support="support@myjet24.com"
+     data-limit="10"
+     data-escalate-after="3"
+     
+     data-locale="en">
+    <button type="button" id="lena-toggle" aria-label="Open support chat" aria-expanded="false">
+        <svg class="lena-ic-chat" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <svg class="lena-ic-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+
+    <div id="lena-panel" role="dialog" aria-label="MyJet24 support chat" hidden>
+        <div class="lena-head">
+            <div class="lena-avatar" aria-hidden="true">L<span class="lena-dot"></span></div>
+            <div class="lena-id">
+                <div class="lena-name">Lena · MyJet24</div>
+                <div class="lena-status">Support assistant · usually replies in seconds</div>
+            </div>
+            <button type="button" class="lena-x" id="lena-close" aria-label="Close chat">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+
+        <div class="lena-body" id="lena-body" aria-live="polite"></div>
+
+        <div class="lena-quick" id="lena-quick">
+            <div class="lena-quick-head" id="lena-quick-head" role="button" tabindex="0" aria-label="Show or hide quick questions">
+                <span class="lena-quick-label">Quick questions</span>
+                <span class="lena-quick-toggle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+            </div>
+            <div class="lena-quick-list" id="lena-quick-list"></div>
+        </div>
+
+        <form class="lena-input" id="lena-form" autocomplete="off">
+            <input type="text" id="lena-text" maxlength="600" placeholder="Type your question…" aria-label="Type your question">
+            <button type="submit" aria-label="Send">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+        </form>
+        <div class="lena-foot">Automated assistant</div>
+    </div>
+
+    <style>
+        #lena-widget{ position:fixed; right:20px; bottom:20px; z-index:2147483000; font-family:'Plus Jakarta Sans',system-ui,sans-serif; }
+        #lena-toggle{ width:60px; height:60px; border-radius:50%; border:none; cursor:pointer; background:linear-gradient(135deg,var(--purple,#7c3aed),var(--purple2,#6d28d9)); color:#fff; box-shadow:0 12px 30px rgba(124,58,237,0.45); display:flex; align-items:center; justify-content:center; transition:transform .2s ease, box-shadow .2s ease; }
+        #lena-toggle:hover{ transform:translateY(-2px) scale(1.04); box-shadow:0 16px 38px rgba(124,58,237,0.55); }
+        #lena-toggle .lena-ic-close{ display:none; }
+        #lena-widget.open #lena-toggle .lena-ic-chat{ display:none; }
+        #lena-widget.open #lena-toggle .lena-ic-close{ display:block; }
+
+        /* 620 statt 540 px (26.09.2026): Kopf, sieben Schnellfragen, Eingabe und Fusszeile
+           liessen dem Verlauf nur rund 110 px - die dreizeilige Begruessung braucht 122 und
+           wurde oben angeschnitten, weil nach dem Einfuegen ans Ende gescrollt wird.
+           max-height deckelt weiterhin auf kleinen Fenstern. */
+        #lena-panel{ position:absolute; right:0; bottom:74px; width:370px; max-width:calc(100vw - 32px); height:620px; max-height:calc(100vh - 120px); background:var(--card-bg,#fff); border-radius:20px; box-shadow:0 30px 70px rgba(15,10,40,0.30), 0 0 0 1px rgba(15,10,40,0.06); display:flex; flex-direction:column; overflow:hidden; animation:lena-in .22s cubic-bezier(.2,.7,.2,1); }
+        #lena-panel[hidden]{ display:none !important; }
+        [data-theme="dark"] #lena-panel{ background:var(--card-bg,#15111f); box-shadow:0 30px 70px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08); }
+        @keyframes lena-in{ from{ opacity:0; transform:translateY(12px) scale(.98); } to{ opacity:1; transform:none; } }
+
+        .lena-head{ display:flex; align-items:center; gap:0.7rem; padding:0.95rem 1rem; background:linear-gradient(135deg,#4a2da0,#2a1c63); color:#fff; flex-shrink:0; }
+        .lena-avatar{ position:relative; width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#a855f7,#7c3aed); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.05rem; flex-shrink:0; }
+        .lena-dot{ position:absolute; right:-1px; bottom:-1px; width:12px; height:12px; border-radius:50%; background:#34d399; border:2px solid #2a1c63; }
+        .lena-id{ flex:1; min-width:0; }
+        .lena-name{ font-weight:800; font-size:0.92rem; }
+        .lena-status{ font-size:0.72rem; color:rgba(237,233,254,0.7); }
+        .lena-x{ background:transparent; border:none; color:rgba(255,255,255,0.8); cursor:pointer; padding:4px; border-radius:8px; display:flex; }
+        .lena-x:hover{ background:rgba(255,255,255,0.12); color:#fff; }
+
+        /* Die Verlaufsflaeche bleibt bewusst auf einem eigenen, leicht getoenten Wert und
+           nicht auf var(--bg): im hellen Thema sind --bg UND --card-bg beide #ffffff
+           (nachgemessen 26.09.2026), die Botblase waere dann weiss auf weiss und nur noch am
+           Rand zu erkennen. Im dunklen Thema trennen sich die beiden (#0c0818 gegen #130f24),
+           dort greift die Variable eine Zeile weiter unten. */
+        .lena-body{ flex:1; overflow-y:auto; padding:1rem; display:flex; flex-direction:column; gap:0.6rem; background:#faf9fe; }
+        /* Der Verlauf sitzt unten, wie in jedem Chat. Vorher klebte die Begruessung oben und
+           darunter standen im Vollbild rund 340 px Leere.
+           margin-top:auto statt justify-content:flex-end oder eines ::before-Platzhalters:
+           beide schneiden bei Ueberlauf die obersten Nachrichten ab. Gemessen am 26.09.2026
+           auf dem Desktop - dort ist der Verlaufsbereich nur rund 110 px hoch, und die
+           dreizeilige Begruessung wurde oben angeschnitten. Ein auto-Aussenabstand faellt bei
+           Platzmangel von selbst auf 0 zurueck: viel Platz -> Inhalt unten, wenig Platz ->
+           Inhalt oben und vollstaendig lesbar. */
+        .lena-body > *:first-child{ margin-top:auto; }
+        [data-theme="dark"] .lena-body{ background:var(--bg,#0f0b18); }
+        .lena-msg{ max-width:84%; padding:0.7rem 0.9rem; border-radius:14px; font-size:0.88rem; line-height:1.55; word-wrap:break-word; white-space:pre-wrap; }
+        .lena-bot{ align-self:flex-start; background:var(--card-bg,#fff); color:var(--text,#1a1530); border:1px solid var(--card-border,#ece8f5); border-bottom-left-radius:5px; }
+        [data-theme="dark"] .lena-bot{ background:var(--card-bg,#241c38); color:var(--text,#ede9fe); border-color:var(--card-border,rgba(255,255,255,0.08)); }
+        .lena-user{ align-self:flex-end; background:linear-gradient(135deg,var(--purple,#7c3aed),var(--purple2,#6d28d9)); color:#fff; border-bottom-right-radius:5px; }
+        .lena-typing{ align-self:flex-start; display:inline-flex; gap:4px; padding:0.8rem 0.95rem; background:#fff; border:1px solid #ece8f5; border-radius:14px; border-bottom-left-radius:5px; }
+        [data-theme="dark"] .lena-typing{ background:#241c38; border-color:rgba(255,255,255,0.08); }
+        .lena-typing span{ width:7px; height:7px; border-radius:50%; background:#b9a7e8; animation:lena-bounce 1.2s infinite ease-in-out; }
+        .lena-typing span:nth-child(2){ animation-delay:.18s; } .lena-typing span:nth-child(3){ animation-delay:.36s; }
+        @keyframes lena-bounce{ 0%,60%,100%{ transform:translateY(0); opacity:.5; } 30%{ transform:translateY(-5px); opacity:1; } }
+        .lena-escalate{ align-self:flex-start; max-width:84%; }
+        .lena-escalate a{ display:inline-flex; align-items:center; gap:0.45rem; padding:0.6rem 0.95rem; background:#f1ecfd; color:#6d28d9; border:1px solid #ddd0fb; border-radius:12px; text-decoration:none; font-weight:700; font-size:0.84rem; }
+        [data-theme="dark"] .lena-escalate a{ background:rgba(124,58,237,0.18); color:#c4b5fd; border-color:rgba(196,181,253,0.3); }
+        .lena-escalate a:hover{ border-color:#7c3aed; }
+
+        .lena-quick{ flex-shrink:0; }
+        .lena-quick-head{ display:flex; align-items:center; justify-content:space-between; gap:0.5rem; padding:0.2rem 1rem 0.45rem; cursor:pointer; user-select:none; }
+        .lena-quick-label{ font-size:0.66rem; font-weight:800; text-transform:uppercase; letter-spacing:0.07em; color:#a59bbd; }
+        [data-theme="dark"] .lena-quick-label{ color:#6b6385; }
+        .lena-quick-toggle{ color:#8b7fb0; display:flex; transition:color .2s; }
+        .lena-quick-head:hover .lena-quick-toggle{ color:#7c3aed; }
+        .lena-quick-toggle svg{ width:18px; height:18px; transition:transform .3s ease; }
+        .lena-quick.collapsed .lena-quick-toggle svg{ transform:rotate(180deg); }
+        .lena-quick-list{ display:flex; flex-wrap:wrap; gap:0.4rem; padding:0 1rem 0.6rem; }
+        .lena-quick.collapsed .lena-quick-list{ display:none; }
+        .lena-quick-list button{ background:#fff; border:1px solid #e2dcef; color:#3b2f63; border-radius:999px; padding:0.5rem 0.85rem; font-size:0.8rem; font-weight:700; cursor:pointer; font-family:inherit; transition:all .15s; }
+        [data-theme="dark"] .lena-quick-list button{ background:var(--card-bg,#241c38); color:var(--text,#d8ccf7); border-color:var(--card-border,rgba(255,255,255,0.1)); }
+        .lena-quick-list button:hover{ border-color:var(--purple,#7c3aed); color:var(--purple,#6d28d9); }
+        .lena-quick-list button.lena-more{ background:#f1ecfd; color:#6d28d9; border-color:#ddd0fb; }
+
+        .lena-input{ display:flex; gap:0.5rem; padding:0.7rem 0.8rem; border-top:1px solid #ece8f5; flex-shrink:0; background:#fff; }
+        [data-theme="dark"] .lena-input{ background:var(--card-bg,#15111f); border-top-color:var(--card-border,rgba(255,255,255,0.08)); }
+        .lena-input input{ flex:1; border:1px solid #e2dcef; border-radius:12px; padding:0.65rem 0.85rem; font-size:0.88rem; font-family:inherit; outline:none; background:#faf9fe; color:#1a1530; }
+        [data-theme="dark"] .lena-input input{ background:var(--bg,#241c38); color:var(--text,#ede9fe); border-color:var(--card-border,rgba(255,255,255,0.1)); }
+        .lena-input input:focus{ border-color:var(--purple,#7c3aed); }
+        .lena-input button{ width:42px; flex-shrink:0; border:none; border-radius:12px; background:linear-gradient(135deg,var(--purple,#7c3aed),var(--purple2,#6d28d9)); color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .lena-input button:disabled{ opacity:.5; cursor:not-allowed; }
+        .lena-foot{ text-align:center; font-size:0.66rem; color:#a59bbd; padding:0 0 0.55rem; background:#fff; flex-shrink:0; }
+        [data-theme="dark"] .lena-foot{ background:var(--card-bg,#15111f); color:var(--text2,#6b6385); }
+        /* SCHMALE SCHIRME: bildschirmfuellend statt gerechneter Hoehe.
+           Gemessen am 26.09.2026 bei 390x844: der Knopf sass nicht bei bottom 14 px,
+           sondern bei 79 px (etwas schiebt ihn ueber die mobile Aktionsleiste). Das Panel
+           haengt 74 px darueber, sass also 153 px ueber dem Boden - waehrend
+           height:calc(100vh - 96px) nur mit 96 px rechnete. Ergebnis: Oberkante bei -33 px,
+           der Kopf mit "Lena" war abgeschnitten.
+           inset:0 kann per Definition nicht ueberlaufen, egal wo der Knopf landet, und
+           entspricht dem, was Chatfenster auf dem Handy ueblicherweise tun. */
+        @media(max-width:560px){
+            #lena-panel{ position:fixed; inset:0; width:auto; height:auto;
+                         max-width:none; max-height:none; border-radius:0; }
+            #lena-widget{ right:14px; bottom:14px; }
+            /* Der Knopf wuerde sonst ueber dem Vollbild schweben. Geschlossen wird ueber
+               das Kreuz im Kopf, das dort ohnehin steht. */
+            #lena-widget.open #lena-toggle{ display:none; }
+            .lena-head{ padding-top:max(0.95rem, env(safe-area-inset-top)); }
+            .lena-foot{ padding-bottom:max(0.55rem, env(safe-area-inset-bottom)); }
+        }
+    </style>
+        
+        <script type="application/json" id="lena-i18n">{"greeting":"Hi! I'm Lena from MyJet24. How can I help with your free dummy ticket or hotel reservation?","q1_q":"How does it work?","q1_a":"Enter your route, dates and passenger name — your free PDF with booking reference & QR code is ready in about 30 seconds; a real PNR comes with Premium ($7.90). No account or credit card needed.","q2_q":"Accepted at embassies & airports?","q2_a":"It's an airline-format flight reservation with booking reference and scannable QR code, made as proof of onward travel for visa applications and check-in; Premium adds a real PNR the airline can verify. For the Schengen Area, use a round-trip.","q3_q":"Is it legal?","q3_a":"Yes. A flight reservation/itinerary is a legitimate document embassies accept — most actually advise not to buy a confirmed ticket before your visa is approved.","q4_q":"What does it cost?","q4_a":"The dummy/onward ticket and hotel reservation PDFs are 100% free and download instantly. The optional Premium ticket is $7.90 and adds real airline branding plus an email confirmation. Premium visa documents (e.g. cover letters) are $7.99.","q5_q":"I didn't get an email — where's my ticket?","q5_a":"The free ticket isn't sent by email — it downloads straight to your device the moment it's generated, so please make sure your browser allows downloads. That download always works and is 100% free. Only the Premium ticket ($7.90) comes with an email confirmation.","q6_q":"How fast & how long valid?","q6_a":"It's generated in about 30 seconds and is ready immediately. Use dates that match your visa application or trip.","more":"Ask something else","email_team":"Email our team","err_generic":"Sorry, something went wrong. Please try again.","err_unreachable":"Sorry, I couldn't reach the assistant right now. Please try again in a moment.","limit_ph":"Chat limit reached"}</script>
+
+    
+    <script src="js/support-widget.js@v=1790433012" defer></script>
+</div>
+
+<script>
+function toggleTheme(){const h=document.documentElement;h.setAttribute('data-theme',h.getAttribute('data-theme')==='dark'?'light':'dark');localStorage.setItem('theme',h.getAttribute('data-theme'));}
+window.addEventListener('DOMContentLoaded',()=>{document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'light');});
+function toggleFaq(el){const item=el.parentElement;const was=item.classList.contains('open');document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));if(!was)item.classList.add('open');}
+</script>
+
+<!-- GDPR Cookie Consent -->
+<style>
+#cookie-consent{position:fixed;z-index:9999;left:1rem;right:1rem;bottom:16px;display:none}
+.cc-karte{max-width:1100px;margin:0 auto;padding:.9rem 1.1rem;border-radius:18px;
+ background:rgba(255,255,255,.82);
+ -webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);
+ border:1px solid rgba(255,255,255,.6);
+ box-shadow:0 10px 36px rgba(0,0,0,.13),0 1px 2px rgba(0,0,0,.05);
+ display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.85rem}
+.cc-text{flex:1;min-width:240px;font-size:.875rem;line-height:1.5;color:var(--text,#1a1a2e)}
+.cc-text a{color:var(--purple,#7c3aed);text-decoration:underline;text-underline-offset:2px}
+.cc-knoepfe{display:flex;gap:.55rem;flex-shrink:0}
+#cc-accept,#cc-reject{border:none;border-radius:10px;padding:.62rem 1.25rem;
+ font-size:.875rem;font-weight:600;cursor:pointer;font-family:inherit;line-height:1.2}
+#cc-accept{background:var(--purple,#7c3aed);color:#fff}
+#cc-reject{background:rgba(120,120,128,.14);color:var(--text,#1a1a2e);font-weight:500}
+#cc-accept:hover{filter:brightness(1.08)}
+#cc-reject:hover{background:rgba(120,120,128,.22)}
+[data-theme="dark"] .cc-karte{background:rgba(20,16,38,.82);border-color:rgba(255,255,255,.12);
+ box-shadow:0 10px 36px rgba(0,0,0,.45)}
+[data-theme="dark"] #cc-reject{background:rgba(255,255,255,.1);color:#e2e8f0}
+/* Solange die Cookie-Frage offen ist, hat sie den unteren Rand fuer sich allein:
+   die lila Aktionsleiste weicht (sonst laegen zwei Leisten uebereinander und man
+   saehe beide durch das Glas), und der Chat-Knopf blendet sich aus. Beide kommen
+   zurueck, sobald geklickt wurde -- egal ob zugestimmt oder abgelehnt.
+   Ein Element zur Zeit: das ist der Grund, warum die Karte danach ganz unten und
+   ueber die volle Breite sitzen kann. */
+body.cc-offen .mobile-cta-bar{display:none}
+/* NICHT display:none. Safari auf dem iPhone zeichnet Schatten fehlerhaft, wenn ein
+   Element von display:none zurueck auf sichtbar springt -- der Glow des Chat-Knopfes
+   bekam dadurch einen hellen, eckigen Hof. In Chromium ist das nicht zu sehen (dort
+   sind die Aufnahmen pixelgleich), auf dem Geraet schon.
+   Mit visibility/opacity bleibt das Element im Layout und wird nur ausgeblendet --
+   es gibt kein Neuzeichnen und damit keinen Schattenfehler. */
+body.cc-offen #lena-widget{visibility:hidden !important;opacity:0 !important;
+ pointer-events:none !important}
+/* Kein Platzhalten mehr fuer den Chat-Knopf: der ist ausgeblendet, solange die
+   Frage offen ist. Die Karte nutzt die volle Breite. */
+@media(min-width:768px){#cookie-consent{left:1.25rem;right:1.25rem;bottom:20px}}
+/* HANDY: bewusst flach halten. Die erste Fassung war 121 px hoch, brach den Text
+   um und legte sich ueber die Ueberschrift -- zu aufdringlich auf einem kleinen
+   Schirm. Jetzt: kleinere Schrift, weniger Polsterung, Knoepfe kompakt nebeneinander
+   statt auf voller Breite. Zielhoehe unter 80 px. */
+@media(max-width:767px){
+ #cookie-consent{left:.6rem;right:.6rem;bottom:12px}
+ .cc-karte{padding:.55rem .7rem;border-radius:14px;gap:.5rem;flex-wrap:nowrap}
+ .cc-text{font-size:.72rem;line-height:1.35;min-width:0}
+ .cc-knoepfe{gap:.35rem;flex-shrink:0}
+ #cc-accept,#cc-reject{padding:.42rem .7rem;font-size:.72rem;border-radius:8px;
+  white-space:nowrap}
+}
+/* Knoepfe bleiben NEBEN dem Text, auch auf schmalen Geraeten -- auf volle Breite
+   gezogen kosteten sie eine ganze Zeile und machten die Karte 70 px hoch. Der Text
+   darf dafuer umbrechen; er ist der flexible Teil. Erst unter 330 px rutschen sie
+   darunter, sonst wird es zu eng zum Treffen. */
+@media(max-width:767px){
+ .cc-karte{align-items:center}
+ .cc-text{flex:1 1 auto}
+ /* Knopfgroesse: Apple empfiehlt 44 px Kantenlaenge zum Antippen, Google 24 als
+    Minimum. Die ersten Fassungen lagen bei 26 und 29 px -- treffbar, aber fummelig.
+    Jetzt ~42 px hoch und breiter. Die Karte waechst dadurch um rund 12 px; das ist
+    der Preis dafuer, dass man den Knopf sicher trifft. */
+ #cc-accept,#cc-reject{padding:.72rem 1rem;font-size:.8rem}
+}
+/* Auf Handybreite lohnt es sich NICHT, die Knoepfe neben den Text zu stellen: der
+   Text bricht dann auf drei Zeilen und die Karte wird hoeher UND unruhiger (gemessen
+   bei 390 px). Also bekommt der Text die volle Zeile -- er passt dort in eine -- und
+   die Knoepfe ruecken darunter, klein und rechtsbuendig statt auf volle Breite. */
+@media(max-width:560px){
+ .cc-karte{flex-wrap:wrap;gap:.4rem}
+ .cc-knoepfe{width:100%;justify-content:flex-end}
+ #cc-accept,#cc-reject{padding:.72rem 1.1rem}
+}
+</style>
+<div id="cookie-consent">
+<div class="cc-karte">
+<div class="cc-text">We use cookies to improve your experience. <a href="privacy-policy.html">Privacy Policy</a></div>
+<div class="cc-knoepfe">
+<button id="cc-accept">Accept All</button>
+<button id="cc-reject">Essential Only</button>
+</div></div></div>
+<script>
+/* cookie consent */
+document.addEventListener("DOMContentLoaded",function(){var CN="mj24_consent",b=document.getElementById("cookie-consent");function gc(n){var m=document.cookie.match(new RegExp("(^| )"+n+"=([^;]+)"));return m?m[2]:null;}function sc(n,v,d){var x=new Date();x.setTime(x.getTime()+(d*864e5));document.cookie=n+"="+v+";expires="+x.toUTCString()+";path=/;SameSite=Lax;Secure";}if(!gc(CN)&&b){b.style.display="block";document.body.classList.add("cc-offen");}document.getElementById("cc-accept").onclick=function(){sc(CN,"all",365);b.style.display="none";document.body.classList.remove("cc-offen");if(typeof loadGtag==="function")loadGtag();if(typeof loadClarity==="function")loadClarity();if(typeof loadYandex==="function")loadYandex();};document.getElementById("cc-reject").onclick=function(){sc(CN,"essential",365);b.style.display="none";document.body.classList.remove("cc-offen");};});
+</script>
+
+<div class="mobile-cta-bar">
+    <span class="mobile-cta-bar-label">Get Free PDF — 30 seconds</span>
+    <a href="booking@tab=hotel&amp;city=Rome&amp;country=Italy.html#wizard" class="mobile-cta-bar-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Generate Free    </a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+/*
+ * Trichter-Messung fuer beide Wege zum Dokument.
+ *
+ * WARUM DAS HIER STEHT. Bis 04.09.2026 war der Trichter unmessbar: das frueheste Signal
+ * war `generate_lead` beim ABSENDEN, und auch das nur auf zwei der acht Startseiten und nur
+ * wenn schon eine E-Mail eingetragen war. Wer eine Preiskarte antippte und dann aufgab,
+ * hinterliess keine Spur. Seit es zwei Wege gibt — das eingebettete Formular und den
+ * Assistenten unter /booking — waere ohne Ereignisse nicht entscheidbar, welcher gewinnt.
+ *
+ * CONSENT — und eine Annahme, die sich als falsch erwies. Die vorhandenen Aufrufe auf der
+ * Startseite pruefen nur `typeof gtag === 'function'`. Am 04.09.2026 nachgemessen: das
+ * genuegt NICHT. Der Shim `function gtag(){dataLayer.push(arguments);}` steht in jedem
+ * <head> und ist immer definiert; consent-gated ist nur das Nachladen der Bibliothek. Ohne
+ * Zustimmung landen die Ereignisse also im dataLayer statt nirgends — sie verlassen den
+ * Browser zwar nicht, aber verlassen sollte man sich darauf nicht.
+ *
+ * Deshalb hier zusaetzlich die Cookie-Pruefung, genau wie sie die Lade-Funktionen selbst
+ * machen: ohne mj24_consent=all wird gar nichts erst erzeugt.
+ *
+ * NUR ZAEHLEN, NICHTS MITSCHICKEN. Kein Feldinhalt, keine E-Mail, kein Ziel — nur wo im
+ * Trichter jemand steht.
+ */
+(function () {
+    'use strict';
+
+    function zugestimmt() {
+        var c = document.cookie.match(/mj24_consent=([^;]+)/);
+        return !!c && c[1] === 'all';
+    }
+
+    function sende(name, daten) {
+        try {
+            if (!zugestimmt()) { return; }
+            if (typeof gtag === 'function') { gtag('event', name, daten || {}); }
+        } catch (e) { /* Messung darf den Kauf nie stoeren */ }
+    }
+
+    /* ---------- 1) Klick auf eine Preiskarte ---------- */
+    document.addEventListener('click', function (e) {
+        var karte = e.target.closest && e.target.closest('a[data-plan]');
+        if (!karte) return;
+        sende('select_item', {
+            item_list_name: 'plan_cards',
+            items: [{ item_id: karte.dataset.plan, item_name: karte.dataset.plan }]
+        });
+    }, true);
+
+    /* ---------- 2) Der Assistent: Schritt erreicht / abgeschlossen ----------
+       Die Komponente schickt 'wizard-step' und 'wizard-step-done' ueber Livewire an das
+       window. Beide tragen Nummer und Kurzname des Schritts. */
+    function schritt(ereignis, name) {
+        window.addEventListener(ereignis, function (e) {
+            var d = (e.detail && (e.detail[0] || e.detail)) || {};
+            sende(name, { step: d.step, step_name: d.name, funnel: 'wizard' });
+        });
+    }
+    schritt('wizard-step', 'form_step_view');
+    schritt('wizard-step-done', 'form_step_complete');
+
+    /* ---------- 3) Beide Wege: die erste Eingabe ----------
+       Der Vergleichspunkt. Ohne ihn liesse sich "angefangen" nicht von "nur angesehen"
+       trennen — und genau daran haengt die Frage, ob der Assistent besser ist.
+       Einmal pro Seitenaufruf, nicht pro Feld. */
+    var begonnen = false;
+    document.addEventListener('focusin', function (e) {
+        if (begonnen) return;
+        var feld = e.target;
+        if (!feld || !feld.closest) return;
+        if (!feld.closest('.form-card')) return;
+        if (['INPUT', 'SELECT', 'TEXTAREA'].indexOf(feld.tagName) === -1) return;
+        begonnen = true;
+        sende('form_start', {
+            funnel: document.getElementById('wizard') ? 'wizard' : 'embedded'
+        });
+    }, true);
+
+    /* ---------- 4) Abbruch ----------
+       Beim Verlassen der Seite: wie weit ist der Kunde gekommen? sendBeacon steht in
+       gtag nicht zur Verfuegung, deshalb auf 'visibilitychange' statt 'unload' — das ist
+       das einzige Ereignis, das mobile Browser beim Wegwischen zuverlaessig ausloesen. */
+    var gemeldet = false;
+    document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState !== 'hidden' || gemeldet || !begonnen) return;
+        gemeldet = true;
+        var punkte = document.querySelectorAll('.wz-dot');
+        var stand = 0;
+        for (var i = 0; i < punkte.length; i++) {
+            if (punkte[i].classList.contains('now')) { stand = i + 1; break; }
+        }
+        sende('form_abandon', {
+            funnel: document.getElementById('wizard') ? 'wizard' : 'embedded',
+            step: stand || null
+        });
+    });
+})();

@@ -8,10 +8,10 @@ export function Footer() {
   const brand = getBrandConfig();
 
   return (
-    <footer className="border-t border-rose-950/40 bg-[#12030f] text-slate-300 pt-16 pb-10">
+    <footer className="border-t border-slate-800 bg-[#070e1c] text-slate-300 pt-16 pb-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Top Header Grid */}
-        <div className="pb-12 border-b border-rose-950/60 grid grid-cols-1 gap-8 lg:grid-cols-12 items-center">
+        <div className="pb-12 border-b border-slate-800/80 grid grid-cols-1 gap-8 lg:grid-cols-12 items-center">
           <div className="lg:col-span-7 space-y-3">
             <DummyTicketLogo variant="full" theme="dark" size="md" />
             <p className="text-sm text-slate-400 max-w-xl leading-relaxed">
@@ -20,11 +20,11 @@ export function Footer() {
           </div>
 
           <div className="lg:col-span-5 flex flex-wrap items-center gap-4 text-xs text-slate-400">
-            <div className="flex items-center gap-2 rounded-xl bg-black/40 border border-rose-950/60 px-3.5 py-2.5">
+            <div className="flex items-center gap-2 rounded-xl bg-slate-900/60 border border-slate-800 px-3.5 py-2.5">
               <Mail className="h-4 w-4 text-brand-400" />
               <span>{brand.supportEmail}</span>
             </div>
-            <div className="flex items-center gap-2 rounded-xl bg-black/40 border border-rose-950/60 px-3.5 py-2.5">
+            <div className="flex items-center gap-2 rounded-xl bg-slate-900/60 border border-slate-800 px-3.5 py-2.5">
               <Phone className="h-4 w-4 text-brand-400" />
               <span>{brand.supportPhone}</span>
             </div>

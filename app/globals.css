@@ -4,10 +4,10 @@
 
 @layer base {
   :root {
-    --brand-primary: #e11d48;
-    --brand-dark: #be123c;
-    --brand-glow: rgba(225, 29, 72, 0.2);
-    --card-border: #fce7f3;
+    --brand-primary: #0062e0;
+    --brand-dark: #1d4ed8;
+    --brand-glow: rgba(0, 98, 224, 0.25);
+    --card-border: #dbeafe;
     --bg-page: #ffffff;
     --text-main: #0B1120;
     --text-muted: #64748B;
@@ -184,10 +184,10 @@
   background: conic-gradient(
     from 0deg,
     rgba(255, 255, 255, 0) 0deg,
-    rgba(225, 29, 72, 0.25) 150deg,
-    rgba(251, 113, 133, 0.75) 265deg,
+    rgba(0, 98, 224, 0.25) 150deg,
+    rgba(56, 189, 248, 0.75) 265deg,
     #ffffff 340deg,
-    rgba(251, 113, 133, 0.55) 356deg,
+    rgba(56, 189, 248, 0.55) 356deg,
     rgba(255, 255, 255, 0) 360deg
   );
   animation: heroSnake 3.5s linear infinite;
@@ -198,11 +198,11 @@
   z-index: -1;
   inset: 2px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+  background: linear-gradient(135deg, #0062e0 0%, #1d4ed8 100%);
   transition: background 0.2s;
 }
 .hero-cta-glow:hover::after {
-  background: linear-gradient(135deg, #be123c 0%, #9f1239 100%);
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
 }
 
 @keyframes heroSnake {
@@ -249,8 +249,8 @@
   border-radius: inherit;
   pointer-events: none;
   box-shadow:
-    0 0 0 2px rgba(225, 29, 72, 0.4),
-    0 0 20px 4px rgba(225, 29, 72, 0.15);
+    0 0 0 2px rgba(0, 98, 224, 0.4),
+    0 0 20px 4px rgba(0, 98, 224, 0.15);
   animation: mjPulse 3s ease-in-out infinite;
   z-index: 0;
 }
@@ -261,7 +261,7 @@
   align-items: center;
   gap: 0.45rem;
   background: #ffffff;
-  border: 1px solid #fce7f3;
+  border: 1px solid #e2e8f0;
   border-radius: 999px;
   padding: 0.4rem 0.9rem;
   font-size: 0.82rem;
@@ -272,11 +272,11 @@
   white-space: nowrap;
 }
 .country-chip:hover {
-  border-color: #e11d48;
-  background: #fdf2f8;
-  color: #be123c;
+  border-color: #0062e0;
+  background: #eff6ff;
+  color: #1d4ed8;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 98, 224, 0.12);
 }
 
 @keyframes skeletonShimmer {

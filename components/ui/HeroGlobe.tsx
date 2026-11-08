@@ -170,8 +170,8 @@ export function HeroGlobe({ className = '' }: { className?: string }) {
 
       // Draw faint background radial glow behind globe
       const bgGrad = ctx.createRadialGradient(cx, cy, radius * 0.2, cx, cy, radius * 1.2);
-      bgGrad.addColorStop(0, 'rgba(225, 29, 72, 0.14)');
-      bgGrad.addColorStop(0.6, 'rgba(219, 39, 119, 0.05)');
+      bgGrad.addColorStop(0, 'rgba(0, 98, 224, 0.18)');
+      bgGrad.addColorStop(0.6, 'rgba(56, 189, 248, 0.06)');
       bgGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
       ctx.fillStyle = bgGrad;
       ctx.beginPath();
@@ -187,7 +187,7 @@ export function HeroGlobe({ className = '' }: { className?: string }) {
           const depthAlpha = Math.max(0.12, (p.pz + 1) / 2);
           ctx.beginPath();
           ctx.arc(p.px, p.py, 1.25, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(244, 114, 182, ${depthAlpha * 0.65})`;
+          ctx.fillStyle = `rgba(147, 197, 253, ${depthAlpha * 0.7})`;
           ctx.fill();
         }
       }
@@ -242,7 +242,7 @@ export function HeroGlobe({ className = '' }: { className?: string }) {
           }
         });
 
-        ctx.strokeStyle = 'rgba(251, 113, 133, 0.45)';
+        ctx.strokeStyle = 'rgba(96, 165, 250, 0.5)';
         ctx.lineWidth = 1.2;
         ctx.stroke();
 
@@ -254,8 +254,8 @@ export function HeroGlobe({ className = '' }: { className?: string }) {
         if (particlePt && particlePt.pz > -0.1) {
           ctx.beginPath();
           ctx.arc(particlePt.px, particlePt.py, 2.5, 0, Math.PI * 2);
-          ctx.fillStyle = '#ff4d6d';
-          ctx.shadowColor = '#e11d48';
+          ctx.fillStyle = '#38bdf8';
+          ctx.shadowColor = '#0062e0';
           ctx.shadowBlur = 8;
           ctx.fill();
           ctx.shadowBlur = 0;
@@ -273,20 +273,20 @@ export function HeroGlobe({ className = '' }: { className?: string }) {
         // Outer pulsing ring
         ctx.beginPath();
         ctx.arc(city.px, city.py, ringRadius, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(244, 114, 182, ${ringAlpha})`;
+        ctx.strokeStyle = `rgba(56, 189, 248, ${ringAlpha})`;
         ctx.lineWidth = 1.2;
         ctx.stroke();
 
         // Center dot
         ctx.beginPath();
         ctx.arc(city.px, city.py, 2.5, 0, Math.PI * 2);
-        ctx.fillStyle = '#e11d48';
+        ctx.fillStyle = '#0062e0';
         ctx.fill();
 
         // City Label on front-facing nodes
         if (city.pz > 0.3) {
           ctx.font = '600 10px Plus Jakarta Sans, Inter, sans-serif';
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
           ctx.fillText(city.name, city.px + 7, city.py + 3);
         }
       });

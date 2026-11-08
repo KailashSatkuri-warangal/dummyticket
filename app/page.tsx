@@ -83,24 +83,24 @@ export default function HomePage() {
       />
 
       {/* HERO SECTION WITH FUTURISTIC SVG FLIGHT-PATH ANIMATION */}
-      <section className="relative overflow-hidden border-b border-rose-950/40 bg-gradient-to-b from-[#180414] via-[#2a0723] to-[#12020f] text-white py-14 sm:py-20 lg:py-24">
+      <section className="relative overflow-hidden border-b border-blue-950/40 bg-gradient-to-b from-[#020914] via-[#071933] to-[#040c1a] text-white py-14 sm:py-20 lg:py-24">
         {/* Background Animated SVG Flight Paths & Coordinates */}
         <svg
           aria-hidden="true"
           viewBox="0 0 1200 420"
-          className="pointer-events-none absolute inset-0 h-full w-full opacity-30"
+          className="pointer-events-none absolute inset-0 h-full w-full opacity-35"
           fill="none"
         >
           <defs>
             <linearGradient id="heroPathGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#f472b6" stopOpacity="0.15" />
-              <stop offset="50%" stopColor="#e11d48" stopOpacity="0.95" />
-              <stop offset="100%" stopColor="#fb7185" stopOpacity="0.4" />
+              <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.2" />
+              <stop offset="50%" stopColor="#0062e0" stopOpacity="0.95" />
+              <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.5" />
             </linearGradient>
           </defs>
           {/* Subtle world grid lines */}
-          <path d="M0 120 H1200 M0 240 H1200 M0 360 H1200" stroke="#3b0d2d" strokeWidth="0.6" strokeDasharray="4 8" />
-          <path d="M240 0 V420 M600 0 V420 M960 0 V420" stroke="#3b0d2d" strokeWidth="0.6" strokeDasharray="4 8" />
+          <path d="M0 120 H1200 M0 240 H1200 M0 360 H1200" stroke="#0d2446" strokeWidth="0.6" strokeDasharray="4 8" />
+          <path d="M240 0 V420 M600 0 V420 M960 0 V420" stroke="#0d2446" strokeWidth="0.6" strokeDasharray="4 8" />
           {/* Primary curved flight trajectory */}
           <path
             d="M 80 320 Q 560 30 1120 190"
@@ -108,14 +108,14 @@ export default function HomePage() {
             strokeWidth="2.5"
             strokeDasharray="8 6"
           />
-          <circle cx="80" cy="320" r="5" fill="#f472b6" />
-          <circle cx="585" cy="142" r="4" fill="#e11d48" />
-          <circle cx="1120" cy="190" r="6" fill="#fb7185" />
+          <circle cx="80" cy="320" r="5" fill="#60a5fa" />
+          <circle cx="585" cy="142" r="4" fill="#0062e0" />
+          <circle cx="1120" cy="190" r="6" fill="#38bdf8" />
           {/* Airplane silhouette along trajectory */}
           <g transform="translate(570, 128) rotate(-10)">
             <path
               d="M0 12 L28 4 L34 12 L28 14 L16 13 L10 22 L6 22 L9 13 L2 13 Z"
-              fill="#f43f5e"
+              fill="#38bdf8"
             />
           </g>
         </svg>

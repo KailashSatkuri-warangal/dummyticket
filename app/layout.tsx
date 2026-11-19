@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import './myjet.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { DynamicScrollAnimations } from '@/components/ui/DynamicScrollAnimations';
 import { getBrandConfig } from '@/lib/config/brand';
 import { getSessionUser } from '@/lib/auth/session';
 
@@ -52,7 +54,8 @@ export default async function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-slate-50 text-navy-900 font-sans antialiased selection:bg-brand-500 selection:text-white">
+      <body className="min-h-screen flex flex-col bg-slate-50 text-navy-900 font-sans antialiased selection:bg-brand-500 selection:text-white overflow-x-hidden w-full max-w-full relative">
+        <DynamicScrollAnimations />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand-600 focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-white"
@@ -60,7 +63,7 @@ export default async function RootLayout({
           Skip to main content
         </a>
         <Header brandName={brand.name} user={user} />
-        <main id="main-content" className="flex-1">
+        <main id="main-content" className="flex-1 overflow-x-hidden w-full max-w-full">
           {children}
         </main>
         <Footer />

@@ -29,6 +29,17 @@
     max-width: 100%;
   }
 
+  /* Suppress legacy scraped navbars and duplicate headers */
+  .unav,
+  .unav-mobile,
+  .unav-desktop,
+  .unav-spacer,
+  .unav-dd-panel,
+  #unavMobile,
+  #unavBurger {
+    display: none !important;
+  }
+
   :focus-visible {
     outline: 2px solid theme(colors.brand.600);
     outline-offset: 2px;
@@ -53,6 +64,110 @@
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* ==========================================================================
+     GLOBAL BULLETPROOF RESPONSIVE & OVERFLOW PREVENTION (MOBILE & DESKTOP)
+     ========================================================================== */
+
+  html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  main,
+  .myjet-page-wrapper {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Fix width: 100vw overflow caused by scrollbar width */
+  .eg-sec {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-inline: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .eg-track {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Fix streak and blob positioning overflow */
+  .dthero {
+    overflow: hidden !important;
+    position: relative !important;
+    max-width: 100% !important;
+  }
+
+  .dt-streak,
+  .dt-blob {
+    max-width: 100vw !important;
+    pointer-events: none !important;
+  }
+
+  @media (max-width: 768px) {
+    .dt-streak {
+      display: none !important;
+    }
+  }
+
+  /* Responsive Table wrappers */
+  .acceptance-table,
+  .myjet-page-wrapper table {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Responsive Grids for Scraped & Static Pages */
+  @media (max-width: 768px) {
+    #main-grid,
+    .mission-grid,
+    .stats-grid,
+    .team-grid,
+    .story-stats-grid,
+    .myjet-page-wrapper [style*="grid-template-columns:1fr 320px"],
+    .myjet-page-wrapper [style*="grid-template-columns: 1fr 320px"],
+    .myjet-page-wrapper [style*="grid-template-columns:1fr 1fr"],
+    .myjet-page-wrapper [style*="grid-template-columns: 1fr 1fr"],
+    .myjet-page-wrapper [style*="grid-template-columns:repeat(4,1fr)"],
+    .myjet-page-wrapper [style*="grid-template-columns: repeat(4, 1fr)"],
+    .myjet-page-wrapper [style*="grid-template-columns:repeat(3,1fr)"],
+    .myjet-page-wrapper [style*="grid-template-columns: repeat(3, 1fr)"],
+    .myjet-page-wrapper [style*="grid-template-columns:repeat(2,1fr)"],
+    .myjet-page-wrapper [style*="grid-template-columns: repeat(2, 1fr)"] {
+      grid-template-columns: 1fr !important;
+      gap: 1.25rem !important;
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+    }
+
+    .myjet-page-wrapper .card {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    .eg-card {
+      flex: 0 0 82vw !important;
+      max-width: 82vw !important;
+    }
+
+    .about-hero-inner {
+      padding: 3rem 1rem !important;
     }
   }
 }
@@ -164,7 +279,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Modern Reference Utilities inspired by myjet24.com
+   Modern Reference Utilities for DummyTicket Platform
    -------------------------------------------------------------------------- */
 
 /* Animated Light Runner around Primary CTA (hero-cta-glow) */
@@ -288,7 +403,7 @@
   }
 }
 
-/* Continuous Marquee Ticker (myjet24 style oc-tw-slide) */
+/* Continuous Marquee Ticker (DummyTicket marquee) */
 @keyframes marqueeSlide {
   from {
     transform: translateX(0);
@@ -322,7 +437,7 @@
   animation-play-state: paused;
 }
 
-/* Floating Levitation (myjet24 dt-float) */
+/* Floating Levitation (DummyTicket dt-float) */
 @keyframes floatSlow {
   0%, 100% {
     transform: translateY(0);
@@ -335,7 +450,7 @@
   animation: floatSlow 5.5s ease-in-out infinite;
 }
 
-/* Subtle Text Glow Pulse (myjet24 oc-jrny-glow) */
+/* Subtle Text Glow Pulse (DummyTicket glow) */
 @keyframes textGlowPulse {
   0%, 100% {
     text-shadow: 0 0 10px rgba(0, 98, 224, 0.16);
@@ -348,7 +463,7 @@
   animation: textGlowPulse 2.8s ease-in-out infinite;
 }
 
-/* Form Shake on Error (myjet24 fvShake) */
+/* Form Shake on Error (DummyTicket shake) */
 @keyframes fvShake {
   0%, 100% { transform: translateX(0); }
   14% { transform: translateX(-8px); }
@@ -380,4 +495,303 @@
   .scroll-slim::-webkit-scrollbar-thumb {
     @apply rounded-full bg-slate-300;
   }
+
+  .perspective-container {
+    perspective: 1200px;
+  }
+
+  .card-3d-elevate {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-style: preserve-3d;
+    will-change: transform, box-shadow;
+  }
+
+  .card-3d-elevate:hover {
+    transform: translateY(-6px) rotateX(2deg) rotateY(-1deg) scale(1.015);
+    box-shadow: 0 25px 50px -12px rgba(0, 98, 224, 0.22), 0 0 0 1px rgba(0, 98, 224, 0.2);
+  }
+
+  .ticket-3d-card {
+    perspective: 1000px;
+    transform: perspective(1000px) rotateX(1.5deg) rotateY(-1deg);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    box-shadow: 0 20px 45px -10px rgba(0, 98, 224, 0.18), 0 10px 20px -5px rgba(15, 23, 42, 0.08);
+  }
+
+  .ticket-3d-card:hover {
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(-4px);
+    box-shadow: 0 30px 60px -15px rgba(0, 98, 224, 0.28), 0 15px 25px -5px rgba(15, 23, 42, 0.12);
+  }
+
+  .glow-ambient-blue {
+    box-shadow: 0 0 40px -5px rgba(0, 98, 224, 0.25);
+  }
+
+  .interactive-glow {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .interactive-glow:hover {
+    box-shadow: 0 0 30px rgba(0, 98, 224, 0.28);
+    transform: translateY(-2px);
+  }
 }
+
+/* ==========================================================================
+   Global Scraped & Dynamic Element Styles (Protected from Tailwind purge)
+   ========================================================================== */
+
+/* Responsive containment for scraped pages, banners, tickers and marqees */
+  .oc-tw-marquee,
+  .oc-tw-track,
+  .oc-tw-set,
+  .oc-ticker,
+  [data-tw-parallax] {
+    max-width: 100% !important;
+    overflow: hidden !important;
+    contain: paint !important;
+    left: 0 !important;
+    width: 100% !important;
+  }
+
+  .hbv-hero,
+  #hbv .hbv-hero,
+  .myjet-page-wrapper {
+    box-sizing: border-box !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+    contain: paint !important;
+  }
+
+  /* Universal suppression for legacy video guide bands, phone mockups, and video embeds */
+  .oc-video-band,
+  .oc-video-inner,
+  .oc-video-player,
+  .oc-phone-scale,
+  .oc-mac-stage,
+  .device-macbook-pro-2018,
+  .device-macbook,
+  .device,
+  .marvel-device,
+  .yt-facade,
+  .yt-facade-btn,
+  .yt-facade-pill,
+  [class*="yt-facade"],
+  [data-yt-id],
+  [class*="oc-video"] {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Polished modern styling for scraped CTA banners across all content pages */
+  .cta-banner {
+    background: linear-gradient(135deg, #0062e0 0%, #1d4ed8 100%) !important;
+    color: #ffffff !important;
+    border-radius: 24px !important;
+    padding: 3rem 2rem !important;
+    text-align: center !important;
+    margin: 3.5rem auto !important;
+    box-shadow: 0 20px 45px -10px rgba(0, 98, 224, 0.35) !important;
+    box-sizing: border-box !important;
+    max-width: 100% !important;
+  }
+
+  .cta-banner h2 {
+    font-size: clamp(1.6rem, 3.5vw, 2.3rem) !important;
+    font-weight: 900 !important;
+    color: #ffffff !important;
+    margin-bottom: 0.75rem !important;
+    letter-spacing: -0.5px !important;
+  }
+
+  .cta-banner p {
+    font-size: 1.05rem !important;
+    color: #dbeafe !important;
+    margin-bottom: 1.75rem !important;
+  }
+
+  .cta-banner .btn-white {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.65rem !important;
+    background: #ffffff !important;
+    color: #0062e0 !important;
+    font-weight: 900 !important;
+    font-size: 1rem !important;
+    padding: 1rem 2rem !important;
+    border-radius: 14px !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+    transition: all 0.2s ease !important;
+    text-decoration: none !important;
+  }
+
+  .cta-banner .btn-white:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+    background: #f8fafc !important;
+  }
+
+  .cta-banner .trust {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 1.25rem !important;
+    margin-top: 1.75rem !important;
+    color: #dbeafe !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+  }
+
+  .cta-banner .trust-item {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.35rem !important;
+  }
+
+  .dt-hotel-card {
+    background: rgba(255, 255, 255, 0.18) !important;
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+    backdrop-filter: blur(8px) !important;
+    border-radius: 16px !important;
+    padding: 1.25rem 1.75rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 1.25rem !important;
+    margin-top: 2rem !important;
+    text-decoration: none !important;
+    color: #ffffff !important;
+    transition: all 0.25s ease !important;
+  }
+
+  .dt-hotel-card:hover {
+    background: rgba(255, 255, 255, 0.28) !important;
+    border-color: #ffffff !important;
+    transform: translateY(-2px) !important;
+  }
+
+  .dt-hotel-body {
+    display: flex !important;
+    flex-direction: column !important;
+    text-align: left !important;
+  }
+
+  .dt-hotel-title {
+    font-weight: 800 !important;
+    font-size: 1.05rem !important;
+    color: #ffffff !important;
+  }
+
+  .dt-hotel-sub {
+    font-size: 0.85rem !important;
+    color: #dbeafe !important;
+    margin-top: 0.2rem !important;
+  }
+
+  /* Diplomatic Learn Cards (/embassy-finder) */
+  .dipl-flow {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2.25rem !important;
+    margin: 2.5rem 0 !important;
+  }
+
+  .dipl-row {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) !important;
+    gap: 2.5rem !important;
+    align-items: center !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 20px !important;
+    padding: 1.75rem !important;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05) !important;
+  }
+
+  @media (max-width: 768px) {
+    .dipl-row {
+      grid-template-columns: 1fr !important;
+      gap: 1.25rem !important;
+      padding: 1.25rem !important;
+    }
+  }
+
+  .dipl-figure {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #f8fafc !important;
+    border-radius: 14px !important;
+    padding: 1.5rem !important;
+  }
+
+  .dipl-figure img {
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 280px !important;
+    object-fit: contain !important;
+  }
+
+  .dt-hotel-card:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-2px) !important;
+  }
+
+  .dt-hotel-title {
+    font-weight: 800 !important;
+    font-size: 0.95rem !important;
+    color: #ffffff !important;
+    display: block !important;
+  }
+
+  .dt-hotel-sub {
+    font-size: 0.8rem !important;
+    color: #bfdbfe !important;
+  }
+
+  /* ==========================================================================
+     DYNAMIC SCROLL ANIMATIONS & REVEAL SYSTEM
+     ========================================================================== */
+  .dt-reveal-pending {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+
+  .dt-revealed {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+
+  .dt-reveal-instant {
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out !important;
+  }
+
+  /* Stagger delays */
+  .dt-stagger-1 { transition-delay: 80ms !important; }
+  .dt-stagger-2 { transition-delay: 160ms !important; }
+  .dt-stagger-3 { transition-delay: 240ms !important; }
+  .dt-stagger-4 { transition-delay: 320ms !important; }
+
+  /* Animated pulse glow on active elements */
+  @keyframes dtPulseGlow {
+    0%, 100% {
+      box-shadow: 0 0 15px rgba(0, 98, 224, 0.25);
+    }
+    50% {
+      box-shadow: 0 0 28px rgba(0, 98, 224, 0.5);
+    }
+  }
+
+  .pulse-active {
+    animation: dtPulseGlow 3s ease-in-out infinite;
+  }

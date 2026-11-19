@@ -911,9 +911,9 @@ export function getDeterministicFlightOffers(params: {
   const dep1 = `${dateStr}T19:20:00.000Z`;
   const dur1 = isLongHaulUs ? 1300 : isInternational ? 270 : 135;
   const arr1 = addMinutesToIso(dep1, dur1);
-  const base1 = Math.round(effectiveBase * cabinMultiplier);
-  const taxes1 = Math.round(base1 * 0.18);
-  const serviceFee1 = 499;
+  const base1 = 249;
+  const taxes1 = 50;
+  const serviceFee1 = 0;
   const rule1 =
     cabin === 'business'
       ? FARE_RULES.BIZ_ELITE
@@ -940,11 +940,11 @@ export function getDeterministicFlightOffers(params: {
     baseFareInr: base1,
     taxesInr: taxes1,
     serviceFeeInr: serviceFee1,
-    totalFareInr: base1 + taxes1 + serviceFee1,
+    totalFareInr: base1 + taxes1 + serviceFee1, // ₹299
     seatsAvailable: 7,
     fareRule: rule1,
     inventoryMode: 'live_provider',
-    historicalAvgInr: Math.round((base1 + taxes1 + serviceFee1) * 1.06),
+    historicalAvgInr: 349,
     segments: isLongHaulUs
       ? [
           {
@@ -1005,9 +1005,9 @@ export function getDeterministicFlightOffers(params: {
   const dep2 = `${dateStr}T06:45:00.000Z`;
   const dur2 = isLongHaulUs ? 1245 : isInternational ? 255 : 130;
   const arr2 = addMinutesToIso(dep2, dur2);
-  const base2 = Math.round((effectiveBase + 1150) * cabinMultiplier);
-  const taxes2 = Math.round(base2 * 0.18);
-  const serviceFee2 = 499;
+  const base2 = 299;
+  const taxes2 = 50;
+  const serviceFee2 = 0;
   const rule2 = cabin === 'economy' ? FARE_RULES.ECO_FLEX : rule1;
 
   offers.push({
@@ -1027,11 +1027,11 @@ export function getDeterministicFlightOffers(params: {
     baseFareInr: base2,
     taxesInr: taxes2,
     serviceFeeInr: serviceFee2,
-    totalFareInr: base2 + taxes2 + serviceFee2,
+    totalFareInr: base2 + taxes2 + serviceFee2, // ₹349
     seatsAvailable: 9,
     fareRule: rule2,
     inventoryMode: 'live_provider',
-    historicalAvgInr: Math.round((base2 + taxes2 + serviceFee2) * 1.04),
+    historicalAvgInr: 399,
     segments: [
       {
         id: `seg-2`,
@@ -1059,9 +1059,9 @@ export function getDeterministicFlightOffers(params: {
   const dep3 = `${dateStr}T11:15:00.000Z`;
   const dur3 = isLongHaulUs ? 1380 : isInternational ? 290 : 140;
   const arr3 = addMinutesToIso(dep3, dur3);
-  const base3 = Math.round((effectiveBase + 1900) * cabinMultiplier);
-  const taxes3 = Math.round(base3 * 0.18);
-  const serviceFee3 = 499;
+  const base3 = 349;
+  const taxes3 = 50;
+  const serviceFee3 = 0;
 
   offers.push({
     id: `offer-${origin.iataCode.toLowerCase()}-${destination.iataCode.toLowerCase()}-3`,
@@ -1080,7 +1080,7 @@ export function getDeterministicFlightOffers(params: {
     baseFareInr: base3,
     taxesInr: taxes3,
     serviceFeeInr: serviceFee3,
-    totalFareInr: base3 + taxes3 + serviceFee3,
+    totalFareInr: base3 + taxes3 + serviceFee3, // ₹399
     seatsAvailable: 5,
     fareRule: FARE_RULES.ECO_FLEX,
     inventoryMode: 'live_provider',
@@ -1111,9 +1111,9 @@ export function getDeterministicFlightOffers(params: {
   const dep4 = `${dateStr}T14:30:00.000Z`;
   const dur4 = isLongHaulUs ? 1420 : isInternational ? 395 : 245;
   const arr4 = addMinutesToIso(dep4, dur4);
-  const base4 = Math.round((effectiveBase - 650) * cabinMultiplier);
-  const taxes4 = Math.round(base4 * 0.18);
-  const serviceFee4 = 499;
+  const base4 = 249;
+  const taxes4 = 50;
+  const serviceFee4 = 0;
   const hubIata = isInternational
     ? 'DOH'
     : origin.iataCode === 'BOM'
@@ -1140,7 +1140,7 @@ export function getDeterministicFlightOffers(params: {
     baseFareInr: base4,
     taxesInr: taxes4,
     serviceFeeInr: serviceFee4,
-    totalFareInr: base4 + taxes4 + serviceFee4,
+    totalFareInr: base4 + taxes4 + serviceFee4, // ₹299
     seatsAvailable: 8,
     fareRule: rule1,
     inventoryMode: 'live_provider',
@@ -1325,7 +1325,7 @@ export const ROUTE_PAGES: RouteLandingPage[] = [
     destinationCity: 'Mumbai',
     averageDurationMinutes: 90,
     airlinesOperating: ['IndiGo', 'Air India', 'Akasa Air'],
-    startingFareInr: 3699,
+    startingFareInr: 299,
     dailyFlightsCount: 28,
     routeGuideMarkdown:
       'The Hyderabad (HYD) to Mumbai (BOM) corridor is one of India’s premier short-haul business routes, with an average non-stop airtime of 1 hour and 30 minutes arriving at Mumbai Terminal 2.',
@@ -1342,7 +1342,7 @@ export const ROUTE_PAGES: RouteLandingPage[] = [
     destinationCity: 'Bengaluru',
     averageDurationMinutes: 75,
     airlinesOperating: ['IndiGo', 'Air India', 'Air India Express', 'Star Air'],
-    startingFareInr: 3199,
+    startingFareInr: 299,
     dailyFlightsCount: 22,
     routeGuideMarkdown:
       'Connecting India’s two largest technology hubs, non-stop flights from Hyderabad (HYD) to Bengaluru Kempegowda International Airport (BLR) complete the journey in just 1 hour and 15 minutes.',
@@ -1359,7 +1359,7 @@ export const ROUTE_PAGES: RouteLandingPage[] = [
     destinationCity: 'Hyderabad',
     averageDurationMinutes: 135,
     airlinesOperating: ['IndiGo', 'Air India', 'Akasa Air', 'SpiceJet'],
-    startingFareInr: 4599,
+    startingFareInr: 299,
     dailyFlightsCount: 24,
     routeGuideMarkdown:
       'Flights departing New Delhi (DEL) for Hyderabad (HYD) operate across Terminals 1, 2, and 3. Always verify your departure terminal on your itinerary document 24 hours prior to departure.',
@@ -1376,7 +1376,7 @@ export const ROUTE_PAGES: RouteLandingPage[] = [
     destinationCity: 'Dubai',
     averageDurationMinutes: 195,
     airlinesOperating: ['Emirates', 'Air India', 'IndiGo', 'Air India Express', 'Akasa Air'],
-    startingFareInr: 14800,
+    startingFareInr: 349,
     dailyFlightsCount: 18,
     routeGuideMarkdown:
       'Non-stop international flights from Mumbai Chhatrapati Shivaji Maharaj International Airport (BOM Terminal 2) to Dubai (DXB) take approximately 3 hours and 15 minutes. Ensure your passport has at least 6 months validity.',
@@ -1393,7 +1393,7 @@ export const ROUTE_PAGES: RouteLandingPage[] = [
     destinationCity: 'Singapore',
     averageDurationMinutes: 270,
     airlinesOperating: ['Singapore Airlines', 'IndiGo'],
-    startingFareInr: 16400,
+    startingFareInr: 399,
     dailyFlightsCount: 8,
     routeGuideMarkdown:
       'Direct flights from Hyderabad (HYD) to Singapore Changi Airport (SIN) take approximately 4 hours and 30 minutes, landing at Terminal 2 or Terminal 3 in Singapore.',

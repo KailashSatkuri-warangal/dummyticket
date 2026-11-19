@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 280" fill="none">
+  <!-- Card background -->
+  <rect width="160" height="280" rx="16" fill="#f5f3ff"/>
+
+  <!-- Sky glow -->
+  <ellipse cx="80" cy="88" rx="68" ry="52" fill="#ede9fe"/>
+
+  <!-- ATLANTIC OCEAN — layered waves -->
+  <path d="M0,205 Q20,200 40,204 Q60,199 80,203 Q100,199 120,204 Q140,200 160,205 L160,248 L0,248 Z" fill="#c4b5fd" opacity="0.28"/>
+  <path d="M0,208 Q25,203 50,207 Q80,203 110,207 Q135,203 160,208" stroke="#a78bfa" stroke-width="0.9" opacity="0.55"/>
+  <path d="M0,216 Q25,211 50,215 Q80,211 110,215 Q135,211 160,216" stroke="#a78bfa" stroke-width="0.7" opacity="0.42"/>
+  <path d="M0,224 Q25,219 50,223 Q80,219 110,223 Q135,219 160,224" stroke="#a78bfa" stroke-width="0.6" opacity="0.3"/>
+  <!-- Small boat on ocean -->
+  <path d="M112,210 Q118,207 126,208 L124,213 Q118,213 112,210 Z" fill="#7c3aed" opacity="0.45"/>
+  <line x1="119" y1="207" x2="119" y2="202" stroke="#6d28d9" stroke-width="0.9" opacity="0.5"/>
+
+  <!-- ROCKY PROMONTORY / CASTLE BASE -->
+  <path d="M0,200 Q30,193 65,197 Q80,193 95,197 Q130,193 160,200 L160,208 L0,208 Z" fill="#5b21b6" opacity="0.65"/>
+
+  <!-- LEFT CORNER BASTION (circular tower) -->
+  <rect x="4" y="152" width="20" height="52" rx="3" fill="#6d28d9"/>
+  <ellipse cx="14" cy="150" rx="11" ry="12" fill="#7c3aed"/>
+  <!-- Left bastion cannon port -->
+  <rect x="8" y="166" width="6" height="8" rx="1" fill="#3b0764" opacity="0.65"/>
+  <!-- Left bastion crenellations -->
+  <rect x="4" y="139" width="5" height="13" rx="0.5" fill="#6d28d9"/>
+  <rect x="12" y="139" width="5" height="13" rx="0.5" fill="#6d28d9"/>
+  <rect x="20" y="139" width="5" height="13" rx="0.5" fill="#6d28d9"/>
+
+  <!-- RIGHT CORNER BASTION -->
+  <rect x="136" y="152" width="20" height="52" rx="3" fill="#6d28d9"/>
+  <ellipse cx="146" cy="150" rx="11" ry="12" fill="#7c3aed"/>
+  <!-- Right bastion cannon port -->
+  <rect x="146" y="166" width="6" height="8" rx="1" fill="#3b0764" opacity="0.65"/>
+  <!-- Right bastion crenellations -->
+  <rect x="136" y="139" width="5" height="13" rx="0.5" fill="#6d28d9"/>
+  <rect x="144" y="139" width="5" height="13" rx="0.5" fill="#6d28d9"/>
+  <rect x="152" y="139" width="5" height="13" rx="0.5" fill="#6d28d9"/>
+
+  <!-- MAIN CASTLE BODY (long horizontal wall) -->
+  <rect x="14" y="155" width="132" height="48" rx="2" fill="#7c3aed"/>
+
+  <!-- CANNON PORTS / EMBRASURES along facade (left section) -->
+  <rect x="22" y="170" width="9" height="11" rx="1" fill="#3b0764" opacity="0.7"/>
+  <rect x="36" y="170" width="9" height="11" rx="1" fill="#3b0764" opacity="0.7"/>
+  <rect x="50" y="170" width="9" height="11" rx="1" fill="#3b0764" opacity="0.7"/>
+  <!-- Cannon ports right section -->
+  <rect x="101" y="170" width="9" height="11" rx="1" fill="#3b0764" opacity="0.7"/>
+  <rect x="115" y="170" width="9" height="11" rx="1" fill="#3b0764" opacity="0.7"/>
+  <rect x="129" y="170" width="9" height="11" rx="1" fill="#3b0764" opacity="0.7"/>
+
+  <!-- CENTRAL ENTRANCE GATE ARCH -->
+  <rect x="66" y="164" width="28" height="38" rx="2" fill="#4c1d95"/>
+  <path d="M66,182 Q80,164 94,182" fill="#3b0764"/>
+  <path d="M64,182 Q80,161 96,182" fill="none" stroke="#c4b5fd" stroke-width="1.1" opacity="0.5"/>
+  <!-- Portcullis grid -->
+  <line x1="72" y1="182" x2="72" y2="202" stroke="#c4b5fd" stroke-width="0.7" opacity="0.3"/>
+  <line x1="80" y1="182" x2="80" y2="202" stroke="#c4b5fd" stroke-width="0.7" opacity="0.3"/>
+  <line x1="88" y1="182" x2="88" y2="202" stroke="#c4b5fd" stroke-width="0.7" opacity="0.3"/>
+  <line x1="66" y1="188" x2="94" y2="188" stroke="#c4b5fd" stroke-width="0.7" opacity="0.3"/>
+  <line x1="66" y1="195" x2="94" y2="195" stroke="#c4b5fd" stroke-width="0.7" opacity="0.3"/>
+
+  <!-- MAIN CRENELLATED PARAPET along top of castle body -->
+  <rect x="14" y="146" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="23" y="146" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="32" y="146" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="41" y="146" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="50" y="146" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="59" y="146" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="68" y="146" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="77" y="146" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="86" y="146" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="95" y="146" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="104" y="146" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="113" y="146" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="122" y="146" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="131" y="146" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="140" y="146" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+
+  <!-- CENTRAL WATCHTOWER (higher) -->
+  <rect x="64" y="108" width="32" height="50" rx="2" fill="#8b5cf6"/>
+  <!-- Tower windows -->
+  <rect x="70" y="120" width="8" height="12" rx="1.5" fill="#ede9fe" opacity="0.52"/>
+  <rect x="83" y="120" width="8" height="12" rx="1.5" fill="#ede9fe" opacity="0.52"/>
+  <!-- Tower lower window -->
+  <rect x="76" y="136" width="8" height="12" rx="1.5" fill="#ede9fe" opacity="0.45"/>
+  <!-- Tower crenellations -->
+  <rect x="64" y="99" width="5" height="11" rx="0.5" fill="#7c3aed"/>
+  <rect x="72" y="99" width="5" height="11" rx="0.5" fill="#7c3aed"/>
+  <rect x="80" y="99" width="5" height="11" rx="0.5" fill="#7c3aed"/>
+  <rect x="88" y="99" width="5" height="11" rx="0.5" fill="#7c3aed"/>
+  <!-- Tower flagpole -->
+  <line x1="84" y1="99" x2="84" y2="76" stroke="#5b21b6" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Ghana flag on pole (red/gold/green tricolor) -->
+  <rect x="84" y="76" width="18" height="4" rx="0.5" fill="#cc0001" opacity="0.75"/>
+  <rect x="84" y="80" width="18" height="4" rx="0.5" fill="#fcd116" opacity="0.8"/>
+  <rect x="84" y="84" width="18" height="4" rx="0.5" fill="#006b3f" opacity="0.75"/>
+  <!-- Black star on flag -->
+  <polygon points="93,78 93.8,80.4 96.4,80.4 94.3,81.9 95.1,84.3 93,82.8 90.9,84.3 91.7,81.9 89.6,80.4 92.2,80.4" fill="#000000" opacity="0.5"/>
+
+  <!-- DECORATIVE BANDS on main castle body -->
+  <rect x="14" y="155" width="132" height="2" rx="0.5" fill="#c4b5fd" opacity="0.45"/>
+  <rect x="14" y="178" width="132" height="1.5" rx="0.5" fill="#c4b5fd" opacity="0.3"/>
+
+  <!-- Decorative sparkles -->
+  <circle cx="148" cy="52" r="2" fill="#a78bfa" opacity="0.5"/>
+  <circle cx="155" cy="76" r="1.5" fill="#c4b5fd" opacity="0.4"/>
+  <circle cx="10" cy="55" r="1.5" fill="#a78bfa" opacity="0.4"/>
+  <circle cx="6" cy="78" r="1" fill="#c4b5fd" opacity="0.35"/>
+
+  <!-- LABEL -->
+  <text x="80" y="256" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#5b21b6">Cape Coast Castle</text>
+  <text x="80" y="269" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9.5" fill="#7c3aed" opacity="0.85">Cape Coast · Ghana</text>
+</svg>

@@ -179,21 +179,21 @@ export default async function AdminFlightsPage() {
               Quick Dynamic Surcharge:
             </span>
             <AdminActionTrigger
-              label="+₹500 Peak Season Adj"
+              label="+₹50 Priority PDF Adj"
               variant="secondary"
               payload={{
                 action: 'SET_FARE_ADJUSTMENT',
                 flightOfferId: 'offer-hyd-del-1',
-                deltaInr: 500,
+                deltaInr: 50,
               }}
             />
             <AdminActionTrigger
-              label="+₹800 Tier Adj"
+              label="+₹100 Express Delivery"
               variant="secondary"
               payload={{
                 action: 'SET_FARE_ADJUSTMENT',
                 flightOfferId: 'offer-hyd-del-2',
-                deltaInr: 800,
+                deltaInr: 100,
               }}
             />
           </div>

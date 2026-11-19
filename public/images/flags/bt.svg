@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20">
+  <!-- Bhutan flag: diagonal split orange (upper-left) and red-crimson (lower-right) -->
+  <polygon points="0,0 30,0 0,20" fill="#FF8000"/>
+  <polygon points="30,0 30,20 0,20" fill="#AF0000"/>
+  <!-- Simplified Druk (dragon) outline in white — centered -->
+  <circle cx="15" cy="10" r="4.5" fill="none" stroke="white" stroke-width="0.8" opacity="0.9"/>
+  <circle cx="15" cy="10" r="1.5" fill="white" opacity="0.85"/>
+  <!-- Dragon body hint (simplified arc) -->
+  <path d="M11.5,8 Q15,5.5 18.5,8 Q15,14 11.5,12 Q13,10 15,10" fill="none" stroke="white" stroke-width="0.7" opacity="0.8"/>
+</svg>

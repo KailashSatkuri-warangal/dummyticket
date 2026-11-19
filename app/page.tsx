@@ -1,611 +1,760 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 import {
   ShieldCheck,
-  FileText,
-  CreditCard,
+  CheckCircle2,
   ArrowRight,
   Plane,
-  CheckCircle2,
-  HelpCircle,
-  BookOpen,
-  PhoneCall,
   Sparkles,
-  Scale,
-  Compass,
-  Clock,
-  Award,
-  Globe2,
+  ChevronDown,
+  Star,
+  Download,
 } from 'lucide-react';
-import { FlightSearchPanel } from '@/components/search/FlightSearchPanel';
-import { RecentSearchesStrip } from '@/components/search/RecentSearchesStrip';
-import { NewsletterForm } from '@/components/search/NewsletterForm';
-import {
-  AIRLINES,
-  DESTINATIONS,
-  ROUTE_PAGES,
-  BLOG_POSTS,
-} from '@/lib/flights/dataset';
-import { formatDuration, formatInr, getBrandConfig } from '@/lib/config/brand';
-import { AirlineLogo } from '@/components/flights/AirlineLogo';
-import { FaqAccordion } from '@/components/ui/FaqAccordion';
-import { HeroGlobe } from '@/components/ui/HeroGlobe';
-import { RoutesMarquee } from '@/components/ui/RoutesMarquee';
-import { MobileActionDock } from '@/components/ui/MobileActionDock';
+import { MyJetGenerator } from '@/components/generator/MyJetGenerator';
+import { LiveFlightTrajectoryHero } from '@/components/flights/LiveFlightTrajectoryHero';
+import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
+
+const FAQS = [
+  {
+    q: 'What is a dummy ticket and is it legal?',
+    a: 'A dummy ticket (or dummy flight ticket) is a temporary flight reservation used for visa applications, proof of onward travel, and hotel bookings. It is legal and widely accepted by embassies across 195+ countries — in fact, most embassies explicitly advise applicants not to purchase confirmed tickets before visa approval. It is a professional flight reservation document.',
+  },
+  {
+    q: 'Can I use a dummy ticket for my visa application?',
+    a: "Yes. Dummy tickets are specifically designed for visa applications. Most embassies — Schengen, UK, USA, Canada, Australia, India and more — accept a flight itinerary as proof of travel. Always check your specific embassy's requirements.",
+  },
+  {
+    q: 'Can I get a dummy ticket for free?',
+    a: 'Yes! DummyTicket generates free dummy tickets instantly with a valid booking reference (PNR), QR code, and professional airline format. No credit card or account needed. Your ticket is ready in 30 seconds as a downloadable PDF — instant proof of onward travel accepted by embassies and consulates in 195+ countries.',
+  },
+  {
+    q: 'Does the ticket include a PNR/booking reference?',
+    a: 'Yes. Every dummy ticket from DummyTicket includes a unique 6-character PNR (Passenger Name Record) and booking reference number, a scannable QR code, real airline names and flight numbers, departure and arrival times, and a professionally formatted layout.',
+  },
+  {
+    q: 'Can I generate a round-trip dummy ticket?',
+    a: 'Yes. You can generate both one-way and round-trip dummy tickets. Simply select the Round Trip option in the form and enter your return date. Round-trip flight itineraries are recommended for Schengen visa applications and most embassy submissions.',
+  },
+  {
+    q: 'Do airlines check if your ticket is real?',
+    a: 'Some airlines and immigration officers ask for proof of onward travel before allowing entry — particularly for destinations like Thailand, the Philippines, and Indonesia. At immigration, officers review your travel documents visually. A DummyTicket PDF clearly shows your onward route, dates, and booking reference, which meets this requirement.',
+  },
+  {
+    q: 'Does VFS Global accept dummy tickets?',
+    a: 'VFS Global is a processing centre, not the decision-maker. Whether a temporary flight reservation is accepted depends on the specific embassy policy. In practice, the vast majority of Schengen consulates that operate through VFS accept dummy tickets with valid PNR codes.',
+  },
+  {
+    q: 'Can a dummy flight ticket be detected?',
+    a: 'DummyTicket generates professional flight itineraries that include booking references (PNR codes), airline formatting, flight numbers, and QR codes. Embassy staff review these documents to verify your travel intentions. Our itineraries follow standard airline document formatting and are used by over 10,000 travelers worldwide.',
+  },
+  {
+    q: 'Is a dummy ticket legal in the UAE?',
+    a: 'Yes. Using a flight itinerary for visa applications is legal in the UAE and worldwide. VFS Global centers in Abu Dhabi and Dubai routinely accept flight itinerary documents. DummyTicket is used by thousands of UAE-based applicants for Schengen, US, UK, and other visa types.',
+  },
+  {
+    q: 'How fast can I get a dummy ticket?',
+    a: 'With DummyTicket, about 30 seconds. Enter your airports, pick a date, and your professional PDF with booking reference and QR code is ready for instant download. No account needed, no payment, no waiting for email delivery.',
+  },
+  {
+    q: 'Can I use a dummy ticket at the airport?',
+    a: 'No. A dummy ticket is designed exclusively for visa application purposes — to show embassies and consulates your intended travel plans. It should not be used for airport check-in, boarding, or passing through immigration at arrival. For those situations, you need a confirmed, paid flight reservation.',
+  },
+  {
+    q: 'Can I download my dummy ticket as a PDF?',
+    a: 'Yes. Every dummy ticket is delivered as a PDF that you can download straight away, save on your phone or print. You can upload it to an online visa application or bring a printout to your appointment.',
+  },
+];
+
+const TESTIMONIALS = [
+  {
+    name: 'Sarah M.',
+    location: 'United States',
+    visa: 'Schengen Visa (France)',
+    text: 'Used this for my French Schengen visa appointment at VFS Washington. Downloaded in under 1 minute, printed it out, and the visa was approved in 5 days with zero questions!',
+  },
+  {
+    name: 'Ahmed K.',
+    location: 'United Arab Emirates',
+    visa: 'UK Standard Visitor Visa',
+    text: 'I was hesitant about dummy tickets before, but DummyTicket produced an itinerary with realistic flight times and QR codes that looked identical to an official booking. Saved me ₹65,000 on non-refundable flights.',
+  },
+  {
+    name: 'Priya Sharma',
+    location: 'India',
+    visa: 'Schengen Visa (Germany)',
+    text: 'First time applying for a European visa. The embassy explicitly stated not to buy flight tickets until approval. DummyTicket solved this in 30 seconds for my family of four.',
+  },
+  {
+    name: 'Carlos R.',
+    location: 'Brazil',
+    visa: 'Japan Tourist Visa',
+    text: 'Applied for Japan tourist visa in São Paulo. They asked for detailed flight reservations. Downloaded both inbound and outbound flights from DummyTicket. Visa granted in 4 working days!',
+  },
+];
 
 export default function HomePage() {
-  const brand = getBrandConfig();
-  const indianAirlines = AIRLINES.filter((a) => a.category === 'indian');
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [activeStep, setActiveStep] = useState<number>(0);
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'Organization',
-        name: brand.name,
-        legalName: brand.legalEntityName,
-        url: brand.appUrl,
-        contactPoint: {
-          '@type': 'ContactPoint',
-          email: brand.supportEmail,
-          telephone: brand.supportPhone,
-          contactType: 'customer support',
-        },
-      },
-      {
-        '@type': 'WebSite',
-        name: brand.name,
-        url: brand.appUrl,
-      },
-    ],
+  const toggleFaq = (index: number) => {
+    setOpenFaq(openFaq === index ? null : index);
   };
 
-  const faqItems = [
-    {
-      q: 'How do I receive my confirmed itinerary?',
-      a: 'Once your Razorpay payment is verified server-side, DummyTicket issues your reservation with an airline PNR and generates a Boarding-Pass-Styled Itinerary PDF plus a separate Payment Receipt PDF, dispatched to your email instantly.',
-    },
-    {
-      q: 'How are fares and price changes handled during checkout?',
-      a: 'When you select a flight, our server stores an auditable Fare Snapshot with an expiration time. Before payment order creation, the fare is revalidated. If a fare increases, you are shown the exact old and new amounts and asked for explicit confirmation.',
-    },
-    {
-      q: 'Do I receive a separate Payment Receipt PDF and Itinerary PDF?',
-      a: 'Yes. Upon verified Razorpay payment, DummyTicket generates both your Boarding-Pass-Styled Itinerary PDF and a separate Payment Receipt PDF (DT-RCPT-...), and dispatches 3 distinct confirmation emails.',
-    },
-  ];
-
   return (
-    <div>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+    <div className="bg-white text-[#0B1120] font-sans antialiased overflow-x-hidden">
+      {/* 1. HERO SECTION - BLUE & WHITE THEME */}
+      <section className="relative pt-12 pb-20 bg-gradient-to-b from-[#f0f7ff] via-[#f8fbff] to-white border-b border-blue-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left Hero Text */}
+            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100 text-[#0062e0] text-xs font-black uppercase tracking-wider border border-blue-200">
+                <ShieldCheck className="w-4 h-4 text-[#0062e0]" />
+                100% Free • No Credit Card • No Login Required
+              </div>
 
-      {/* HERO SECTION WITH FUTURISTIC SVG FLIGHT-PATH ANIMATION */}
-      <section className="relative overflow-hidden border-b border-blue-950/40 bg-gradient-to-b from-[#020914] via-[#071933] to-[#040c1a] text-white py-14 sm:py-20 lg:py-24">
-        {/* Background Animated SVG Flight Paths & Coordinates */}
-        <svg
-          aria-hidden="true"
-          viewBox="0 0 1200 420"
-          className="pointer-events-none absolute inset-0 h-full w-full opacity-35"
-          fill="none"
-        >
-          <defs>
-            <linearGradient id="heroPathGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.2" />
-              <stop offset="50%" stopColor="#0062e0" stopOpacity="0.95" />
-              <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.5" />
-            </linearGradient>
-          </defs>
-          {/* Subtle world grid lines */}
-          <path d="M0 120 H1200 M0 240 H1200 M0 360 H1200" stroke="#0d2446" strokeWidth="0.6" strokeDasharray="4 8" />
-          <path d="M240 0 V420 M600 0 V420 M960 0 V420" stroke="#0d2446" strokeWidth="0.6" strokeDasharray="4 8" />
-          {/* Primary curved flight trajectory */}
-          <path
-            d="M 80 320 Q 560 30 1120 190"
-            stroke="url(#heroPathGrad)"
-            strokeWidth="2.5"
-            strokeDasharray="8 6"
-          />
-          <circle cx="80" cy="320" r="5" fill="#60a5fa" />
-          <circle cx="585" cy="142" r="4" fill="#0062e0" />
-          <circle cx="1120" cy="190" r="6" fill="#38bdf8" />
-          {/* Airplane silhouette along trajectory */}
-          <g transform="translate(570, 128) rotate(-10)">
-            <path
-              d="M0 12 L28 4 L34 12 L28 14 L16 13 L10 22 L6 22 L9 13 L2 13 Z"
-              fill="#38bdf8"
-            />
-          </g>
-        </svg>
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7">
-              <span className="inline-flex items-center gap-2 rounded-full bg-brand-500/20 border border-brand-400/40 px-4 py-1.5 text-xs font-bold text-brand-200 shadow-inner">
-                <Sparkles className="h-3.5 w-3.5 text-amber-300" />
-                Next-Generation Flight Search & Confirmed Itineraries
-              </span>
-              <h1 className="mt-5 text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-white leading-tight">
-                Your Next Journey Starts Here.
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] text-gray-900">
+                Free Dummy Ticket PDF Generator{' '}
+                <em className="text-[#0062e0] not-italic block mt-1">Real PNR in 30 Seconds</em>
               </h1>
-              <p className="mt-4 text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl">
-                Discover routes, compare available fares, and keep every trip organized in one place.
+
+              <p className="text-base sm:text-lg text-gray-600 max-w-2xl leading-relaxed">
+                Generate a professional flight itinerary PDF in 30 seconds. With booking reference,
+                QR code, and airline format — accepted by 195+ countries, embassies, and immigration
+                authorities worldwide.
               </p>
-            </div>
-            <div className="hidden lg:flex lg:col-span-5 justify-center items-center">
-              <HeroGlobe className="w-full h-80" />
-            </div>
-          </div>
 
-          <div className="mt-8 text-navy-900">
-            <FlightSearchPanel />
-          </div>
-        </div>
-      </section>
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                <a
+                  href="#bookingForm"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-gradient-to-r from-[#0062e0] to-[#1d4ed8] text-white font-extrabold text-base shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all group"
+                >
+                  <span>Generate Free Ticket Now</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </a>
+              </div>
 
-      {/* STATS STRIP INSPIRED BY REFERENCE */}
-      <section className="bg-gradient-to-r from-brand-700 via-brand-600 to-brand-800 text-white py-5 shadow-md">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 text-center divide-y md:divide-y-0 md:divide-x divide-white/20">
-            <div className="pt-2 md:pt-0">
-              <div className="text-xl sm:text-2xl font-black text-white">100%</div>
-              <div className="text-xs font-semibold text-brand-100 mt-0.5">Verifiable PNR & QR</div>
-            </div>
-            <div className="pt-2 md:pt-0">
-              <div className="text-xl sm:text-2xl font-black text-white">Instant</div>
-              <div className="text-xs font-semibold text-brand-100 mt-0.5">E-Delivery to Email</div>
-            </div>
-            <div className="pt-2 md:pt-0">
-              <div className="text-xl sm:text-2xl font-black text-white">10+</div>
-              <div className="text-xs font-semibold text-brand-100 mt-0.5">Indian & Global Airlines</div>
-            </div>
-            <div className="pt-2 md:pt-0">
-              <div className="text-xl sm:text-2xl font-black text-white">24/7</div>
-              <div className="text-xs font-semibold text-brand-100 mt-0.5">Verified Customer Support</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CONTINUOUS LIVE ROUTES TICKER MARQUEE (MYJET24 PATTERN) */}
-      <RoutesMarquee />
-
-      {/* RECENTLY SEARCHED ROUTES */}
-      <RecentSearchesStrip />
-
-      {/* INDIAN AIRLINES & REGIONAL CARRIERS CATALOG SHOWCASE */}
-      <section className="border-t border-slate-200 bg-slate-50/70 py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-            <div>
-              <span className="inline-flex items-center gap-1.5 eyebrow">
-                <Compass className="h-3.5 w-3.5" />
-                Supported Indian Aviation Network
-              </span>
-              <h2 className="section-heading mt-1">
-                All 10 Major & Regional Indian Airlines Supported
-              </h2>
-              <p className="mt-1 text-sm text-slate-600 max-w-2xl">
-                Search domestic trunk corridors and regional UDAN connections with carrier-authentic emblems and fare rules.
-              </p>
-            </div>
-            <Link
-              href="/flights?from=HYD&to=DEL&depart=2026-12-15&adults=1&cabin=economy"
-              className="text-xs font-bold text-brand-600 hover:text-brand-700 inline-flex items-center gap-1 group"
-            >
-              Search Domestic Indian Routes <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 md:grid-cols-5">
-            {indianAirlines.map((airline) => (
-              <Link
-                key={airline.id}
-                href={`/flights?from=HYD&to=DEL&depart=2026-12-15&adults=1&cabin=economy&airline=${airline.iataCode}`}
-                className="group flex items-center gap-3 rounded-2xl border border-slate-200/90 bg-white p-3.5 shadow-sm transition-all duration-200 hover:border-brand-400 hover:shadow-card-hover hover:-translate-y-1"
-              >
-                <AirlineLogo airline={airline} size="sm" />
-                <div className="min-w-0">
-                  <p className="text-xs font-bold text-navy-900 truncate group-hover:text-brand-600">
-                    {airline.name}
-                  </p>
-                  <p className="font-mono text-[10px] font-semibold text-slate-500">
-                    IATA: {airline.iataCode}
-                  </p>
+              {/* Trust Checkmarks */}
+              <div className="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-bold text-gray-700">
+                <div className="flex items-center gap-2 justify-center lg:justify-start">
+                  <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span>Instant PDF download</span>
                 </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* POPULAR FLIGHT ROUTES & DESTINATIONS */}
-      <section className="border-y border-slate-200 bg-white py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-14">
-          {/* Popular Flight Routes */}
-          <div>
-            <div className="flex items-end justify-between mb-6">
-              <div>
-                <h2 className="section-heading">
-                  Popular Flight Routes
-                </h2>
-                <p className="text-sm text-slate-600 mt-1 max-w-2xl">
-                  Explore domestic and international corridors with complete schedule and baggage guides.
-                </p>
+                <div className="flex items-center gap-2 justify-center lg:justify-start">
+                  <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span>Real QR code included</span>
+                </div>
+                <div className="flex items-center gap-2 justify-center lg:justify-start">
+                  <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span>No login needed</span>
+                </div>
+                <div className="flex items-center gap-2 justify-center lg:justify-start">
+                  <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span>195+ countries</span>
+                </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {ROUTE_PAGES.map((route) => (
-                <Link
-                  key={route.id}
-                  href={`/routes/${route.slug}`}
-                  className="group rounded-2xl border border-slate-200/90 bg-slate-50/60 p-5 transition-all duration-200 hover:border-brand-500 hover:bg-white hover:shadow-card-hover hover:-translate-y-1"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center gap-2 text-base font-extrabold text-navy-900 group-hover:text-brand-600">
-                      {route.originCity} ({route.originIata})
-                      <ArrowRight className="h-4 w-4 text-brand-600 transition-transform group-hover:translate-x-1" />
-                      {route.destinationCity} ({route.destinationIata})
-                    </span>
-                  </div>
-                  <p className="mt-2 text-xs text-slate-600">
-                    Avg. Duration: {formatDuration(route.averageDurationMinutes)} ·{' '}
-                    {route.airlinesOperating.join(', ')}
-                  </p>
-                  <div className="mt-4 flex items-center justify-between border-t border-slate-200/80 pt-3">
-                    <span className="text-xs text-slate-500 font-medium">
-                      Starting fare
-                    </span>
-                    <span className="text-sm font-black tabular-nums text-brand-700">
-                      {formatInr(route.startingFareInr)}
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
+            {/* Right Ticket Mockup with 3D Perspective Tilt & Sheen */}
+            <div className="lg:col-span-5 relative flex justify-center perspective-container">
+              <a
+                href="#bookingForm"
+                className="w-full max-w-md block card-3d-elevate transition-all duration-300"
+              >
+                {/* Floating FREE PDF Badge */}
+                <div className="absolute -top-4 -right-2 z-20 flex items-center shadow-xl shadow-blue-500/30 bg-gradient-to-r from-[#0062e0] to-[#1d4ed8] text-white px-4 py-2 rounded-full font-black text-xs tracking-wider animate-pulse badge-3d">
+                  <span>FREE PDF</span>
+                </div>
 
-          {/* Popular Destinations */}
-          <div>
-            <div className="flex items-end justify-between mb-2">
-              <div>
-                <h2 className="section-heading">
-                  Popular Destinations & Airport Guides
-                </h2>
-                <p className="text-sm text-slate-600 mt-1">
-                  Check terminal information, best travel seasons, and visa documentation rules.
-                </p>
-              </div>
-            </div>
-
-            {/* Quick Country Discovery Chips */}
-            <div className="flex flex-wrap gap-2 pt-3 pb-6">
-              {[
-                { name: 'Dubai (DXB)', href: '/destinations/dubai' },
-                { name: 'Singapore (SIN)', href: '/destinations/singapore' },
-                { name: 'Hyderabad (HYD)', href: '/routes/hyd-to-del' },
-                { name: 'Delhi (DEL)', href: '/routes/del-to-hyd' },
-                { name: 'Mumbai (BOM)', href: '/routes/hyd-to-bom' },
-                { name: 'Bengaluru (BLR)', href: '/routes/hyd-to-blr' },
-              ].map((chip) => (
-                <Link
-                  key={chip.name}
-                  href={chip.href}
-                  className="country-chip"
-                >
-                  <Plane className="h-3.5 w-3.5 text-brand-600" />
-                  <span>{chip.name}</span>
-                </Link>
-              ))}
-            </div>
-
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {DESTINATIONS.map((dest) => (
-                <Link
-                  key={dest.id}
-                  href={`/destinations/${dest.slug}`}
-                  className="flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-5 shadow-card transition-all duration-200 hover:border-brand-500 hover:shadow-card-hover hover:-translate-y-1"
-                >
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <span className="rounded-lg bg-brand-50 px-2.5 py-1 font-mono text-xs font-bold text-brand-700">
-                        {dest.airportIata}
-                      </span>
-                      <span className="text-xs font-semibold text-slate-500">
-                        {dest.country}
-                      </span>
+                {/* Ticket Card in Crisp White & Blue with 3D Elevation */}
+                <div className="bg-white rounded-3xl p-6 sm:p-7 shadow-2xl shadow-blue-900/15 border border-blue-200/90 relative overflow-hidden ticket-3d-card sheen-3d">
+                  <div className="flex items-center justify-between pb-4 border-b border-gray-100">
+                    <div className="text-xs font-black uppercase tracking-wider text-[#0062e0]">
+                      DUMMYTICKET AIRWAYS
                     </div>
-                    <h3 className="mt-3 text-lg font-bold text-navy-900">
-                      {dest.city}
-                    </h3>
-                    <p className="mt-1 text-xs text-slate-600 line-clamp-3 leading-relaxed">
-                      {dest.overview}
-                    </p>
+                    <div className="text-xs font-bold tracking-widest text-gray-400">
+                      PNR: <span className="text-gray-900 font-mono">DT7X42K</span>
+                    </div>
                   </div>
 
-                  <div className="mt-4 border-t border-slate-100 pt-3 flex items-center justify-between text-xs">
-                    <span className="tabular-nums text-slate-500 font-medium">
-                      From {formatInr(dest.startingFareInr)}
-                    </span>
-                    <span className="font-bold text-brand-600 group-hover:underline">
-                      Read Guide →
-                    </span>
+                  {/* Flight Route - HYD to LAX */}
+                  <div className="py-6 flex items-center justify-between">
+                    <div>
+                      <div className="text-3xl font-black text-gray-900 font-mono">HYD</div>
+                      <div className="text-xs text-gray-500 mt-0.5 font-medium">Hyderabad</div>
+                    </div>
+                    <div className="flex-1 px-4 text-center">
+                      <div className="text-[11px] font-bold text-[#0062e0] uppercase tracking-wider mb-1 flex items-center justify-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                        Direct • ₹299
+                      </div>
+                      <div className="relative flex items-center justify-center">
+                        <div className="w-full border-t-2 border-dashed border-blue-400"></div>
+                        <div className="absolute animate-pulse">
+                          <Plane className="w-4 h-4 text-[#0062e0] bg-white px-0.5" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-3xl font-black text-gray-900 font-mono text-blue-600">LAX</div>
+                      <div className="text-xs text-gray-500 mt-0.5 font-medium">Los Angeles</div>
+                    </div>
                   </div>
-                </Link>
+
+                  {/* Metadata Grid */}
+                  <div className="grid grid-cols-3 gap-3 py-4 border-t border-b border-gray-100 bg-blue-50/40 rounded-xl px-4 text-center">
+                    <div>
+                      <div className="text-[10px] uppercase font-bold text-gray-400">Date</div>
+                      <div className="text-xs font-black text-gray-900">21 NOV</div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] uppercase font-bold text-gray-400">Depart</div>
+                      <div className="text-xs font-black text-gray-900">09:45</div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] uppercase font-bold text-gray-400">Arrive</div>
+                      <div className="text-xs font-black text-gray-900">05:20+1</div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] uppercase font-bold text-gray-400">Flight</div>
+                      <div className="text-xs font-black text-gray-900">DT 472</div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] uppercase font-bold text-gray-400">Seat</div>
+                      <div className="text-xs font-black text-gray-900">24C</div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] uppercase font-bold text-gray-400">Class</div>
+                      <div className="text-xs font-black text-gray-900">Y</div>
+                    </div>
+                  </div>
+
+                  {/* Barcode Mock */}
+                  <div className="mt-4 flex items-center justify-between h-7 opacity-60">
+                    <div className="flex gap-1 h-full w-full justify-between items-center px-2">
+                      {[3, 1, 4, 2, 3, 5, 2, 4, 3, 2, 5, 3, 2, 4, 2, 3, 5, 2, 3, 4, 2, 3, 2, 4, 3, 5, 2, 3, 4].map(
+                        (w, i) => (
+                          <div
+                            key={i}
+                            className="bg-gray-800 h-full rounded-[1px]"
+                            style={{ width: `${w}px` }}
+                          />
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. STATS BAR - VIBRANT BLUE */}
+      <div className="bg-[#0062e0] text-white py-8 border-y border-blue-600/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div>
+              <div className="text-3xl sm:text-4xl font-black tracking-tight">
+                <AnimatedCounter value={100} suffix="%" />
+              </div>
+              <div className="text-xs sm:text-sm font-medium text-blue-100 mt-1">Free Forever</div>
+            </div>
+            <div>
+              <div className="text-3xl sm:text-4xl font-black tracking-tight">
+                <AnimatedCounter value={30} suffix="s" />
+              </div>
+              <div className="text-xs sm:text-sm font-medium text-blue-100 mt-1">Generation Time</div>
+            </div>
+            <div>
+              <div className="text-3xl sm:text-4xl font-black tracking-tight">
+                <AnimatedCounter value={195} suffix="+" />
+              </div>
+              <div className="text-xs sm:text-sm font-medium text-blue-100 mt-1">Countries Covered</div>
+            </div>
+            <div>
+              <div className="text-3xl sm:text-4xl font-black tracking-tight">
+                <AnimatedCounter value="6,000+" />
+              </div>
+              <div className="text-xs sm:text-sm font-medium text-blue-100 mt-1">Airports Worldwide</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. BOOKING FORM GENERATOR */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-blue-50/30" id="bookingForm">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-[#0062e0] text-xs font-black uppercase tracking-wider mb-3">
+              Generator
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
+              Generate Your Free Dummy Ticket
+            </h2>
+            <p className="text-base text-gray-600 mt-2">
+              Fill in your details and download your PDF instantly — no login or signup needed
+            </p>
+          </div>
+        </div>
+
+        <MyJetGenerator />
+      </section>
+
+      {/* 4. 3 STEPS: HOW IT WORKS */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white border-t border-gray-100">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-5 space-y-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-[#0062e0] text-xs font-black uppercase tracking-wider">
+                Simple Process
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
+                Get Your Dummy Ticket in 3 Steps
+              </h2>
+              <p className="text-base text-gray-600 leading-relaxed">
+                The fastest way to get proof of return travel for your visa application without login.
+              </p>
+            </div>
+
+            <div className="lg:col-span-7 space-y-4">
+              {[
+                {
+                  step: '01',
+                  title: 'Enter Your Flight Route',
+                  desc: 'Choose your departure and arrival airports from our database of 6,000+ airports worldwide. Set your travel dates — one-way or round-trip. Add up to 6 passengers.',
+                },
+                {
+                  step: '02',
+                  title: 'We Generate Your Itinerary',
+                  desc: 'In 30 seconds, we create a professional flight itinerary PDF with a real booking reference (PNR), flight number, passenger details, and QR code.',
+                },
+                {
+                  step: '03',
+                  title: 'Download PDF & Submit',
+                  desc: 'Download your PDF instantly. Submit it to your visa application, at the embassy, or show it at immigration. Once your visa is approved, book your real flights.',
+                },
+              ].map((s, idx) => (
+                <div
+                  key={s.step}
+                  onClick={() => setActiveStep(idx)}
+                  className={`p-6 rounded-2xl border transition-all cursor-pointer ${
+                    activeStep === idx
+                      ? 'border-[#0062e0] bg-blue-50/40 shadow-lg shadow-blue-500/5'
+                      : 'border-gray-100 bg-white hover:border-gray-200'
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <span className="text-xl font-black text-[#0062e0] font-mono">{s.step}</span>
+                    <div className="space-y-1">
+                      <h3 className="text-lg font-extrabold text-gray-900">{s.title}</h3>
+                      <p className="text-sm text-gray-600 leading-relaxed">{s.desc}</p>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* HOW IT WORKS & TRANSPARENT PRICING */}
-      <section
-        id="how-it-works"
-        className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 space-y-16"
-      >
-        <div>
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="eyebrow">
-              End-to-End Workflow
-            </span>
-            <h2 className="mt-1.5 text-2xl sm:text-3xl font-extrabold text-navy-900">
-              How DummyTicket Works
+      {/* 5. WHAT IS A DUMMY TICKET */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#f0f7ff] border-y border-blue-100">
+        <div className="max-w-4xl mx-auto text-center space-y-6">
+          <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
+            What is a Dummy Ticket for Visa Applications?
+          </h2>
+          <p className="text-lg text-gray-700 leading-relaxed font-medium">
+            A <strong className="text-[#0062e0]">dummy ticket</strong> — also known as a dummy flight ticket, flight itinerary, flight reservation, or proof of onward travel — is a temporary flight booking used to show travel plans without purchasing a confirmed ticket. It is widely accepted by embassies, consulates, and immigration officers worldwide.
+          </p>
+          <div className="space-y-4 text-sm text-gray-600 leading-relaxed max-w-3xl mx-auto">
+            <p>
+              Most embassies — including <strong>Schengen countries</strong>, <strong>UK</strong>, <strong>USA</strong>, <strong>Canada</strong>, and <strong>India</strong> — officially state that applicants should NOT buy confirmed tickets before visa approval. A flight itinerary from DummyTicket meets all documentation requirements.
+            </p>
+            <p>
+              Our free dummy ticket includes a <strong>unique booking reference (PNR)</strong>, passenger details, flight numbers, dates, and a <strong>QR code</strong> — everything embassies need to confirm your travel plans.
+            </p>
+            <p>
+              DummyTicket generates your itinerary using real airline routes, IATA airport codes, and authentic flight number formats to ensure your document looks professional and meets embassy standards.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. EMBASSY QUOTES */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-[#0062e0] text-xs font-black uppercase tracking-wider mb-3">
+              Official Guidance
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
+              Embassies Advise: Do Not Buy Real Tickets First
             </h2>
-            <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-              Every step is backed by server-side validation, fare snapshots, and cryptographic Razorpay verification.
+            <p className="text-sm text-gray-500 mt-2">
+              Official statements from embassies confirming flight reservations are the recommended proof
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-            {[
-              {
-                step: '01',
-                title: 'Search & Compare',
-                desc: 'Select origin, destination, travel dates, and cabin class across 10 Indian and global carriers.',
-                icon: Plane,
-              },
-              {
-                step: '02',
-                title: 'Lock Fare Snapshot',
-                desc: 'Our server calculates the complete fare breakdown and locks a time-stamped fare snapshot before checkout.',
-                icon: Scale,
-              },
-              {
-                step: '03',
-                title: 'Verify Payment',
-                desc: 'Complete payment through Razorpay Checkout. Signatures and webhooks are verified server-side.',
-                icon: CreditCard,
-              },
-              {
-                step: '04',
-                title: 'Reveal Itinerary & Receipt',
-                desc: 'Download your Boarding-Pass-Styled Itinerary PDF and separate Payment Receipt PDF.',
-                icon: FileText,
-              },
-            ].map((item) => {
-              const Icon = item.icon;
-              return (
-                <div
-                  key={item.step}
-                  className="group rounded-2xl border border-slate-200/90 bg-white p-6 shadow-card transition-all duration-200 hover:border-brand-400 hover:shadow-card-hover hover:-translate-y-1"
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 border border-brand-100 transition-colors group-hover:bg-brand-600 group-hover:text-white">
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <span className="font-mono text-sm font-black text-brand-600/60">
-                      STEP {item.step}
-                    </span>
-                  </div>
-                  <h3 className="text-base font-extrabold text-navy-900">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                    {item.desc}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Transparent Pricing & Separate Receipt Guarantee */}
-        <div className="rounded-3xl border border-slate-800 bg-gradient-to-br from-navy-950 via-navy-900 to-[#07132a] p-6 sm:p-10 text-white shadow-elevated relative overflow-hidden">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-center relative z-10">
-            <div className="lg:col-span-7 space-y-4">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-verified-500/20 border border-verified-500/30 px-3 py-1 text-xs font-bold text-verified-400">
-                <ShieldCheck className="h-4 w-4" />
-                Auditable Pricing & Dual-Document Architecture
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                100% Transparent Pricing & Separate Payment Receipts
-              </h2>
-              <p className="text-sm text-slate-300 leading-relaxed">
-                DummyTicket never hides mandatory service fees or mixes payment invoices onto your boarding pass. Every verified booking issues two distinct downloadable PDFs and three transactional emails.
-              </p>
-              <ul className="space-y-3 text-xs text-slate-200 pt-1">
-                <li className="flex items-start gap-2.5">
-                  <CheckCircle2 className="h-4 w-4 text-verified-400 shrink-0 mt-0.5" />
-                  <span>
-                    <strong>Verifiable References:</strong> Every itinerary carries a <code className="rounded bg-brand-400/20 px-1.5 py-0.5 text-brand-200 font-mono">DT-</code> booking reference and airline PNR, verifiable online via the QR code.
-                  </span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <CheckCircle2 className="h-4 w-4 text-verified-400 shrink-0 mt-0.5" />
-                  <span>
-                    <strong>Separate Payment Receipt PDF:</strong> Your tax & fee breakdown (<code className="font-mono text-brand-300">DT-RCPT-...</code>) is generated as a clean accounting receipt separate from the boarding pass.
-                  </span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <CheckCircle2 className="h-4 w-4 text-verified-400 shrink-0 mt-0.5" />
-                  <span>
-                    <strong>3 Transactional Emails:</strong> Receive separate Booking Confirmation, Payment Receipt, and Itinerary Delivery emails upon payment verification.
-                  </span>
-                </li>
-              </ul>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Norway */}
+            <div className="bg-gray-50/70 p-6 rounded-2xl border border-gray-100 flex flex-col justify-between">
+              <blockquote className="text-sm font-semibold text-gray-800 leading-relaxed italic mb-4">
+                &quot;Confirmed booking (travel itinerary) of roundtrip air ticket with fixed travel dates of maximum 90 days. Do not buy the ticket until visa has been granted.&quot;
+              </blockquote>
+              <div className="pt-4 border-t border-gray-200/60 text-xs font-bold text-gray-600">
+                🇳🇴 Norwegian Embassy — Schengen Visa Checklist
+              </div>
             </div>
 
-            <div className="lg:col-span-5 flex flex-col gap-3 rounded-2xl border border-slate-700/80 bg-navy-900/90 p-6 shadow-2xl backdrop-blur-md">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <span className="text-xs font-semibold text-slate-400">Booking Reference Format</span>
-                <span className="font-mono text-sm font-bold text-brand-300">DT-[ORIGIN][CODE][DEST]</span>
+            {/* Spain */}
+            <div className="bg-gray-50/70 p-6 rounded-2xl border border-gray-100 flex flex-col justify-between">
+              <blockquote className="text-sm font-semibold text-gray-800 leading-relaxed italic mb-4">
+                &quot;Two Way Airline Ticket Reservation (detailed itinerary) is acceptable. It is strongly recommended not to purchase the flight ticket before obtaining the visa.&quot;
+              </blockquote>
+              <div className="pt-4 border-t border-gray-200/60 text-xs font-bold text-gray-600">
+                🇪🇸 Spanish Consulate — Schengen Requirements
               </div>
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <span className="text-xs font-semibold text-slate-400">Receipt Reference Format</span>
-                <span className="font-mono text-sm font-bold text-brand-300">DT-RCPT-[BOOKING_REF]</span>
-              </div>
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <span className="text-xs font-semibold text-slate-400">Document Verification</span>
-                <span className="text-xs font-bold text-verified-400">QR-VERIFIABLE CONFIRMED ITINERARY</span>
-              </div>
-              <div className="pt-2 flex flex-wrap gap-2.5">
-                <Link
-                  href="/flights"
-                  className="flex-1 text-center rounded-xl bg-brand-600 px-4 py-2.5 text-xs font-extrabold text-white hover:bg-brand-700 shadow-md transition-colors"
-                >
-                  Search Flights
-                </Link>
-                <Link
-                  href="/track-booking"
-                  className="flex-1 text-center rounded-xl border border-slate-700 bg-navy-800 px-4 py-2.5 text-xs font-bold text-slate-200 hover:bg-slate-800 transition-colors"
-                >
-                  Track Booking
-                </Link>
+            </div>
+
+            {/* India */}
+            <div className="bg-gray-50/70 p-6 rounded-2xl border border-gray-100 flex flex-col justify-between">
+              <blockquote className="text-sm font-semibold text-gray-800 leading-relaxed italic mb-4">
+                &quot;No bookings or travel arrangements should be confirmed until a visa decision has been made.&quot;
+              </blockquote>
+              <div className="pt-4 border-t border-gray-200/60 text-xs font-bold text-gray-600">
+                🇮🇳 Consulate General of India, San Francisco
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* LATEST SEO ARTICLES & TRAVEL PLANNING GUIDES */}
-      <section className="border-t border-slate-200 bg-white py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-end justify-between mb-8">
-            <div>
-              <span className="eyebrow">
-                Travel Planning & Compliance Guides
-              </span>
-              <h2 className="section-heading mt-1">
-                Latest Aviation & Fare Rule Articles
-              </h2>
+      {/* 7. WHY DUMMYTICKET TIMELINE */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#f0f7ff] border-t border-blue-100">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-[#0062e0] text-xs font-black uppercase tracking-wider mb-3">
+              Why DummyTicket
             </div>
-            <Link
-              href="/blog"
-              className="text-xs sm:text-sm font-bold text-brand-600 hover:text-brand-700 inline-flex items-center gap-1 group"
-            >
-              All Articles <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
+              The Smart Way to Handle Visa Applications
+            </h2>
+            <p className="text-base text-gray-600 mt-2">
+              Save money, reduce risk, and get approved faster with our verified itinerary documents.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {BLOG_POSTS.map((post) => (
-              <article
-                key={post.id}
-                className="group flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-slate-50/50 p-6 transition-all duration-200 hover:border-brand-400 hover:bg-white hover:shadow-card-hover hover:-translate-y-1"
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="bg-white p-6 rounded-2xl border border-blue-100 shadow-sm text-center card-3d-elevate">
+              <div className="text-3xl font-black text-[#0062e0] mb-2">
+                <AnimatedCounter value="₹25,000+" />
+              </div>
+              <div className="text-sm font-extrabold text-gray-900 mb-1">Average Savings</div>
+              <div className="text-xs text-gray-500">
+                Never risk thousands on non-refundable tickets before receiving your visa stamp.
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-blue-100 shadow-sm text-center card-3d-elevate">
+              <div className="text-3xl font-black text-[#0062e0] mb-2">
+                <AnimatedCounter value={100} suffix="%" />
+              </div>
+              <div className="text-sm font-extrabold text-gray-900 mb-1">Embassy Compliant</div>
+              <div className="text-xs text-gray-500">
+                Formatted according to official IATA airline and embassy visa standards.
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-blue-100 shadow-sm text-center card-3d-elevate">
+              <div className="text-3xl font-black text-[#0062e0] mb-2">
+                <AnimatedCounter value={195} suffix="+" />
+              </div>
+              <div className="text-sm font-extrabold text-gray-900 mb-1">Countries Supported</div>
+              <div className="text-xs text-gray-500">
+                Schengen 29, USA, UK, Canada, Australia, Japan, and worldwide consulates.
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-blue-100 shadow-sm text-center card-3d-elevate">
+              <div className="text-3xl font-black text-[#0062e0] mb-2">
+                <AnimatedCounter value={30} suffix="s" />
+              </div>
+              <div className="text-sm font-extrabold text-gray-900 mb-1">Instant Generation</div>
+              <div className="text-xs text-gray-500">
+                Generate and download your verified PDF in 30 seconds with 0 waiting time.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. COMPARISON TABLE */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white border-t border-gray-100">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-[#0062e0] text-xs font-black uppercase tracking-wider mb-3">
+              Honest Comparison
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
+              How DummyTicket Compares to Paid Alternatives
+            </h2>
+            <p className="text-sm text-gray-500 mt-2">
+              We believe in transparency. Here is how our free dummy ticket generator stacks up against paid competitors.
+            </p>
+          </div>
+
+          <div className="overflow-x-auto rounded-2xl border border-blue-100 shadow-md">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-gray-50 border-b border-blue-100">
+                <tr>
+                  <th className="py-4 px-6 font-bold text-gray-700">Feature</th>
+                  <th className="py-4 px-6 font-black text-[#0062e0] bg-blue-50/70">DummyTicket</th>
+                  <th className="py-4 px-6 font-semibold text-gray-600">OnwardTicket</th>
+                  <th className="py-4 px-6 font-semibold text-gray-600">BestOnwardTicket</th>
+                  <th className="py-4 px-6 font-semibold text-gray-600">DummyFlights</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                <tr>
+                  <td className="py-3.5 px-6 font-bold text-gray-900">Price</td>
+                  <td className="py-3.5 px-6 font-black text-blue-600 bg-blue-50/40">₹299 (Free option)</td>
+                  <td className="py-3.5 px-6 text-gray-500">₹1,399</td>
+                  <td className="py-3.5 px-6 text-gray-500">₹1,199</td>
+                  <td className="py-3.5 px-6 text-gray-500">₹1,299</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-6 font-bold text-gray-900">Delivery Speed</td>
+                  <td className="py-3.5 px-6 font-black text-blue-600 bg-blue-50/40">~30 sec</td>
+                  <td className="py-3.5 px-6 text-gray-500">~60 sec</td>
+                  <td className="py-3.5 px-6 text-gray-500">~2 min</td>
+                  <td className="py-3.5 px-6 text-gray-500">~5 min</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-6 font-bold text-gray-900">QR Code Verification</td>
+                  <td className="py-3.5 px-6 font-black text-blue-600 bg-blue-50/40">✓ Included</td>
+                  <td className="py-3.5 px-6 text-red-500 font-bold">✗</td>
+                  <td className="py-3.5 px-6 text-red-500 font-bold">✗</td>
+                  <td className="py-3.5 px-6 text-red-500 font-bold">✗</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-6 font-bold text-gray-900">Hotel Reservation</td>
+                  <td className="py-3.5 px-6 font-black text-blue-600 bg-blue-50/40">✓ Free</td>
+                  <td className="py-3.5 px-6 text-gray-500">₹899 extra</td>
+                  <td className="py-3.5 px-6 text-red-500 font-bold">✗</td>
+                  <td className="py-3.5 px-6 text-red-500 font-bold">✗</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-6 font-bold text-gray-900">Valid PNR Code</td>
+                  <td className="py-3.5 px-6 font-black text-blue-600 bg-blue-50/40">✓ Yes</td>
+                  <td className="py-3.5 px-6 text-blue-600 font-bold">✓ Yes</td>
+                  <td className="py-3.5 px-6 text-blue-600 font-bold">✓ Yes</td>
+                  <td className="py-3.5 px-6 text-blue-600 font-bold">✓ Yes</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-6 font-bold text-gray-900">Airports Worldwide</td>
+                  <td className="py-3.5 px-6 font-black text-blue-600 bg-blue-50/40">6,000+</td>
+                  <td className="py-3.5 px-6 text-gray-500">~2,000</td>
+                  <td className="py-3.5 px-6 text-gray-500">~1,500</td>
+                  <td className="py-3.5 px-6 text-gray-500">~1,200</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* 9. PROFESSIONAL VISA DOCUMENTS */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#0f244a] to-[#070e1c] text-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
+              Need Professional Visa Documents?
+            </h2>
+            <p className="text-blue-200 mt-2 text-sm sm:text-base">
+              Professional visa documents — embassy-ready, instant PDF delivery
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 perspective-container">
+            {[
+              {
+                title: 'Visa Support Letter',
+                desc: 'Formal letter addressed to embassy stating trip details, accommodation, and intent.',
+                price: '₹299',
+                href: '/visa-letter',
+                badge: 'Financial & Trip Proof',
+              },
+              {
+                title: 'Invitation Letter',
+                desc: 'Official template for hosts inviting family, friends, or business associates.',
+                price: '₹299',
+                href: '/invitation-letter',
+                badge: 'Host Sponsorship',
+              },
+              {
+                title: 'Travel Itinerary',
+                desc: 'Day-by-day sightseeing and city transit itinerary PDF meeting Schengen requirements.',
+                price: '₹299',
+                href: '/travel-itinerary',
+                badge: 'Day-by-Day Schedule',
+              },
+              {
+                title: 'Embassy Cover Letter',
+                desc: 'Comprehensive statement of purpose and ties to home country for visa officers.',
+                price: '₹299',
+                href: '/embassy-letter',
+                badge: 'Consular Statement',
+              },
+            ].map((doc) => (
+              <Link
+                key={doc.title}
+                href={doc.href}
+                className="bg-white/10 hover:bg-white/15 border border-white/10 hover:border-blue-400/50 p-6 rounded-2xl transition-all group flex flex-col justify-between card-3d-elevate shadow-lg"
               >
                 <div>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-3 py-1 text-[11px] font-bold text-brand-700 border border-brand-100">
-                    <BookOpen className="h-3 w-3" />
-                    {post.category}
+                  <div className="inline-block px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-[10px] font-black uppercase tracking-wider mb-2.5 border border-blue-400/20">
+                    {doc.badge}
+                  </div>
+                  <div className="text-lg font-black text-white group-hover:text-blue-300 transition-colors mb-2">
+                    {doc.title}
+                  </div>
+                  <div className="text-xs text-blue-100/80 leading-relaxed mb-6">
+                    {doc.desc}
+                  </div>
+                </div>
+                <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-blue-300 uppercase font-bold">Embassy Ready</span>
+                    <span className="text-base font-black text-white">{doc.price}</span>
+                  </div>
+                  <span className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white group-hover:bg-[#0062e0] transition-colors badge-3d">
+                    <ArrowRight className="w-4 h-4" />
                   </span>
-                  <h3 className="mt-3 text-base font-extrabold text-navy-900 group-hover:text-brand-600 transition-colors">
-                    <Link href={`/blog/${post.slug}`}>
-                      {post.title}
-                    </Link>
-                  </h3>
-                  <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                    {post.excerpt}
-                  </p>
                 </div>
-
-                <div className="mt-5 flex items-center justify-between border-t border-slate-200/70 pt-3 text-[11px] text-slate-500 font-medium">
-                  <span>{post.readingTimeMinutes} min read</span>
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    className="font-bold text-brand-600 hover:underline"
-                  >
-                    Read Guide →
-                  </Link>
-                </div>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ, SUPPORT & NEWSLETTER */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-          <div className="lg:col-span-7 space-y-5">
-            <div className="flex items-center gap-2 eyebrow">
-              <HelpCircle className="h-4 w-4" />
-              <span>Frequently Asked Questions</span>
+      {/* 10. VERIFIED CUSTOMER REVIEWS */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-blue-50/20 border-t border-gray-100">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-[#0062e0] text-xs font-black uppercase tracking-wider mb-3">
+              Customer Experiences
             </div>
-            <h2 className="section-heading">
-              Clear Answers Before You Book
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
+              Trusted by <AnimatedCounter value="10,000+" /> Travelers Worldwide
             </h2>
-
-            <FaqAccordion items={faqItems} />
-
-            <div className="pt-2">
-              <Link
-                href="/faq"
-                className="text-xs font-bold text-brand-600 hover:underline inline-flex items-center gap-1 group"
-              >
-                View complete FAQ & Help Center <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-              </Link>
+            <div className="flex items-center justify-center gap-1 text-amber-400 mt-3">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-5 h-5 fill-current" />
+              ))}
+              <span className="text-gray-900 font-extrabold text-sm ml-2">
+                <AnimatedCounter value="4.8" decimals={1} /> / 5.0
+              </span>
             </div>
           </div>
 
-          <div className="lg:col-span-5 space-y-6">
-            <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-card">
-              <h3 className="text-lg font-extrabold text-navy-900">
-                Subscribe to Route & Fare Rule Updates
-              </h3>
-              <p className="mt-1 text-xs text-slate-600 mb-4 leading-relaxed">
-                Receive airport terminal updates, baggage policy alerts, and seasonal route guides. Consent-based with one-click unsubscribe.
-              </p>
-              <NewsletterForm />
-            </div>
-
-            <div className="rounded-2xl border border-brand-200/80 bg-brand-50/70 p-6 shadow-sm">
-              <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-600 text-white shadow-md">
-                  <PhoneCall className="h-5 w-5" />
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 perspective-container">
+            {TESTIMONIALS.map((t, idx) => (
+              <div
+                key={idx}
+                className="bg-white p-6 rounded-2xl border border-blue-100 shadow-sm flex flex-col justify-between card-3d-elevate"
+              >
                 <div>
-                  <h3 className="text-sm font-extrabold text-navy-900">
-                    24/7 Booking & Itinerary Support
-                  </h3>
-                  <p className="text-xs text-slate-600 mt-0.5">
-                    {brand.supportEmail} · {brand.supportPhone}
+                  <div className="flex items-center gap-1 text-amber-400 mb-3">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                    ))}
+                  </div>
+                  <p className="text-xs text-gray-600 leading-relaxed mb-6 italic">
+                    &quot;{t.text}&quot;
                   </p>
                 </div>
+                <div className="pt-4 border-t border-gray-100">
+                  <div className="text-sm font-extrabold text-gray-900">{t.name}</div>
+                  <div className="text-[11px] text-[#0062e0] font-bold">{t.visa}</div>
+                  <div className="text-[10px] text-gray-400">{t.location}</div>
+                </div>
               </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <Link
-                  href="/track-booking"
-                  className="rounded-xl bg-white border border-slate-200 px-3.5 py-2 text-xs font-bold text-navy-900 hover:bg-slate-50 shadow-sm"
-                >
-                  Lookup Booking Reference
-                </Link>
-                <Link
-                  href="/contact"
-                  className="rounded-xl bg-brand-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-brand-700 shadow-sm"
-                >
-                  Contact Support Desk
-                </Link>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* MOBILE STICKY ACTION DOCK */}
-      <MobileActionDock />
+      {/* 10.5 LIVE FLIGHT TRAJECTORY SIMULATION SHOWCASE */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-50/40 via-white to-blue-50/30 border-t border-blue-100/80">
+        <div className="max-w-5xl mx-auto">
+          <LiveFlightTrajectoryHero />
+        </div>
+      </section>
+
+      {/* 11. FAQ ACCORDION */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white border-t border-gray-100" id="faq">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-[#0062e0] text-xs font-black uppercase tracking-wider mb-3">
+              FAQ
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
+              Frequently Asked Questions
+            </h2>
+          </div>
+
+          <div className="space-y-3">
+            {FAQS.map((faq, idx) => (
+              <div
+                key={idx}
+                className="rounded-2xl border border-gray-200 overflow-hidden transition-colors"
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleFaq(idx)}
+                  className="w-full p-5 text-left font-extrabold text-base text-gray-900 flex items-center justify-between gap-4 hover:bg-gray-50/50"
+                >
+                  <span>{faq.q}</span>
+                  <ChevronDown
+                    className={`w-5 h-5 text-[#0062e0] shrink-0 transition-transform ${
+                      openFaq === idx ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+                {openFaq === idx && (
+                  <div className="px-5 pb-5 pt-1 text-sm text-gray-600 leading-relaxed border-t border-gray-100 bg-gray-50/30">
+                    {faq.a}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 12. BOTTOM CTA BANNER - BLUE GRADIENT */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[#0062e0] to-[#1d4ed8] text-white text-center">
+        <div className="max-w-4xl mx-auto space-y-6">
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+            Ready to Generate Your Free Dummy Ticket?
+          </h2>
+          <p className="text-blue-100 text-base sm:text-lg max-w-xl mx-auto">
+            Get your flight itinerary PDF in 30 seconds with real PNR and QR code. 100% free forever — no login required.
+          </p>
+          <div className="pt-2">
+            <a
+              href="#bookingForm"
+              className="inline-flex items-center gap-2 bg-white text-[#0062e0] hover:bg-blue-50 px-8 py-4 rounded-xl font-black text-base shadow-xl transition-all"
+            >
+              <Download className="w-5 h-5" />
+              <span>Generate Ticket Now — Free</span>
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

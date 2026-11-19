@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 280" fill="none">
+  <!-- Card background -->
+  <rect width="160" height="280" rx="16" fill="#f5f3ff"/>
+
+  <!-- Background halo -->
+  <circle cx="80" cy="130" r="68" fill="#ede9fe"/>
+
+  <!-- Ground shadow -->
+  <ellipse cx="80" cy="218" rx="52" ry="6" fill="#ddd6fe" opacity="0.55"/>
+
+  <!-- TOWER SILHOUETTE — continuous filled path -->
+  <!-- Base wide legs curving up to first floor, then middle, then top -->
+  <path d="
+    M 18,215
+    C 34,198 50,172 56,150
+    L 52,140
+    L 68,140
+    L 68,130
+    L 66,78
+    L 70,78
+    L 70,70
+    L 75,36
+    L 80,8
+    L 85,36
+    L 90,70
+    L 90,78
+    L 94,78
+    L 92,130
+    L 92,140
+    L 108,140
+    L 104,150
+    C 110,172 126,198 142,215
+    Z
+  " fill="#7c3aed"/>
+
+  <!-- First floor wider platform bar -->
+  <rect x="50" y="135" width="60" height="10" rx="2" fill="#6d28d9"/>
+
+  <!-- Second floor platform bar -->
+  <rect x="65" y="73" width="30" height="8" rx="2" fill="#6d28d9"/>
+
+  <!-- Top platform bar -->
+  <rect x="73" y="32" width="14" height="6" rx="1.5" fill="#6d28d9"/>
+
+  <!-- Antenna -->
+  <line x1="80" y1="8" x2="80" y2="32" stroke="#5b21b6" stroke-width="3" stroke-linecap="round"/>
+  <!-- Antenna tip dot -->
+  <circle cx="80" cy="7" r="2" fill="#5b21b6"/>
+
+  <!-- BASE SECTION — lattice horizontal beams (white overlay) -->
+  <line x1="57" y1="198" x2="103" y2="198" stroke="white" stroke-width="1.2" opacity="0.45"/>
+  <line x1="56" y1="183" x2="104" y2="183" stroke="white" stroke-width="1.2" opacity="0.4"/>
+  <line x1="55" y1="167" x2="105" y2="167" stroke="white" stroke-width="1.2" opacity="0.4"/>
+  <line x1="54" y1="152" x2="106" y2="152" stroke="white" stroke-width="1" opacity="0.35"/>
+
+  <!-- BASE — diagonal lattice (left half) -->
+  <line x1="54" y1="152" x2="68" y2="140" stroke="white" stroke-width="0.8" opacity="0.3"/>
+  <line x1="55" y1="167" x2="68" y2="152" stroke="white" stroke-width="0.8" opacity="0.3"/>
+  <line x1="56" y1="183" x2="62" y2="167" stroke="white" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- BASE — diagonal lattice (right half) -->
+  <line x1="106" y1="152" x2="92" y2="140" stroke="white" stroke-width="0.8" opacity="0.3"/>
+  <line x1="105" y1="167" x2="92" y2="152" stroke="white" stroke-width="0.8" opacity="0.3"/>
+  <line x1="104" y1="183" x2="98" y2="167" stroke="white" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- MIDDLE SECTION — horizontal beams -->
+  <line x1="69" y1="120" x2="91" y2="120" stroke="white" stroke-width="1" opacity="0.45"/>
+  <line x1="68" y1="108" x2="92" y2="108" stroke="white" stroke-width="1" opacity="0.4"/>
+  <line x1="68" y1="94" x2="92" y2="94" stroke="white" stroke-width="1" opacity="0.4"/>
+
+  <!-- UPPER SECTION — horizontal beams -->
+  <line x1="75" y1="62" x2="85" y2="62" stroke="white" stroke-width="1" opacity="0.45"/>
+  <line x1="74" y1="52" x2="86" y2="52" stroke="white" stroke-width="1" opacity="0.4"/>
+  <line x1="74" y1="44" x2="86" y2="44" stroke="white" stroke-width="1" opacity="0.4"/>
+
+  <!-- Ground line -->
+  <line x1="22" y1="215" x2="138" y2="215" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Decorative stars -->
+  <circle cx="25" cy="32" r="2.5" fill="#a78bfa" opacity="0.55"/>
+  <circle cx="142" cy="22" r="1.8" fill="#c4b5fd" opacity="0.45"/>
+  <circle cx="18" cy="80" r="1.2" fill="#a78bfa" opacity="0.4"/>
+  <circle cx="148" cy="90" r="1.5" fill="#c4b5fd" opacity="0.4"/>
+  <circle cx="138" cy="55" r="1" fill="#a78bfa" opacity="0.35"/>
+
+  <!-- Label -->
+  <text x="80" y="237" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#5b21b6">Tour Eiffel</text>
+  <text x="80" y="253" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#7c3aed" opacity="0.8">Paris · France</text>
+</svg>

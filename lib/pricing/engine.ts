@@ -19,20 +19,20 @@ export interface CouponConfig {
 export const CONFIGURED_COUPONS: Record<string, CouponConfig> = {
   WELCOME10: {
     code: 'WELCOME10',
-    description: '10% off up to ₹1,500 on eligible bookings',
+    description: '10% off on dummy ticket reservations',
     discountType: 'percentage',
     discountValue: 10,
-    minOrderAmountInr: 3000,
-    maxDiscountInr: 1500,
+    minOrderAmountInr: 299,
+    maxDiscountInr: 50,
     isActive: true,
   },
-  FLAT500: {
-    code: 'FLAT500',
-    description: 'Flat ₹500 instant discount on orders above ₹4,000',
+  FLAT50: {
+    code: 'FLAT50',
+    description: 'Flat ₹50 instant discount on orders above ₹299',
     discountType: 'fixed',
-    discountValue: 500,
-    minOrderAmountInr: 4000,
-    maxDiscountInr: 500,
+    discountValue: 50,
+    minOrderAmountInr: 299,
+    maxDiscountInr: 50,
     isActive: true,
   },
 };
@@ -68,9 +68,9 @@ export function calculateCompleteFare(params: {
   const cabin = params.cabin ?? params.offer.cabin;
 
   const adminDelta = getAdminOfferAdjustment(params.offer.id);
-  const unitBase = Math.max(500, params.offer.baseFareInr + adminDelta);
-  const unitTax = Math.round(unitBase * 0.18);
-  const unitServiceFee = params.offer.serviceFeeInr;
+  const unitBase = Math.max(100, params.offer.baseFareInr + adminDelta);
+  const unitTax = params.offer.taxesInr ?? 50;
+  const unitServiceFee = params.offer.serviceFeeInr ?? 0;
 
   const adultBase = unitBase * adults;
   const childBase = Math.round(unitBase * 0.75) * children;

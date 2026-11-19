@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 13">
+  <!-- Zimbabwe flag — 7 horizontal stripes -->
+  <rect y="0"      width="20" height="1.857" fill="#006400"/>
+  <rect y="1.857"  width="20" height="1.857" fill="#FFD200"/>
+  <rect y="3.714"  width="20" height="1.857" fill="#DE2010"/>
+  <rect y="5.571"  width="20" height="1.857" fill="#000000"/>
+  <rect y="7.428"  width="20" height="1.857" fill="#DE2010"/>
+  <rect y="9.285"  width="20" height="1.857" fill="#FFD200"/>
+  <rect y="11.142" width="20" height="1.858" fill="#006400"/>
+  <!-- White triangle -->
+  <polygon points="0,0 0,13 8.5,6.5" fill="#FFFFFF"/>
+  <!-- Red 5-pointed star -->
+  <polygon points="5.5,5.2 5.79,6.1 6.74,6.1 5.98,6.65 6.26,7.55 5.5,7.0 4.74,7.55 5.02,6.65 4.26,6.1 5.21,6.1" fill="#DE2010"/>
+</svg>

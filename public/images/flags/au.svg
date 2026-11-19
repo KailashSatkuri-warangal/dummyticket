@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20">
+  <!-- Flagge Australiens: blaues Feld, Union Jack im Obereck,
+       Commonwealth Star darunter, Kreuz des Suedens in der Flugseite. -->
+  <rect width="30" height="20" fill="#012169"/>
+
+  <!-- Obereck: Union Jack, auf 15x10 beschnitten -->
+  <clipPath id="au-canton"><rect width="15" height="10"/></clipPath>
+  <g clip-path="url(#au-canton)">
+    <!-- Andreaskreuz weiss, darauf die schmaleren roten Bahnen (St. Patrick) -->
+    <g stroke="#FFFFFF" stroke-width="2">
+      <line x1="0" y1="0" x2="15" y2="10"/>
+      <line x1="15" y1="0" x2="0" y2="10"/>
+    </g>
+    <g stroke="#C8102E" stroke-width="0.67">
+      <line x1="0" y1="0" x2="15" y2="10"/>
+      <line x1="15" y1="0" x2="0" y2="10"/>
+    </g>
+    <!-- Georgskreuz: weisse Bahn, darauf die rote -->
+    <rect x="5.83" width="3.34" height="10" fill="#FFFFFF"/>
+    <rect y="3.33" width="15" height="3.34" fill="#FFFFFF"/>
+    <rect x="6.5" width="2" height="10" fill="#C8102E"/>
+    <rect y="4" width="15" height="2" fill="#C8102E"/>
+  </g>
+
+  <g fill="#FFFFFF">
+    <!-- Commonwealth Star, sieben Zacken -->
+    <path d="M7.50,12.50 L7.98,14.00 L9.45,13.44 L8.58,14.75 L9.94,15.56 L8.37,15.69 L8.58,17.25 L7.50,16.11 L6.42,17.25 L6.63,15.69 L5.06,15.56 L6.42,14.75 L5.55,13.44 L7.02,14.00 Z"/>
+    <!-- Alpha Crucis -->
+    <path d="M22.50,14.80 L22.81,15.76 L23.75,15.40 L23.19,16.24 L24.06,16.76 L23.06,16.84 L23.19,17.84 L22.50,17.11 L21.81,17.84 L21.94,16.84 L20.94,16.76 L21.81,16.24 L21.25,15.40 L22.19,15.76 Z"/>
+    <!-- Beta Crucis -->
+    <path d="M18.40,7.00 L18.71,7.96 L19.65,7.60 L19.09,8.44 L19.96,8.96 L18.96,9.04 L19.09,10.04 L18.40,9.31 L17.71,10.04 L17.84,9.04 L16.84,8.96 L17.71,8.44 L17.15,7.60 L18.09,7.96 Z"/>
+    <!-- Gamma Crucis -->
+    <path d="M22.50,2.80 L22.81,3.76 L23.75,3.40 L23.19,4.24 L24.06,4.76 L23.06,4.84 L23.19,5.84 L22.50,5.11 L21.81,5.84 L21.94,4.84 L20.94,4.76 L21.81,4.24 L21.25,3.40 L22.19,3.76 Z"/>
+    <!-- Delta Crucis -->
+    <path d="M26.60,6.60 L26.91,7.56 L27.85,7.20 L27.29,8.04 L28.16,8.56 L27.16,8.64 L27.29,9.64 L26.60,8.91 L25.91,9.64 L26.04,8.64 L25.04,8.56 L25.91,8.04 L25.35,7.20 L26.29,7.56 Z"/>
+    <!-- Epsilon Crucis, fuenf Zacken -->
+    <path d="M24.40,11.15 L24.65,11.76 L25.30,11.81 L24.80,12.23 L24.96,12.87 L24.40,12.52 L23.84,12.87 L24.00,12.23 L23.50,11.81 L24.15,11.76 Z"/>
+  </g>
+</svg>

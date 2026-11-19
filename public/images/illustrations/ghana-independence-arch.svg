@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 280" fill="none">
+  <!-- Card background -->
+  <rect width="160" height="280" rx="16" fill="#f5f3ff"/>
+
+  <!-- Sky glow -->
+  <ellipse cx="80" cy="82" rx="68" ry="52" fill="#ede9fe"/>
+
+  <!-- PALM TREES — left -->
+  <path d="M22,212 Q25,194 23,176" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+  <path d="M23,176 Q11,165 4,158" stroke="#8b5cf6" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+  <path d="M23,176 Q14,162 12,170" stroke="#8b5cf6" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <path d="M23,176 Q24,162 30,158" stroke="#8b5cf6" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+  <path d="M23,176 Q28,168 34,172" stroke="#8b5cf6" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+  <!-- Palm coconuts left -->
+  <circle cx="21" cy="177" r="2" fill="#7c3aed" opacity="0.4"/>
+
+  <!-- PALM TREES — right -->
+  <path d="M138,212 Q135,194 137,176" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+  <path d="M137,176 Q149,165 156,158" stroke="#8b5cf6" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+  <path d="M137,176 Q146,162 148,170" stroke="#8b5cf6" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <path d="M137,176 Q136,162 130,158" stroke="#8b5cf6" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+  <path d="M137,176 Q132,168 126,172" stroke="#8b5cf6" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+  <!-- Palm coconuts right -->
+  <circle cx="139" cy="177" r="2" fill="#7c3aed" opacity="0.4"/>
+
+  <!-- ARCH STRUCTURE -->
+  <!-- Left pillar -->
+  <rect x="36" y="120" width="24" height="82" rx="2" fill="#7c3aed"/>
+  <!-- Right pillar -->
+  <rect x="100" y="120" width="24" height="82" rx="2" fill="#7c3aed"/>
+  <!-- Arch lintel / connecting top block -->
+  <rect x="36" y="112" width="88" height="10" rx="2" fill="#8b5cf6"/>
+  <!-- Grand arch opening -->
+  <rect x="62" y="132" width="36" height="62" rx="2" fill="#3b0764"/>
+  <!-- Arch curve -->
+  <path d="M62,150 Q80,132 98,150" fill="#3b0764"/>
+  <!-- Arch inner border (decorative) -->
+  <path d="M60,150 Q80,130 100,150" fill="none" stroke="#c4b5fd" stroke-width="1.2" opacity="0.5"/>
+
+  <!-- PILLAR DECORATIVE HORIZONTAL BANDS -->
+  <rect x="36" y="130" width="24" height="2" rx="0.5" fill="#a78bfa" opacity="0.55"/>
+  <rect x="100" y="130" width="24" height="2" rx="0.5" fill="#a78bfa" opacity="0.55"/>
+  <rect x="36" y="154" width="24" height="2" rx="0.5" fill="#a78bfa" opacity="0.45"/>
+  <rect x="100" y="154" width="24" height="2" rx="0.5" fill="#a78bfa" opacity="0.45"/>
+  <rect x="36" y="175" width="24" height="2" rx="0.5" fill="#a78bfa" opacity="0.4"/>
+  <rect x="100" y="175" width="24" height="2" rx="0.5" fill="#a78bfa" opacity="0.4"/>
+
+  <!-- TOP ENTABLATURE / PARAPET BASE -->
+  <rect x="32" y="106" width="96" height="8" rx="2" fill="#6d28d9"/>
+  <!-- CRENELLATIONS along parapet -->
+  <rect x="32" y="97" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="41" y="97" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="50" y="97" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="59" y="97" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="68" y="97" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="77" y="97" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="86" y="97" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="95" y="97" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="104" y="97" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+  <rect x="113" y="97" width="6" height="11" rx="0.5" fill="#6d28d9"/>
+
+  <!-- INSCRIPTION BAND (FREEDOM AND JUSTICE) -->
+  <rect x="42" y="113" width="76" height="5" rx="0.5" fill="#6d28d9" opacity="0.55"/>
+
+  <!-- GHANA BLACK STAR — 5-pointed star above arch apex -->
+  <polygon points="80,67 83.8,78.5 96,78.5 86.1,85.5 89.9,97 80,90 70.1,97 73.9,85.5 64,78.5 76.2,78.5" fill="#5b21b6" opacity="0.9"/>
+  <!-- Star highlight -->
+  <polygon points="80,67 83.8,78.5 96,78.5 86.1,85.5 89.9,97 80,90 70.1,97 73.9,85.5 64,78.5 76.2,78.5" fill="none" stroke="#c4b5fd" stroke-width="0.8" opacity="0.4"/>
+
+  <!-- STEPS (three tiers at base) -->
+  <rect x="28" y="202" width="104" height="5" rx="1" fill="#6d28d9"/>
+  <rect x="22" y="207" width="116" height="5" rx="1" fill="#7c3aed" opacity="0.8"/>
+  <rect x="16" y="212" width="128" height="5" rx="1" fill="#8b5cf6" opacity="0.55"/>
+
+  <!-- GROUND PAVING -->
+  <rect x="0" y="238" width="160" height="10" rx="0" fill="#ddd6fe" opacity="0.4"/>
+  <line x1="0" y1="241" x2="160" y2="241" stroke="#c4b5fd" stroke-width="0.5" opacity="0.3"/>
+  <line x1="0" y1="245" x2="160" y2="245" stroke="#c4b5fd" stroke-width="0.5" opacity="0.22"/>
+  <!-- Paving vertical joints -->
+  <line x1="40" y1="238" x2="40" y2="248" stroke="#c4b5fd" stroke-width="0.5" opacity="0.22"/>
+  <line x1="80" y1="238" x2="80" y2="248" stroke="#c4b5fd" stroke-width="0.5" opacity="0.22"/>
+  <line x1="120" y1="238" x2="120" y2="248" stroke="#c4b5fd" stroke-width="0.5" opacity="0.22"/>
+
+  <!-- Decorative sparkles -->
+  <circle cx="148" cy="50" r="2" fill="#a78bfa" opacity="0.5"/>
+  <circle cx="156" cy="76" r="1.5" fill="#c4b5fd" opacity="0.4"/>
+  <circle cx="10" cy="52" r="1.5" fill="#a78bfa" opacity="0.4"/>
+  <circle cx="6" cy="80" r="1" fill="#c4b5fd" opacity="0.35"/>
+
+  <!-- LABEL -->
+  <text x="80" y="256" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#5b21b6">Independence Arch</text>
+  <text x="80" y="269" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9.5" fill="#7c3aed" opacity="0.85">Accra · Ghana</text>
+</svg>

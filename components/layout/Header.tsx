@@ -2,393 +2,559 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Menu,
   X,
-  LogIn,
-  UserCircle2,
-  LogOut,
-  Ticket,
-  ShieldCheck,
-  Sparkles,
-  User,
-  Bell,
-  Lock,
   ChevronDown,
+  Plane,
+  Ticket,
+  FileText,
+  Building,
+  Search,
+  Calculator,
+  AlertTriangle,
+  Mail,
 } from 'lucide-react';
-import { NotificationBell } from '@/components/notifications/NotificationBell';
-import { DummyTicketLogo } from '@/components/brand/DummyTicketLogo';
-import type { SessionUser } from '@/lib/auth/session';
-
-const NAV_ITEMS = [
-  { label: 'Flights', href: '/flights' },
-  { label: 'Track Booking', href: '/track-booking' },
-  { label: 'Popular Routes', href: '/routes/hyd-to-del' },
-  { label: 'Destinations', href: '/destinations/dubai' },
-  { label: 'Travel Guides', href: '/blog' },
-  { label: 'Help', href: '/help' },
-];
 
 export function Header({
   brandName = 'DummyTicket',
-  user,
 }: {
   brandName?: string;
-  user?: SessionUser | null;
+  user?: any;
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
+  const [countriesOpen, setCountriesOpen] = useState(false);
+  const [toolsOpen, setToolsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
-  const profileRef = useRef<HTMLDivElement>(null);
-  const isAdmin = user
-    ? ['admin', 'support_agent', 'finance_manager', 'content_editor'].includes(user.role)
-    : false;
+
+  const countriesRef = useRef<HTMLDivElement>(null);
+  const toolsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => {
-      const next = window.scrollY > 12;
-      setScrolled((prev) => (prev === next ? prev : next));
+      setScrolled(window.scrollY > 10);
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Close dropdowns when clicking outside
   useEffect(() => {
-    if (!mobileOpen) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMobileOpen(false);
-    };
-    document.addEventListener('keydown', onKeyDown);
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [mobileOpen]);
-
-  useEffect(() => {
-    if (!profileOpen) return;
-    function onPointerDown(e: PointerEvent) {
-      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
-        setProfileOpen(false);
+    const handleClickOutside = (e: MouseEvent) => {
+      if (countriesRef.current && !countriesRef.current.contains(e.target as Node)) {
+        setCountriesOpen(false);
       }
-    }
-    function onKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') setProfileOpen(false);
-    }
-    document.addEventListener('pointerdown', onPointerDown);
-    document.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.removeEventListener('pointerdown', onPointerDown);
-      document.removeEventListener('keydown', onKeyDown);
+      if (toolsRef.current && !toolsRef.current.contains(e.target as Node)) {
+        setToolsOpen(false);
+      }
     };
-  }, [profileOpen]);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
-  useEffect(() => {
-    setProfileOpen(false);
+  const handleGoToForm = (e: React.MouseEvent) => {
     setMobileOpen(false);
-  }, [pathname]);
-
-  const firstName = user?.fullName?.split(' ')[0] ?? 'Account';
-  const initials = user?.fullName
-    ? user.fullName
-        .split(' ')
-        .slice(0, 2)
-        .map((part) => part[0]?.toUpperCase() ?? '')
-        .join('')
-    : '';
-
-  function handleSignOut() {
-    setProfileOpen(false);
-    setMobileOpen(false);
-    router.refresh();
-    fetch('/auth/signout', { method: 'POST' }).then(() => {
-      router.push('/');
-      router.refresh();
-    });
-  }
+    const form = document.getElementById('bookingForm');
+    if (form) {
+      e.preventDefault();
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return (
     <header
-      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'border-b border-slate-200/90 bg-white/95 shadow-md backdrop-blur-xl'
-          : 'border-b border-slate-200/70 bg-white/90 shadow-sm backdrop-blur-md'
+          ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-blue-100'
+          : 'bg-white/90 backdrop-blur-md border-b border-blue-50'
       }`}
+      style={{ height: '72px' }}
     >
-      {/* Trust bar */}
-      <div className="bg-navy-950 px-4 py-1.5 text-xs text-slate-200 border-b border-slate-800/80">
-        <div className="container-page flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 rounded-full bg-verified-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-verified-400 border border-verified-500/30">
-              <ShieldCheck className="h-3 w-3" />
-              Secure Server-Verified Bookings
-            </span>
-            <span className="hidden md:inline text-slate-300">
-              Instant e-documents · Razorpay verified payments · 24/7 support
-            </span>
+      <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+        {/* Brand Logo - DummyTicket in Blue and White */}
+        <Link href="/" className="flex items-center gap-2.5 group text-decoration-none">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0062e0] to-[#1d4ed8] flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
+            <Plane className="w-5 h-5 -rotate-45" />
           </div>
-          <div className="flex items-center gap-4 text-[11px]">
-            <Link href="/track-booking" className="hover:text-white underline-offset-2 hover:underline">
-              Track Booking
-            </Link>
-            {isAdmin && (
-              <Link href="/admin" className="text-brand-300 font-medium hover:text-white">
-                Admin Console
-              </Link>
-            )}
-          </div>
-        </div>
-      </div>
+          <span className="text-2xl font-black tracking-tight text-[#0B1120]">
+            Dummy<span className="text-[#0062e0]">Ticket</span>
+          </span>
+        </Link>
 
-      {/* Main Navigation */}
-      <div className="container-page flex h-16 items-center justify-between">
-        <div className="flex items-center gap-8">
+        {/* Desktop Nav Links */}
+        <nav className="hidden lg:flex items-center gap-1">
           <Link
-            href="/"
-            aria-label={`${brandName} Home`}
-            className="flex items-center gap-2.5 text-navy-900 focus:outline-none focus:ring-2 focus:ring-brand-600 rounded-lg"
+            href="/dummy-ticket"
+            className={`px-3.5 py-2 rounded-lg text-sm font-bold transition-colors ${
+              pathname === '/dummy-ticket'
+                ? 'text-[#0062e0] bg-blue-50'
+                : 'text-gray-700 hover:text-[#0062e0] hover:bg-blue-50/60'
+            }`}
           >
-            <div className="hidden sm:block">
-              <DummyTicketLogo variant="full" theme="light" size="md" showTagline={!scrolled} />
-            </div>
-            <div className="sm:hidden">
-              <DummyTicketLogo variant="compact" theme="light" size="sm" showTagline={false} />
-            </div>
+            Dummy Ticket
           </Link>
 
-          <nav
-            aria-label="Primary Navigation"
-            className="hidden lg:flex items-center gap-1 text-sm font-medium text-slate-700"
-          >
-            {NAV_ITEMS.map((item) => {
-              const baseHref = item.href.split('?')[0];
-              const isActive =
-                pathname === baseHref ||
-                (baseHref !== '/' && pathname?.startsWith(baseHref));
+          {/* Countries Dropdown */}
+          <div className="relative" ref={countriesRef}>
+            <button
+              type="button"
+              onClick={() => {
+                setCountriesOpen(!countriesOpen);
+                setToolsOpen(false);
+              }}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-bold text-gray-700 hover:text-[#0062e0] hover:bg-blue-50/60 transition-colors"
+              aria-expanded={countriesOpen}
+            >
+              Countries
+              <ChevronDown
+                className={`w-4 h-4 transition-transform duration-200 ${
+                  countriesOpen ? 'rotate-180 text-[#0062e0]' : 'text-gray-400'
+                }`}
+              />
+            </button>
 
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`relative px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-200 ${
-                    isActive
-                      ? 'text-brand-600 bg-brand-50 shadow-sm'
-                      : 'text-slate-600 hover:text-brand-600 hover:bg-slate-100/70'
-                  }`}
+            <AnimatePresence>
+              {countriesOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[680px] bg-white rounded-2xl p-6 shadow-2xl border border-blue-100 grid grid-cols-3 gap-6 z-50"
                 >
-                  {item.label}
-                  {isActive && (
-                    <motion.span
-                      layoutId="header-nav-underline"
-                      className="absolute inset-x-3 -bottom-1 h-0.5 rounded-full bg-brand-600"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
-
-        <div className="flex items-center gap-2 sm:gap-3">
-          {user && <NotificationBell />}
-
-          {user ? (
-            <div className="relative" ref={profileRef}>
-              <button
-                type="button"
-                onClick={() => setProfileOpen((prev) => !prev)}
-                aria-expanded={profileOpen}
-                aria-haspopup="menu"
-                aria-label="Account menu"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white py-1 pl-1 pr-2.5 text-xs font-semibold text-navy-900 shadow-sm hover:border-brand-400 transition-colors"
-              >
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-600 text-[11px] font-bold text-white">
-                  {initials || <User className="h-3.5 w-3.5" />}
-                </span>
-                <span className="hidden sm:inline max-w-[110px] truncate">{firstName}</span>
-                <ChevronDown className={`h-3.5 w-3.5 text-slate-500 transition-transform ${profileOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              <AnimatePresence>
-                {profileOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.15 }}
-                    role="menu"
-                    aria-label="Account menu"
-                    className="absolute right-0 top-11 z-50 w-64 rounded-xl border border-slate-200 bg-white p-2 shadow-elevated"
-                  >
-                    <div className="border-b border-slate-100 px-3 pb-2.5 pt-1.5">
-                      <p className="truncate text-sm font-bold text-navy-900">{user.fullName}</p>
-                      <p className="truncate text-xs text-slate-500">{user.email}</p>
-                      <span className="badge badge-brand mt-1.5 capitalize">{user.role.replace('_', ' ')}</span>
+                  <div>
+                    <div className="text-[11px] font-black uppercase tracking-wider text-[#0062e0] mb-3">
+                      Popular Destinations
                     </div>
-                    <div className="py-1.5">
+                    <div className="space-y-1">
                       {[
-                        { href: '/account', label: 'Dashboard', icon: UserCircle2 },
-                        { href: '/account/bookings', label: 'My Bookings', icon: Ticket },
-                        { href: '/account/notifications', label: 'Notifications', icon: Bell },
-                        { href: '/account/profile', label: 'Profile', icon: User },
-                        { href: '/account/security', label: 'Security', icon: Lock },
-                      ].map((item) => {
-                        const Icon = item.icon;
-                        return (
-                          <Link
-                            key={item.href}
-                            href={item.href}
-                            role="menuitem"
-                            onClick={() => setProfileOpen(false)}
-                            className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-navy-900"
-                          >
-                            <Icon className="h-3.5 w-3.5 text-slate-400" />
-                            {item.label}
-                          </Link>
-                        );
-                      })}
-                      {isAdmin && (
+                        { name: 'USA', href: '/proof-of-onward-travel', flag: '🇺🇸' },
+                        { name: 'United Kingdom', href: '/proof-of-onward-travel', flag: '🇬🇧' },
+                        { name: 'Thailand', href: '/proof-of-onward-travel', flag: '🇹🇭' },
+                        { name: 'India', href: '/proof-of-onward-travel', flag: '🇮🇳' },
+                        { name: 'Philippines', href: '/proof-of-onward-travel', flag: '🇵🇭' },
+                        { name: 'Turkey', href: '/proof-of-onward-travel', flag: '🇹🇷' },
+                        { name: 'Germany', href: '/proof-of-onward-travel', flag: '🇩🇪' },
+                        { name: 'Australia', href: '/proof-of-onward-travel', flag: '🇦🇺' },
+                      ].map((c) => (
                         <Link
-                          href="/admin"
-                          role="menuitem"
-                          onClick={() => setProfileOpen(false)}
-                          className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-semibold text-brand-700 hover:bg-brand-50"
+                          key={c.name}
+                          href={c.href}
+                          onClick={() => setCountriesOpen(false)}
+                          className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-sm font-medium text-gray-700 hover:text-[#0062e0] hover:bg-blue-50 transition-colors"
                         >
-                          <ShieldCheck className="h-3.5 w-3.5" />
-                          Admin Console
+                          <span className="text-base">{c.flag}</span>
+                          <span>{c.name}</span>
                         </Link>
-                      )}
+                      ))}
                     </div>
-                    <div className="border-t border-slate-100 pt-1.5">
-                      <button
-                        type="button"
-                        role="menuitem"
-                        onClick={handleSignOut}
-                        className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-semibold text-coral-600 hover:bg-coral-50"
+                  </div>
+
+                  <div>
+                    <div className="text-[11px] font-black uppercase tracking-wider text-[#0062e0] mb-3">
+                      Regions
+                    </div>
+                    <Link
+                      href="/dummy-ticket-schengen-visa"
+                      onClick={() => setCountriesOpen(false)}
+                      className="block p-3 rounded-xl border border-blue-100 hover:border-blue-300 hover:bg-blue-50/50 transition-all mb-4 group"
+                    >
+                      <div className="flex items-center gap-2 font-bold text-gray-900 group-hover:text-[#0062e0]">
+                        <span className="text-lg">🇪🇺</span> Schengen Zone
+                      </div>
+                      <div className="text-xs text-gray-500 mt-0.5">29 European countries requirement</div>
+                    </Link>
+                  </div>
+
+                  <div>
+                    <div className="text-[11px] font-black uppercase tracking-wider text-[#0062e0] mb-3">
+                      Resources
+                    </div>
+                    <div className="space-y-2">
+                      <Link
+                        href="/proof-of-onward-travel"
+                        onClick={() => setCountriesOpen(false)}
+                        className="block p-2.5 rounded-xl hover:bg-blue-50 transition-colors"
                       >
-                        <LogOut className="h-3.5 w-3.5" />
-                        Sign Out
-                      </button>
+                        <div className="text-sm font-bold text-gray-900">All 195 Countries</div>
+                        <div className="text-xs text-gray-500">Complete immigration directory</div>
+                      </Link>
+                      <Link
+                        href="/onward-ticket"
+                        onClick={() => setCountriesOpen(false)}
+                        className="block p-2.5 rounded-xl hover:bg-blue-50 transition-colors"
+                      >
+                        <div className="text-sm font-bold text-gray-900">Onward Ticket</div>
+                        <div className="text-xs text-gray-500">Required at check-in</div>
+                      </Link>
+                      <Link
+                        href="/temporary-flight-reservation"
+                        onClick={() => setCountriesOpen(false)}
+                        className="block p-2.5 rounded-xl hover:bg-blue-50 transition-colors"
+                      >
+                        <div className="text-sm font-bold text-gray-900">Temporary Reservation</div>
+                        <div className="text-xs text-gray-500">Fast embassy itinerary</div>
+                      </Link>
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ) : (
-            <>
-              <Link
-                href="/login"
-                className="btn btn-secondary hidden px-3.5 py-2 text-xs font-bold sm:inline-flex"
-              >
-                <LogIn className="h-4 w-4 text-brand-600" />
-                Sign In
-              </Link>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
-              <Link
-                href="/signup"
-                className="btn btn-primary btn-shimmer px-4 py-2 text-xs font-bold shadow-md shadow-brand-600/20 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-1"
-              >
-                <Sparkles className="h-4 w-4" />
-                <span>Get Started</span>
-              </Link>
-            </>
-          )}
+          {/* Tools Dropdown */}
+          <div className="relative" ref={toolsRef}>
+            <button
+              type="button"
+              onClick={() => {
+                setToolsOpen(!toolsOpen);
+                setCountriesOpen(false);
+              }}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-bold text-gray-700 hover:text-[#0062e0] hover:bg-blue-50/60 transition-colors"
+              aria-expanded={toolsOpen}
+            >
+              Tools
+              <ChevronDown
+                className={`w-4 h-4 transition-transform duration-200 ${
+                  toolsOpen ? 'rotate-180 text-[#0062e0]' : 'text-gray-400'
+                }`}
+              />
+            </button>
 
+            <AnimatePresence>
+              {toolsOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[720px] bg-white rounded-2xl p-6 shadow-2xl border border-blue-100 grid grid-cols-2 gap-6 z-50"
+                >
+                  <div>
+                    <div className="text-[11px] font-black uppercase tracking-wider text-[#0062e0] mb-3">
+                      Research & Verification Tools
+                    </div>
+                    <div className="space-y-1.5">
+                      {[
+                        {
+                          name: 'Visa Checker',
+                          desc: 'Check requirements for any passport',
+                          href: '/visa-checker',
+                          icon: Search,
+                          color: 'text-blue-600 bg-blue-50',
+                        },
+                        {
+                          name: 'Embassy Finder',
+                          desc: 'Embassies & consulates worldwide',
+                          href: '/embassy-finder',
+                          icon: Building,
+                          color: 'text-indigo-600 bg-indigo-50',
+                        },
+                        {
+                          name: 'Visa Cost Calculator',
+                          desc: 'Exact fees & processing times',
+                          href: '/visa-cost-calculator',
+                          icon: Calculator,
+                          color: 'text-emerald-600 bg-emerald-50',
+                        },
+                        {
+                          name: 'Visa Risk Checker',
+                          desc: 'Check your approval chances',
+                          href: '/visa-risk-check',
+                          icon: AlertTriangle,
+                          color: 'text-red-600 bg-red-50',
+                        },
+                        {
+                          name: 'Hotel Booking',
+                          desc: 'Free accommodation proof for visa',
+                          href: '/hotel-booking',
+                          icon: Building,
+                          color: 'text-sky-600 bg-sky-50',
+                        },
+                      ].map((item) => (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          onClick={() => setToolsOpen(false)}
+                          className="flex items-center gap-3 p-2 rounded-xl hover:bg-blue-50/70 transition-colors group"
+                        >
+                          <div
+                            className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${item.color}`}
+                          >
+                            <item.icon className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-bold text-gray-900 group-hover:text-[#0062e0]">
+                              {item.name}
+                            </div>
+                            <div className="text-xs text-gray-500">{item.desc}</div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-[11px] font-black uppercase tracking-wider text-[#0062e0] mb-3">
+                      Document Generators
+                    </div>
+                    <div className="space-y-1.5">
+                      {[
+                        {
+                          name: 'Visa Support Letter',
+                          desc: 'Embassy-ready support letter',
+                          href: '/visa-letter',
+                          icon: FileText,
+                          color: 'text-amber-600 bg-amber-50',
+                        },
+                        {
+                          name: 'Invitation Letter',
+                          desc: 'Official host invitation format',
+                          href: '/invitation-letter',
+                          icon: Mail,
+                          color: 'text-pink-600 bg-pink-50',
+                        },
+                        {
+                          name: 'Travel Itinerary',
+                          desc: 'Day-by-day travel plan PDF',
+                          href: '/travel-itinerary',
+                          icon: FileText,
+                          color: 'text-cyan-600 bg-cyan-50',
+                        },
+                        {
+                          name: 'Embassy Cover Letter',
+                          desc: 'Professional applicant statement',
+                          href: '/embassy-letter',
+                          icon: FileText,
+                          color: 'text-blue-600 bg-blue-50',
+                        },
+                        {
+                          name: 'Flight Itinerary for Visa',
+                          desc: 'Dedicated visa flight itinerary guide',
+                          href: '/flight-itinerary-for-visa',
+                          icon: Plane,
+                          color: 'text-sky-600 bg-sky-50',
+                        },
+                      ].map((item) => (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          onClick={() => setToolsOpen(false)}
+                          className="flex items-center gap-3 p-2 rounded-xl hover:bg-blue-50/70 transition-colors group"
+                        >
+                          <div
+                            className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${item.color}`}
+                          >
+                            <item.icon className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-bold text-gray-900 group-hover:text-[#0062e0]">
+                              {item.name}
+                            </div>
+                            <div className="text-xs text-gray-500">{item.desc}</div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <Link
+            href="/blog"
+            className={`px-3.5 py-2 rounded-lg text-sm font-bold transition-colors ${
+              pathname.startsWith('/blog')
+                ? 'text-[#0062e0] bg-blue-50'
+                : 'text-gray-700 hover:text-[#0062e0] hover:bg-blue-50/60'
+            }`}
+          >
+            Blog
+          </Link>
+
+          <Link
+            href="/about"
+            className={`px-3.5 py-2 rounded-lg text-sm font-bold transition-colors ${
+              pathname === '/about'
+                ? 'text-[#0062e0] bg-blue-50'
+                : 'text-gray-700 hover:text-[#0062e0] hover:bg-blue-50/60'
+            }`}
+          >
+            About
+          </Link>
+        </nav>
+
+        {/* Right CTA Button - Clean & No Login */}
+        <div className="flex items-center gap-3">
+          <a
+            href="/#bookingForm"
+            onClick={handleGoToForm}
+            className="inline-flex items-center gap-2 bg-[#0062e0] hover:bg-[#1d4ed8] text-white px-5 py-2.5 rounded-xl font-extrabold text-sm shadow-md shadow-blue-500/25 hover:shadow-lg hover:shadow-blue-500/35 hover:-translate-y-0.5 transition-all"
+          >
+            <Ticket className="w-4 h-4" />
+            <span>Free Ticket</span>
+          </a>
+
+          {/* Mobile Menu Button */}
           <button
             type="button"
-            onClick={() => setMobileOpen((prev) => !prev)}
-            aria-expanded={mobileOpen}
-            aria-label="Toggle mobile navigation menu"
-            className="inline-flex lg:hidden items-center justify-center rounded-lg p-2 text-slate-700 hover:bg-slate-100"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="lg:hidden p-2 text-gray-700 hover:text-[#0062e0] rounded-lg hover:bg-blue-50"
+            aria-label="Toggle navigation"
           >
-            {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Navigation Drawer */}
+      {/* Mobile Drawer */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.22, ease: 'easeOut' }}
-            className="lg:hidden overflow-hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6"
+            className="lg:hidden bg-white border-b border-blue-100 px-4 pt-2 pb-6 shadow-xl max-h-[85vh] overflow-y-auto"
           >
-            <div className="grid grid-cols-1 gap-1.5 text-sm font-medium text-slate-800">
-              {NAV_ITEMS.map((item, idx) => (
-                <motion.div
-                  key={item.href}
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.04 }}
+            <div className="space-y-1">
+              <Link
+                href="/dummy-ticket"
+                onClick={() => setMobileOpen(false)}
+                className="block px-3 py-2 rounded-lg text-base font-bold text-gray-800 hover:bg-blue-50 hover:text-[#0062e0]"
+              >
+                Dummy Ticket Guide
+              </Link>
+              <Link
+                href="/dummy-ticket-schengen-visa"
+                onClick={() => setMobileOpen(false)}
+                className="block px-3 py-2 rounded-lg text-base font-bold text-gray-800 hover:bg-blue-50 hover:text-[#0062e0]"
+              >
+                Schengen Visa Dummy Ticket
+              </Link>
+              <Link
+                href="/proof-of-onward-travel"
+                onClick={() => setMobileOpen(false)}
+                className="block px-3 py-2 rounded-lg text-base font-bold text-gray-800 hover:bg-blue-50 hover:text-[#0062e0]"
+              >
+                Proof of Onward Travel (195+ Countries)
+              </Link>
+              <Link
+                href="/onward-ticket"
+                onClick={() => setMobileOpen(false)}
+                className="block px-3 py-2 rounded-lg text-base font-bold text-gray-800 hover:bg-blue-50 hover:text-[#0062e0]"
+              >
+                Onward Ticket
+              </Link>
+              <Link
+                href="/hotel-booking"
+                onClick={() => setMobileOpen(false)}
+                className="block px-3 py-2 rounded-lg text-base font-bold text-gray-800 hover:bg-blue-50 hover:text-[#0062e0]"
+              >
+                Hotel Reservation Proof
+              </Link>
+              <div className="pt-2 border-t border-blue-100 my-2">
+                <div className="text-xs font-black uppercase tracking-wider text-[#0062e0] px-3 py-1">
+                  Tools & Calculators
+                </div>
+                <Link
+                  href="/visa-checker"
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-blue-50"
                 >
-                  <Link
-                    href={item.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="block rounded-lg px-3 py-2.5 hover:bg-slate-50"
-                  >
-                    {item.label}
-                  </Link>
-                </motion.div>
-              ))}
-              {user ? (
-                <>
-                  <Link
-                    href="/account"
-                    onClick={() => setMobileOpen(false)}
-                    className="rounded-lg px-3 py-2.5 hover:bg-slate-50 flex items-center gap-2"
-                  >
-                    <UserCircle2 className="h-4 w-4 text-blue-600" />
-                    My Account
-                  </Link>
-                  {isAdmin && (
-                    <Link
-                      href="/admin"
-                      onClick={() => setMobileOpen(false)}
-                      className="rounded-lg px-3 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-brand-700"
-                    >
-                      <ShieldCheck className="h-4 w-4" />
-                      Admin Console
-                    </Link>
-                  )}
-                  <button
-                    type="button"
-                    onClick={handleSignOut}
-                    className="rounded-lg px-3 py-2.5 hover:bg-coral-50 flex items-center gap-2 text-coral-600 w-full text-left"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link
-                    href="/login"
-                    onClick={() => setMobileOpen(false)}
-                    className="rounded-lg px-3 py-2.5 hover:bg-slate-50 flex items-center gap-2"
-                  >
-                    <LogIn className="h-4 w-4 text-brand-600" />
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/signup"
-                    onClick={() => setMobileOpen(false)}
-                    className="rounded-lg px-3 py-2.5 hover:bg-slate-50 flex items-center gap-2"
-                  >
-                    <Sparkles className="h-4 w-4 text-brand-600" />
-                    Create Account
-                  </Link>
-                </>
-              )}
+                  Visa Checker
+                </Link>
+                <Link
+                  href="/embassy-finder"
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-blue-50"
+                >
+                  Embassy Finder
+                </Link>
+                <Link
+                  href="/visa-cost-calculator"
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-blue-50"
+                >
+                  Visa Cost Calculator
+                </Link>
+                <Link
+                  href="/visa-risk-check"
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-blue-50"
+                >
+                  Visa Risk Checker
+                </Link>
+              </div>
+              <div className="pt-2 border-t border-blue-100 my-2">
+                <div className="text-xs font-black uppercase tracking-wider text-[#0062e0] px-3 py-1">
+                  Document Generators
+                </div>
+                <Link
+                  href="/visa-letter"
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-blue-50"
+                >
+                  Visa Support Letter
+                </Link>
+                <Link
+                  href="/invitation-letter"
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-blue-50"
+                >
+                  Invitation Letter
+                </Link>
+                <Link
+                  href="/travel-itinerary"
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-blue-50"
+                >
+                  Travel Itinerary
+                </Link>
+                <Link
+                  href="/embassy-letter"
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-blue-50"
+                >
+                  Embassy Cover Letter
+                </Link>
+                <Link
+                  href="/flight-itinerary-for-visa"
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-blue-50"
+                >
+                  Flight Itinerary for Visa
+                </Link>
+              </div>
+              <div className="pt-2 border-t border-blue-100 my-2">
+                <Link
+                  href="/blog"
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-base font-bold text-gray-800 hover:bg-blue-50"
+                >
+                  Travel & Visa Blog
+                </Link>
+                <Link
+                  href="/about"
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-base font-bold text-gray-800 hover:bg-blue-50"
+                >
+                  About DummyTicket
+                </Link>
+              </div>
+              <div className="pt-3">
+                <a
+                  href="/#bookingForm"
+                  onClick={handleGoToForm}
+                  className="w-full flex items-center justify-center gap-2 bg-[#0062e0] text-white py-3 rounded-xl font-black text-center shadow-md shadow-blue-500/25"
+                >
+                  <Ticket className="w-5 h-5" /> Generate Free Ticket Now
+                </a>
+              </div>
             </div>
           </motion.div>
         )}

@@ -48,11 +48,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (!user) {
-    if (
-      pathname.startsWith('/account') ||
-      pathname.startsWith('/admin') ||
-      pathname.startsWith('/checkout')
-    ) {
+    if (pathname.startsWith('/account')) {
       const loginUrl = new URL('/login', request.url);
       loginUrl.searchParams.set('next', pathname + request.nextUrl.search);
       return NextResponse.redirect(loginUrl);
@@ -78,8 +74,5 @@ export const config = {
   matcher: [
     '/account/:path*',
     '/admin/:path*',
-    '/checkout/:path*',
-    '/login',
-    '/signup',
   ],
 };

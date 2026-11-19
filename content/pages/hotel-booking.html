@@ -1,0 +1,2273 @@
+
+<div id="hbv">
+
+
+<section class="hbv-hero">
+    <div class="hbv-hero-inner">
+        <div class="hbv-hero-text">
+            <span class="hbv-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                100% free &middot; no account needed
+            </span>
+            <h1 class="hbv-h1">Free Dummy Hotel Booking for Your Visa &mdash; <span class="hl">PDF Ready in 30 Seconds</span></h1>
+            <p class="hbv-sub">Create a professional hotel booking confirmation for your visa application &mdash; free, instant and downloadable as PDF.</p>
+            <div class="hbv-hero-cta">
+                <a href="/#bookingForm" class="hbv-cta1">
+                    Generate My Free Booking
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+                <a href="hotel-booking.html#hbv-how" class="hbv-cta2">
+                    See how it works
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="hbv-hero-stage" aria-hidden="true">
+            <img class="hbv-hero-photo" src="images/hotel-booking/hero-hotel-room.webp" width="1600" height="1000" alt="Bright hotel room with two beds, a seating corner and a round table" fetchpriority="high">
+            
+            <div class="hbv-doc">
+                <div class="hbv-doc-head">
+                    <span class="hbv-doc-brand">DummyTicket</span>
+                    <span class="hbv-doc-tag">CONFIRMED</span>
+                </div>
+                <div class="hbv-doc-title">Hotel Confirmation</div>
+                <div class="hbv-doc-rows">
+                    <div><span>Hotel</span><b>Grand View Hotel</b></div>
+                    <div><span>Guest</span><b>A. Traveller</b></div>
+                    <div><span>Check-in</span><b>14 Oct 2026</b></div>
+                    <div><span>Check-out</span><b>21 Oct 2026</b></div>
+                    <div><span>Reference</span><b>MJ-4471-2026</b></div>
+                </div>
+            </div>
+            <div class="hbv-float hbv-float-1">
+                <span class="hbv-float-ic hbv-ic-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                Confirmation generated
+            </div>
+            <div class="hbv-float hbv-float-2">
+                <span class="hbv-float-ic hbv-ic-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+                30 sec
+            </div>
+            
+            <style>
+/* POSITION: UNTEN IN DER KARTE, NICHT AM OBEREN RAND (13.09.2026).
+   Oben ueber dem Rand gemessen (Playwright): das Symbol verdeckte die PNR-Zeile (8 px am
+   Rechner, 3 px am Handy), lag am Handy auf der Startseite unter der festen Navigation,
+   deckte in RTL "DummyTicket AIRWAYS" zu und die Glanzstriche ragten aus der Karte. Unten
+   rechts neben dem Barcode ist die Flaeche frei — Vorschlag des Auftraggebers. In RTL steht
+   der Barcode rechts, das Abzeichen deshalb links. */
+.ticket-floating-badge.tpb {
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    border-radius: 0;
+    gap: 0;
+    color: #fff;
+    top: auto;
+    bottom: 26px;
+    right: 42px;
+    align-items: center;
+}
+.tpb-file {
+    position: relative;
+    z-index: 2;
+    display: block;
+    width: 54px;
+    height: 66px;
+    filter: drop-shadow(0 0 12px rgba(239, 35, 60, 0.5)) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+    transform-origin: 50% 100%;
+    animation: tpb-hopp 3.6s ease-in-out infinite;
+}
+.tpb-file svg { display: block; width: 100%; height: 100%; }
+.tpb-pill {
+    position: relative;
+    z-index: 1;
+    margin-left: -16px;
+    padding: 0.5rem 1.05rem 0.5rem 1.55rem;
+    border-radius: 999px;
+    /* Erste Ebene = Lichtstreifen, der einmal je Takt ueber die Pille laeuft. Ruhelage -10 %:
+       ausserhalb der Pille, also auch ohne Animation unsichtbar. */
+    background:
+        linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.55) 50%, transparent 62%) no-repeat,
+        linear-gradient(135deg, #ff4d6d 0%, #e11d48 100%);
+    background-size: 250% 100%, 100% 100%;
+    background-position: -10% 0, 0 0;
+    animation: tpb-puls 3.6s ease-in-out infinite, tpb-glanz 3.6s linear infinite;
+    color: #fff;
+    font-weight: 900;
+    font-size: 1.02rem;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    white-space: nowrap;
+    box-shadow: 0 8px 22px rgba(225, 29, 72, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+/* STRAHLEN AM PILLENENDE (13.09.2026). Vorher hingen drei Striche versetzt ueber der rechten
+   oberen Ecke — zwei oben, einer mittig nach unten — und sahen laut Auftraggeber "bugged" aus.
+   Jetzt sitzt der Strahlenkranz IN der Pille und liegt im Bogen um ihr rundes Ende: Mittelpunkt
+   = Mittelpunkt der Rundung (16 px vor dem Ende), drei Strahlen bei -50°, 0°, +50° von Radius
+   20 bis 30. Erster Versuch mit Strahlen ab Radius 4 aus einem Punkt las sich als Pfeil "<",
+   der auf die Pille zeigt. Waechst beim Pulsieren mit.
+   Ueberstand rechts ~16 px, bei scale(1.09) ~18 px. Das Abzeichen steht 42 px (Handy 30 px) vom
+   Kartenrand statt 30/20 — gemessen ragten die ersten Strahlen sonst 1–4 px aus .ticket-wrap. */
+.tpb-burst {
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    margin-left: -16px;
+    width: 32px;
+    height: 64px;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+.tpb-burst svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 0 4px rgba(255, 77, 109, 0.55)); }
+/* Strahl = 10 Einheiten lang. Strichmuster 11/40: Versatz 0 zeigt ihn ganz, -11 hat ihn nach
+   aussen weggeschoben, +11 steht er noch "an der Pille". */
+.tpb-ray { stroke-dasharray: 11 40; stroke-dashoffset: 0; animation: tpb-strahl 3.6s ease-out infinite; }
+.tpb-ray-1, .tpb-ray-3 { animation-delay: 0.06s; }
+
+/* TAKT 3,6 s: Ruhe bis 50 %, dann fliegen die Strahlen weg, die Pille pulsiert, das Dokument
+   hopst, der Lichtstreifen laeuft durch und die Strahlen wachsen neu aus der Pille. 100 % ist
+   jeweils die Ruhelage — so steht auch bei abgestellter Bewegung alles sauber da. */
+@keyframes tpb-puls {
+    0%, 54%, 80%, 100% { transform: scale(1); }
+    60% { transform: scale(1.09); }
+    67% { transform: scale(0.96); }
+    74% { transform: scale(1.03); }
+}
+@keyframes tpb-glanz {
+    0%, 56% { background-position: 110% 0, 0 0; }
+    82%, 100% { background-position: -10% 0, 0 0; }
+}
+@keyframes tpb-hopp {
+    0%, 54%, 78%, 100% { transform: translateY(0) rotate(0deg); }
+    60% { transform: translateY(-3px) rotate(-4deg); }
+    68% { transform: translateY(0) rotate(2deg); }
+}
+@keyframes tpb-strahl {
+    0%, 50% { stroke-dashoffset: 0; opacity: 1; }
+    58% { stroke-dashoffset: -11; opacity: 0; }
+    58.1% { stroke-dashoffset: 11; opacity: 0; }
+    62% { opacity: 1; }
+    74%, 100% { stroke-dashoffset: 0; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .tpb-file, .tpb-pill, .tpb-ray { animation: none; }
+}
+[dir="rtl"] .ticket-floating-badge.tpb { right: auto; left: 42px; }
+a.ticket-floating-badge.tpb { text-decoration: none; cursor: pointer; }
+a.ticket-floating-badge.tpb:hover .tpb-pill { filter: brightness(1.1); }
+[dir="rtl"] .tpb-pill { margin-left: 0; margin-right: -16px; padding: 0.5rem 1.55rem 0.5rem 1.05rem; }
+[dir="rtl"] .tpb-burst { left: auto; right: 100%; margin-left: 0; margin-right: -16px; transform: translateY(-50%) scaleX(-1); }
+@media (max-width: 560px) {
+    .ticket-floating-badge.tpb { bottom: 18px; right: 30px; transform: scale(0.8); transform-origin: bottom right; }
+    [dir="rtl"] .ticket-floating-badge.tpb { right: auto; left: 30px; transform-origin: bottom left; }
+}
+</style>
+
+<a  href="hotel-booking.html#bookingForm" tabindex="-1"  class="ticket-floating-badge tpb hbv-tpb" aria-label="FREE PDF">
+    <span class="tpb-file" aria-hidden="true"><svg viewBox="0 0 54 66" xmlns="http://www.w3.org/2000/svg"><path d="M9 2.5h25.5L51.5 19.5V57a6.5 6.5 0 0 1-6.5 6.5H9A6.5 6.5 0 0 1 2.5 57V9A6.5 6.5 0 0 1 9 2.5z" fill="#fff" stroke="#ef233c" stroke-width="3"/><path d="M34.5 2.5V14a5.5 5.5 0 0 0 5.5 5.5h11.5" fill="#ffe4e8" stroke="#ef233c" stroke-width="3" stroke-linejoin="round"/><path d="M27 17v14.5M21 26l6 6 6-6" fill="none" stroke="#ef233c" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><text x="27" y="53" text-anchor="middle" font-family="'Plus Jakarta Sans', Inter, Arial, sans-serif" font-size="14.5" font-weight="800" fill="#1f2937">PDF</text></svg></span>
+    <span class="tpb-pill">FREE PDF<span class="tpb-burst" aria-hidden="true"><svg viewBox="0 0 32 64" fill="none" stroke="#ff4d6d" stroke-width="3.2" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path class="tpb-ray tpb-ray-1" d="M12.86 16.68 19.28 9.02"/><path class="tpb-ray tpb-ray-2" d="M20 32h10"/><path class="tpb-ray tpb-ray-3" d="M12.86 47.32 19.28 54.98"/></svg></span></span>
+</a>
+        </div>
+    </div>
+</section>
+
+
+
+<div class="hbv-trust">
+    <div class="hbv-trust-inner">
+        <div class="hbv-trust-cell">
+            <span class="hbv-trust-ic hbv-ic-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <div><b>For visa applications</b><small>Valid for all visa types worldwide</small></div>
+        </div>
+        <div class="hbv-trust-cell">
+            <span class="hbv-trust-ic hbv-ic-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+            <div><b>Instant PDF</b><small>Ready in about 30 seconds</small></div>
+        </div>
+        <div class="hbv-trust-cell">
+            <span class="hbv-trust-ic hbv-ic-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+            <div><b>100% free</b><small>No credit card needed</small></div>
+        </div>
+        <div class="hbv-trust-cell">
+            <span class="hbv-trust-ic hbv-ic-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10z"/></svg></span>
+            <div><b>195+ countries</b><small>Any destination available</small></div>
+        </div>
+    </div>
+</div>
+
+
+
+<section class="hbv-formular">
+    <div class="hbv-band">
+        <div class="hbv-formular-kopf">
+            <div class="section-tag">Generate</div>
+            <h2 class="hbv-h2">Create your hotel booking now</h2>
+            <p class="hbv-lead">Free, no account, no card. The PDF is ready as soon as the last field is filled.</p>
+        </div>
+        <div id="bookingForm" style="scroll-margin-top:88px;">
+            <div wire:key="lw-1222518006-0" wire:snapshot="{&quot;data&quot;:{&quot;activeTab&quot;:&quot;hotel&quot;,&quot;plan&quot;:&quot;&quot;,&quot;flight_type&quot;:&quot;&quot;,&quot;departure_airport&quot;:&quot;&quot;,&quot;arrival_airport&quot;:&quot;&quot;,&quot;departure_date&quot;:&quot;&quot;,&quot;return_date&quot;:&quot;&quot;,&quot;adults&quot;:1,&quot;children&quot;:0,&quot;infants&quot;:0,&quot;flight_email&quot;:&quot;&quot;,&quot;flight_whatsapp&quot;:&quot;&quot;,&quot;flight_phone_code&quot;:&quot;&quot;,&quot;notes&quot;:&quot;&quot;,&quot;passengers&quot;:[[[{&quot;name&quot;:&quot;&quot;,&quot;passport&quot;:&quot;&quot;},{&quot;s&quot;:&quot;arr&quot;}]],{&quot;s&quot;:&quot;arr&quot;}],&quot;herkunftsseite&quot;:&quot;\/hotel-booking&quot;,&quot;aufStartseite&quot;:false,&quot;departure_results&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;arrival_results&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;flight_phone_search&quot;:&quot;&quot;,&quot;show_flight_phone_dropdown&quot;:false,&quot;out_stop_enabled&quot;:false,&quot;via_airport&quot;:&quot;&quot;,&quot;via_results&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;ret_stop_enabled&quot;:false,&quot;return_via_airport&quot;:&quot;&quot;,&quot;return_via_results&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;city&quot;:&quot;&quot;,&quot;country&quot;:&quot;&quot;,&quot;checkin_date&quot;:&quot;&quot;,&quot;checkout_date&quot;:&quot;&quot;,&quot;room_type&quot;:&quot;Standard Room&quot;,&quot;rooms&quot;:1,&quot;hotel_adults&quot;:1,&quot;hotel_children&quot;:0,&quot;hotel_email&quot;:&quot;&quot;,&quot;hotel_whatsapp&quot;:&quot;&quot;,&quot;hotel_phone_code&quot;:&quot;&quot;,&quot;hotel_guests&quot;:[[[{&quot;name&quot;:&quot;&quot;,&quot;passport&quot;:&quot;&quot;,&quot;dob&quot;:&quot;&quot;,&quot;nationality&quot;:&quot;&quot;},{&quot;s&quot;:&quot;arr&quot;}]],{&quot;s&quot;:&quot;arr&quot;}],&quot;phone_search&quot;:&quot;&quot;,&quot;country_search&quot;:&quot;&quot;,&quot;city_search&quot;:&quot;&quot;,&quot;country_code&quot;:&quot;&quot;,&quot;show_countries&quot;:false,&quot;show_cities&quot;:false,&quot;country_results&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;city_results&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;show_phone_dropdown&quot;:false,&quot;all_country_codes&quot;:[[[{&quot;code&quot;:&quot;+93&quot;,&quot;country&quot;:&quot;Afghanistan&quot;,&quot;flag&quot;:&quot;\ud83c\udde6\ud83c\uddeb&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+355&quot;,&quot;country&quot;:&quot;Albania&quot;,&quot;flag&quot;:&quot;\ud83c\udde6\ud83c\uddf1&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+213&quot;,&quot;country&quot;:&quot;Algeria&quot;,&quot;flag&quot;:&quot;\ud83c\udde9\ud83c\uddff&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+54&quot;,&quot;country&quot;:&quot;Argentina&quot;,&quot;flag&quot;:&quot;\ud83c\udde6\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+61&quot;,&quot;country&quot;:&quot;Australia&quot;,&quot;flag&quot;:&quot;\ud83c\udde6\ud83c\uddfa&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+43&quot;,&quot;country&quot;:&quot;Austria&quot;,&quot;flag&quot;:&quot;\ud83c\udde6\ud83c\uddf9&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+994&quot;,&quot;country&quot;:&quot;Azerbaijan&quot;,&quot;flag&quot;:&quot;\ud83c\udde6\ud83c\uddff&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+973&quot;,&quot;country&quot;:&quot;Bahrain&quot;,&quot;flag&quot;:&quot;\ud83c\udde7\ud83c\udded&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+880&quot;,&quot;country&quot;:&quot;Bangladesh&quot;,&quot;flag&quot;:&quot;\ud83c\udde7\ud83c\udde9&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+32&quot;,&quot;country&quot;:&quot;Belgium&quot;,&quot;flag&quot;:&quot;\ud83c\udde7\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+55&quot;,&quot;country&quot;:&quot;Brazil&quot;,&quot;flag&quot;:&quot;\ud83c\udde7\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+1&quot;,&quot;country&quot;:&quot;Canada&quot;,&quot;flag&quot;:&quot;\ud83c\udde8\ud83c\udde6&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+56&quot;,&quot;country&quot;:&quot;Chile&quot;,&quot;flag&quot;:&quot;\ud83c\udde8\ud83c\uddf1&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+86&quot;,&quot;country&quot;:&quot;China&quot;,&quot;flag&quot;:&quot;\ud83c\udde8\ud83c\uddf3&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+57&quot;,&quot;country&quot;:&quot;Colombia&quot;,&quot;flag&quot;:&quot;\ud83c\udde8\ud83c\uddf4&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+506&quot;,&quot;country&quot;:&quot;Costa Rica&quot;,&quot;flag&quot;:&quot;\ud83c\udde8\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+385&quot;,&quot;country&quot;:&quot;Croatia&quot;,&quot;flag&quot;:&quot;\ud83c\udded\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+420&quot;,&quot;country&quot;:&quot;Czech Republic&quot;,&quot;flag&quot;:&quot;\ud83c\udde8\ud83c\uddff&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+45&quot;,&quot;country&quot;:&quot;Denmark&quot;,&quot;flag&quot;:&quot;\ud83c\udde9\ud83c\uddf0&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+20&quot;,&quot;country&quot;:&quot;Egypt&quot;,&quot;flag&quot;:&quot;\ud83c\uddea\ud83c\uddec&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+358&quot;,&quot;country&quot;:&quot;Finland&quot;,&quot;flag&quot;:&quot;\ud83c\uddeb\ud83c\uddee&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+33&quot;,&quot;country&quot;:&quot;France&quot;,&quot;flag&quot;:&quot;\ud83c\uddeb\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+995&quot;,&quot;country&quot;:&quot;Georgia&quot;,&quot;flag&quot;:&quot;\ud83c\uddec\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+49&quot;,&quot;country&quot;:&quot;Germany&quot;,&quot;flag&quot;:&quot;\ud83c\udde9\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+233&quot;,&quot;country&quot;:&quot;Ghana&quot;,&quot;flag&quot;:&quot;\ud83c\uddec\ud83c\udded&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+30&quot;,&quot;country&quot;:&quot;Greece&quot;,&quot;flag&quot;:&quot;\ud83c\uddec\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+36&quot;,&quot;country&quot;:&quot;Hungary&quot;,&quot;flag&quot;:&quot;\ud83c\udded\ud83c\uddfa&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+91&quot;,&quot;country&quot;:&quot;India&quot;,&quot;flag&quot;:&quot;\ud83c\uddee\ud83c\uddf3&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+62&quot;,&quot;country&quot;:&quot;Indonesia&quot;,&quot;flag&quot;:&quot;\ud83c\uddee\ud83c\udde9&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+98&quot;,&quot;country&quot;:&quot;Iran&quot;,&quot;flag&quot;:&quot;\ud83c\uddee\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+964&quot;,&quot;country&quot;:&quot;Iraq&quot;,&quot;flag&quot;:&quot;\ud83c\uddee\ud83c\uddf6&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+353&quot;,&quot;country&quot;:&quot;Ireland&quot;,&quot;flag&quot;:&quot;\ud83c\uddee\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+972&quot;,&quot;country&quot;:&quot;Israel&quot;,&quot;flag&quot;:&quot;\ud83c\uddee\ud83c\uddf1&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+39&quot;,&quot;country&quot;:&quot;Italy&quot;,&quot;flag&quot;:&quot;\ud83c\uddee\ud83c\uddf9&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+81&quot;,&quot;country&quot;:&quot;Japan&quot;,&quot;flag&quot;:&quot;\ud83c\uddef\ud83c\uddf5&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+962&quot;,&quot;country&quot;:&quot;Jordan&quot;,&quot;flag&quot;:&quot;\ud83c\uddef\ud83c\uddf4&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+254&quot;,&quot;country&quot;:&quot;Kenya&quot;,&quot;flag&quot;:&quot;\ud83c\uddf0\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+965&quot;,&quot;country&quot;:&quot;Kuwait&quot;,&quot;flag&quot;:&quot;\ud83c\uddf0\ud83c\uddfc&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+961&quot;,&quot;country&quot;:&quot;Lebanon&quot;,&quot;flag&quot;:&quot;\ud83c\uddf1\ud83c\udde7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+60&quot;,&quot;country&quot;:&quot;Malaysia&quot;,&quot;flag&quot;:&quot;\ud83c\uddf2\ud83c\uddfe&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+960&quot;,&quot;country&quot;:&quot;Maldives&quot;,&quot;flag&quot;:&quot;\ud83c\uddf2\ud83c\uddfb&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+52&quot;,&quot;country&quot;:&quot;Mexico&quot;,&quot;flag&quot;:&quot;\ud83c\uddf2\ud83c\uddfd&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+212&quot;,&quot;country&quot;:&quot;Morocco&quot;,&quot;flag&quot;:&quot;\ud83c\uddf2\ud83c\udde6&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+95&quot;,&quot;country&quot;:&quot;Myanmar&quot;,&quot;flag&quot;:&quot;\ud83c\uddf2\ud83c\uddf2&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+977&quot;,&quot;country&quot;:&quot;Nepal&quot;,&quot;flag&quot;:&quot;\ud83c\uddf3\ud83c\uddf5&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+31&quot;,&quot;country&quot;:&quot;Netherlands&quot;,&quot;flag&quot;:&quot;\ud83c\uddf3\ud83c\uddf1&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+64&quot;,&quot;country&quot;:&quot;New Zealand&quot;,&quot;flag&quot;:&quot;\ud83c\uddf3\ud83c\uddff&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+234&quot;,&quot;country&quot;:&quot;Nigeria&quot;,&quot;flag&quot;:&quot;\ud83c\uddf3\ud83c\uddec&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+47&quot;,&quot;country&quot;:&quot;Norway&quot;,&quot;flag&quot;:&quot;\ud83c\uddf3\ud83c\uddf4&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+968&quot;,&quot;country&quot;:&quot;Oman&quot;,&quot;flag&quot;:&quot;\ud83c\uddf4\ud83c\uddf2&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+92&quot;,&quot;country&quot;:&quot;Pakistan&quot;,&quot;flag&quot;:&quot;\ud83c\uddf5\ud83c\uddf0&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+507&quot;,&quot;country&quot;:&quot;Panama&quot;,&quot;flag&quot;:&quot;\ud83c\uddf5\ud83c\udde6&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+51&quot;,&quot;country&quot;:&quot;Peru&quot;,&quot;flag&quot;:&quot;\ud83c\uddf5\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+63&quot;,&quot;country&quot;:&quot;Philippines&quot;,&quot;flag&quot;:&quot;\ud83c\uddf5\ud83c\udded&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+48&quot;,&quot;country&quot;:&quot;Poland&quot;,&quot;flag&quot;:&quot;\ud83c\uddf5\ud83c\uddf1&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+351&quot;,&quot;country&quot;:&quot;Portugal&quot;,&quot;flag&quot;:&quot;\ud83c\uddf5\ud83c\uddf9&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+974&quot;,&quot;country&quot;:&quot;Qatar&quot;,&quot;flag&quot;:&quot;\ud83c\uddf6\ud83c\udde6&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+40&quot;,&quot;country&quot;:&quot;Romania&quot;,&quot;flag&quot;:&quot;\ud83c\uddf7\ud83c\uddf4&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+7&quot;,&quot;country&quot;:&quot;Russia&quot;,&quot;flag&quot;:&quot;\ud83c\uddf7\ud83c\uddfa&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+966&quot;,&quot;country&quot;:&quot;Saudi Arabia&quot;,&quot;flag&quot;:&quot;\ud83c\uddf8\ud83c\udde6&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+65&quot;,&quot;country&quot;:&quot;Singapore&quot;,&quot;flag&quot;:&quot;\ud83c\uddf8\ud83c\uddec&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+27&quot;,&quot;country&quot;:&quot;South Africa&quot;,&quot;flag&quot;:&quot;\ud83c\uddff\ud83c\udde6&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+82&quot;,&quot;country&quot;:&quot;South Korea&quot;,&quot;flag&quot;:&quot;\ud83c\uddf0\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+34&quot;,&quot;country&quot;:&quot;Spain&quot;,&quot;flag&quot;:&quot;\ud83c\uddea\ud83c\uddf8&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+94&quot;,&quot;country&quot;:&quot;Sri Lanka&quot;,&quot;flag&quot;:&quot;\ud83c\uddf1\ud83c\uddf0&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+46&quot;,&quot;country&quot;:&quot;Sweden&quot;,&quot;flag&quot;:&quot;\ud83c\uddf8\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+41&quot;,&quot;country&quot;:&quot;Switzerland&quot;,&quot;flag&quot;:&quot;\ud83c\udde8\ud83c\udded&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+886&quot;,&quot;country&quot;:&quot;Taiwan&quot;,&quot;flag&quot;:&quot;\ud83c\uddf9\ud83c\uddfc&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+255&quot;,&quot;country&quot;:&quot;Tanzania&quot;,&quot;flag&quot;:&quot;\ud83c\uddf9\ud83c\uddff&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+66&quot;,&quot;country&quot;:&quot;Thailand&quot;,&quot;flag&quot;:&quot;\ud83c\uddf9\ud83c\udded&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+216&quot;,&quot;country&quot;:&quot;Tunisia&quot;,&quot;flag&quot;:&quot;\ud83c\uddf9\ud83c\uddf3&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+90&quot;,&quot;country&quot;:&quot;Turkey&quot;,&quot;flag&quot;:&quot;\ud83c\uddf9\ud83c\uddf7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+256&quot;,&quot;country&quot;:&quot;Uganda&quot;,&quot;flag&quot;:&quot;\ud83c\uddfa\ud83c\uddec&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+380&quot;,&quot;country&quot;:&quot;Ukraine&quot;,&quot;flag&quot;:&quot;\ud83c\uddfa\ud83c\udde6&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+971&quot;,&quot;country&quot;:&quot;UAE&quot;,&quot;flag&quot;:&quot;\ud83c\udde6\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+44&quot;,&quot;country&quot;:&quot;United Kingdom&quot;,&quot;flag&quot;:&quot;\ud83c\uddec\ud83c\udde7&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+1&quot;,&quot;country&quot;:&quot;USA&quot;,&quot;flag&quot;:&quot;\ud83c\uddfa\ud83c\uddf8&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+598&quot;,&quot;country&quot;:&quot;Uruguay&quot;,&quot;flag&quot;:&quot;\ud83c\uddfa\ud83c\uddfe&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+58&quot;,&quot;country&quot;:&quot;Venezuela&quot;,&quot;flag&quot;:&quot;\ud83c\uddfb\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+84&quot;,&quot;country&quot;:&quot;Vietnam&quot;,&quot;flag&quot;:&quot;\ud83c\uddfb\ud83c\uddf3&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+967&quot;,&quot;country&quot;:&quot;Yemen&quot;,&quot;flag&quot;:&quot;\ud83c\uddfe\ud83c\uddea&quot;},{&quot;s&quot;:&quot;arr&quot;}],[{&quot;code&quot;:&quot;+263&quot;,&quot;country&quot;:&quot;Zimbabwe&quot;,&quot;flag&quot;:&quot;\ud83c\uddff\ud83c\uddfc&quot;},{&quot;s&quot;:&quot;arr&quot;}]],{&quot;s&quot;:&quot;arr&quot;}]},&quot;memo&quot;:{&quot;id&quot;:&quot;GkuXrSay0eEp4DPEKasv&quot;,&quot;name&quot;:&quot;hotel-booking-form&quot;,&quot;path&quot;:&quot;hotel-booking&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;release&quot;:&quot;a-a-a&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[&quot;3749110491-0&quot;,&quot;1060370182-0&quot;,&quot;4245122738-0&quot;,&quot;277613727-0&quot;,&quot;2880279862-0&quot;],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;,&quot;islands&quot;:[]},&quot;checksum&quot;:&quot;0c35a7e9f521df7bc52fb50747f6051e6642be5c297daa0ab9b2f788ed157f42&quot;}" wire:effects="{&quot;listeners&quot;:[&quot;plan-selected&quot;]}" wire:id="GkuXrSay0eEp4DPEKasv" wire:name="hotel-booking-form">
+            <style>
+    .pm-btn{ isolation:isolate; }
+    .pm-btn::after{ content:''; position:absolute; inset:0; border-radius:inherit; background:linear-gradient(115deg, transparent 38%, rgba(255,255,255,0.30) 50%, transparent 62%); background-size:250% 100%; background-position:150% 0; animation:pmSheen 5.5s ease-in-out infinite; pointer-events:none; z-index:1; }
+    .pm-btn > span{ position:relative; z-index:2; }
+    .pm-btn:hover{ transform:translateY(-2px); box-shadow:0 16px 40px rgba(0, 98, 224,0.5), inset 0 1px 0 rgba(255,255,255,0.32) !important; }
+    .pm-btn:active{ transform:translateY(0); }
+    @keyframes pmSheen{ 0%{ background-position:150% 0; } 55%,100%{ background-position:-50% 0; } }
+    @media (prefers-reduced-motion:reduce){ .pm-btn::after{ animation:none; opacity:0; } }
+    @media (max-width:560px){
+      .pm-btn{ padding:0.9rem 0.85rem 0.7rem !important; border-radius:14px !important; }
+      .pm-btn > span:first-child > span:first-child{ font-size:0.92rem !important; gap:0.4rem !important; line-height:1.25 !important; }
+      .pm-btn > span:first-child > span:first-child svg{ width:16px !important; height:16px !important; }
+      .pm-btn > span:first-child > span:last-child{ font-size:0.6rem !important; gap:0.35rem !important; line-height:1.45 !important; margin-top:0.3rem !important; }
+    }
+    @media (max-width:430px){
+      .pill-wrap{ max-width:100%; }
+      .pill-tab{ padding:0.65rem 0.8rem !important; font-size:0.75rem !important; gap:0.3rem !important; min-width:0; flex:1 1 0; justify-content:center; }
+      .pill-tab svg{ width:13px !important; height:13px !important; flex:0 0 auto; }
+    }
+    </style>
+    <div class="mj-plan" role="button" tabindex="0" >
+    <span class="mj-plan-ico" aria-hidden="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>
+    <!--[if BLOCK]><![endif]-->        <span class="mj-plan-text">Enter your own travel details — the document is generated from them</span>
+    <!--[if ENDBLOCK]><![endif]--></div>
+    <!-- PILL TOGGLE -->
+    <div style="display:flex;justify-content:center;margin-bottom:2rem;">
+        <div class="pill-wrap" style="display:inline-flex;background:var(--bg3);border-radius:50px;padding:5px;border:1px solid var(--border);">
+            <button type="button" wire:click="switchTab('flight')" class="pill-tab" style="padding:0.75rem 1.75rem;border-radius:50px;border:none;font-family:inherit;font-weight:700;font-size:0.9rem;cursor:pointer;display:flex;align-items:center;gap:0.5rem;transition:all 0.25s;background:transparent;color:var(--text2);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg> Flight Reservation
+            </button>
+            <button type="button" wire:click="switchTab('hotel')" class="pill-tab" style="padding:0.75rem 1.75rem;border-radius:50px;border:none;font-family:inherit;font-weight:700;font-size:0.9rem;cursor:pointer;display:flex;align-items:center;gap:0.5rem;transition:all 0.25s;background:var(--purple);color:white;box-shadow:0 4px 12px var(--purple-glow);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Hotel Reservation
+            </button>
+        </div>
+    </div>
+
+    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+    <!--[if BLOCK]><![endif]-->    <div class="form-card">
+        <form wire:submit="submitHotel" novalidate style="display:flex;flex-direction:column;gap:1.5rem;">
+            <div>
+                <label class="input-label">Destination City</label>
+                
+                <div style="margin-bottom:0.5rem;">
+                    <label class="input-label">Country</label>
+                    <div style="position:relative;">
+                        <input type="text" wire:model.live.debounce.300ms="country_search" required
+                            placeholder="e.g. Germany, Egypt, Turkey..." autocomplete="off" class="inp">
+                        <div wire:loading wire:target="updatedCountrySearch" style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);font-size:0.75rem;color:var(--purple);">⏳</div>
+                        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                    </div>
+                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                </div>
+                
+                <div>
+                    <label class="input-label">City</label>
+                    <div style="position:relative;">
+                        <input type="text" wire:model.live.debounce.300ms="city_search" required
+                            placeholder="Select a country first"
+                            autocomplete="off" class="inp"  disabled style="opacity:0.5;cursor:not-allowed;" >
+                        <div wire:loading wire:target="updatedCitySearch" style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);font-size:0.75rem;color:var(--purple);">⏳</div>
+                        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                    </div>
+                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div>
+    <label class="input-label" for="checkin_date" id="checkin_date_label">Check-in Date</label>
+    <div class="date-field"
+         data-dp-panel="checkin_date_panel"
+                  >
+
+        <input type="date" id="checkin_date" wire:model.blur="checkin_date"
+                required                min="2026-11-06" max="2028-11-07"
+               class="inp dp-native">
+
+        <button type="button" class="inp dp-trigger" id="checkin_date_trigger"
+                aria-haspopup="dialog" aria-expanded="false"
+                aria-controls="checkin_date_panel"
+                aria-labelledby="checkin_date_label checkin_date_trigger_text">
+            <span class="dp-trigger-text dp-placeholder" id="checkin_date_trigger_text"
+                  data-dp-placeholder="Select a date">Select a date</span>
+        </button>
+    </div>
+    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]--></div>
+                <div>
+    <label class="input-label" for="checkout_date" id="checkout_date_label">Check-out Date</label>
+    <div class="date-field"
+         data-dp-panel="checkout_date_panel"
+          data-dp-min-from="checkin_date"           data-dp-min-exclusive >
+
+        <input type="date" id="checkout_date" wire:model.blur="checkout_date"
+                required                min="2026-11-06" max="2028-11-07"
+               class="inp dp-native">
+
+        <button type="button" class="inp dp-trigger" id="checkout_date_trigger"
+                aria-haspopup="dialog" aria-expanded="false"
+                aria-controls="checkout_date_panel"
+                aria-labelledby="checkout_date_label checkout_date_trigger_text">
+            <span class="dp-trigger-text dp-placeholder" id="checkout_date_trigger_text"
+                  data-dp-placeholder="Select a date">Select a date</span>
+        </button>
+    </div>
+    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]--></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div>
+                    <label class="input-label">Room Type</label>
+                    <select wire:model="room_type" class="inp">
+                        <option value="Standard Room">Standard Room (3-Star)</option>
+                        <option value="Superior Room">Superior Room (3-4 Star)</option>
+                        <option value="Deluxe Room">Deluxe Room (4-Star)</option>
+                        <option value="Junior Suite">Junior Suite (4-5 Star)</option>
+                        <option value="Suite">Suite (5-Star)</option>
+                    </select>
+                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                </div>
+                <div>
+                    <label class="input-label">Rooms</label>
+                    <select wire:model="rooms" class="inp">
+                        <option value="1">1 Room</option>
+                        <option value="2">2 Rooms</option>
+                        <option value="3">3 Rooms</option>
+                    </select>
+                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                </div>
+            </div>
+            <div>
+                <label class="input-label">Guests (Max 6)</label>
+                <div class="inner-card">
+                    <div class="pax-row">
+                        <div><div style="font-weight:700;color:var(--text);">Adults</div><div style="font-size:0.8rem;color:var(--text2);">12+ years</div></div>
+                        <div style="display:flex;align-items:center;gap:1rem;">
+                            <button type="button" wire:click="decrementHotelAdults" class="pax-btn pax-minus">−</button>
+                            <span style="font-size:1.2rem;font-weight:800;color:var(--text);width:24px;text-align:center;">1</span>
+                            <button type="button" wire:click="incrementHotelAdults" class="pax-btn pax-plus">+</button>
+                        </div>
+                    </div>
+                    <div class="pax-row">
+                        <div><div style="font-weight:700;color:var(--text);">Children</div><div style="font-size:0.8rem;color:var(--text2);">2–11 years</div></div>
+                        <div style="display:flex;align-items:center;gap:1rem;">
+                            <button type="button" wire:click="decrementHotelChildren" class="pax-btn pax-minus">−</button>
+                            <span style="font-size:1.2rem;font-weight:800;color:var(--text);width:24px;text-align:center;">0</span>
+                            <button type="button" wire:click="incrementHotelChildren" class="pax-btn pax-plus">+</button>
+                        </div>
+                    </div>
+                    <div style="font-size:0.8rem;color:var(--text2);margin-top:0.75rem;">Total: <strong>1</strong> / 6 guests</div>
+                </div>
+            </div>
+            <div class="inner-card">
+                <h3 style="font-size:1rem;font-weight:800;color:var(--text);margin-bottom:1rem;">Guest Details</h3>
+                <!--[if BLOCK]><![endif]-->                <div wire:key="guest-0" style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.5rem;">
+                    <input type="text" wire:model="hotel_guests.0.name" placeholder="Guest 1 – Full Name" required class="inp">
+                    <input type="text" wire:model="hotel_guests.0.passport" placeholder="Passport Number" required class="inp">
+                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
+                    <input type="date" wire:model="hotel_guests.0.dob" class="inp" min="1906-11-07" max="2026-11-07" placeholder="Date of Birth" title="Date of Birth" style="color:var(--text2);">
+                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                    <input type="text" wire:model="hotel_guests.0.nationality" placeholder="Nationality" class="inp">
+                </div>
+                <!--[if ENDBLOCK]><![endif]-->            </div>
+            <div class="inner-card">
+                <h3 style="font-size:1rem;font-weight:800;color:var(--text);margin-bottom:1rem;">Contact Information</h3>
+                <div style="display:flex;flex-direction:column;gap:1rem;">
+                    <div>
+                        <label class="input-label">Email Address</label>
+                        <input type="email" wire:model.blur="hotel_email" required placeholder="your@email.com" class="inp">
+                        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 2fr;gap:0.75rem;">
+                        <div style="position:relative;">
+                            <label class="input-label">Country Code</label>
+                            <input type="text" wire:model.live.debounce.300ms="phone_search" wire:focus="$set('show_phone_dropdown', true)" placeholder="Search country..." class="inp" autocomplete="off">
+                            <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                            <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                        </div>
+                        <div>
+                            <label class="input-label">Phone Number</label>
+                            <input type="tel" wire:model.blur="hotel_whatsapp" required placeholder="50 123 4567" pattern="(?=(?:[^0-9٠-٩۰-۹०-९০-৯０-９]*[0-9٠-٩۰-۹०-९০-৯０-９]){4,15}[^0-9٠-٩۰-۹०-९০-৯０-９]*$)[0-9٠-٩۰-۹०-९০-৯０-９+\(\)\.\/\s\-]+" inputmode="tel" class="inp">
+                            <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="button" wire:click="checkoutCleanHotel" wire:loading.attr="disabled" class="pm-btn" style="width:100%;position:relative;overflow:hidden;background:linear-gradient(135deg,#2563eb 0%,#0062e0 50%,#1d4ed8 100%);color:#fff;border:none;padding:1.05rem 1rem 0.8rem;border-radius:16px;font-size:1rem;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 10px 30px rgba(0, 98, 224,0.42), inset 0 1px 0 rgba(255,255,255,0.28);transition:transform 0.2s ease, box-shadow 0.2s ease;text-align:center;">
+                <span wire:loading.remove wire:target="checkoutCleanHotel">
+                    <span style="display:flex;align-items:center;justify-content:center;gap:0.5rem;font-size:1.1rem;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                        Download Premium Hotel Reservation — ₹399
+                    </span>
+                    <span style="display:flex;align-items:center;justify-content:center;gap:0.75rem;margin-top:0.4rem;font-size:0.65rem;font-weight:500;color:rgba(255,255,255,0.7);letter-spacing:0.3px;">
+                        Real Hotel &middot; Price Details &middot; Hotel Contact &middot; QR Code
+                    </span>
+                </span>
+                <span wire:loading wire:target="checkoutCleanHotel">Redirecting to payment...</span>
+            </button>
+            <div style="text-align:center;margin:0.35rem 0 0.75rem;"><span style="font-size:0.75rem;color:var(--text2);display:inline-flex;align-items:center;gap:0.35rem;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> No watermark · Secure Stripe payment</span></div>
+            <div style="display:flex;align-items:center;gap:0.75rem;margin:0.25rem 0;"><div style="flex:1;height:1px;background:var(--border);"></div><span style="font-size:0.75rem;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">or</span><div style="flex:1;height:1px;background:var(--border);"></div></div>
+            
+            <button type="submit" style="width:100%;background:rgba(0, 98, 224,0.06);color:var(--purple);border:1.5px solid rgba(0, 98, 224,0.25);padding:0.85rem;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.5rem;box-shadow:0 0 12px rgba(0, 98, 224,0.08);" wire:loading.attr="disabled">
+                <span wire:loading.remove wire:target="submitHotel" style="display:flex;align-items:center;gap:0.5rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download Free (with watermark)</span>
+                <span wire:loading wire:target="submitHotel">Generating PDF...</span>
+            </button>
+        </form>
+    </div>
+    <!--[if ENDBLOCK]><![endif]--></div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="hbv-antwort" aria-labelledby="hbv-antwort-t">
+    <div class="hbv-band">
+        <div class="hbv-antwort-kasten" itemscope itemtype="https://schema.org/Answer">
+            <h2 class="hbv-antwort-h" id="hbv-antwort-t">What is a dummy hotel booking?</h2>
+            <p class="aag-summary-text" itemprop="text">A dummy hotel booking is a hotel reservation confirmation issued for a visa application. It carries the hotel name and address, the guest name as written in the passport, check-in and check-out dates and a booking reference &mdash; without prepayment. Consulates accept it as proof of accommodation because they require evidence of where you intend to stay, not evidence that you have already paid.</p>
+            <dl class="hbv-antwort-fakten">
+                <div><dt>Cost</dt><dd>Free</dd></div>
+                <div><dt>Delivery</dt><dd>PDF in about 30 seconds</dd></div>
+                <div><dt>Prepayment</dt><dd>None &mdash; no card required</dd></div>
+                <div><dt>Used for</dt><dd>Schengen, UK, US, Canada, Australia, UAE</dd></div>
+            </dl>
+        </div>
+    </div>
+</section>
+
+
+<section class="hbv-sec" id="hbv-how">
+    <div class="hbv-band">
+        <div class="hbv-how-grid">
+            <div class="hbv-how-copy">
+                <div class="section-tag">How it works</div>
+                <h2 class="hbv-h2">How to get a free dummy hotel booking PDF in 30 seconds</h2>
+                <p class="hbv-lead">Free, no account and no card. The confirmation is generated the moment you finish the last field.</p>
+                <a href="/#bookingForm" class="hbv-cta1 hbv-cta-sm">
+                    Generate my booking
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
+            <ol class="hbv-steps">
+                                <li>
+                    <span class="hbv-step-n">01</span>
+                    <b>Choose your destination and hotel</b>
+                    <small>Enter the hotel name and address, or search for one at your destination. Any hotel worldwide works.</small>
+                </li>
+                                <li>
+                    <span class="hbv-step-n">02</span>
+                    <b>Enter your travel dates</b>
+                    <small>Check-in and check-out must cover every night of the stay and match the itinerary you submit.</small>
+                </li>
+                                <li>
+                    <span class="hbv-step-n">03</span>
+                    <b>Add the guest details</b>
+                    <small>Names exactly as they appear in the passport, for every traveller on the application.</small>
+                </li>
+                                <li>
+                    <span class="hbv-step-n">04</span>
+                    <b>Download the PDF</b>
+                    <small>The confirmation is generated with a booking reference and is ready to attach to the application.</small>
+                </li>
+                            </ol>
+        </div>
+    </div>
+</section>
+
+
+<section class="hbv-risk">
+    <div class="hbv-risk-inner">
+        <div class="hbv-risk-copy">
+            <div class="section-tag hbv-tag-light">The real cost</div>
+            <h2 class="hbv-h2 hbv-h2-light">Don&rsquo;t risk hundreds before your visa is approved.</h2>
+            <p class="hbv-lead hbv-lead-light">A hotel booking for a visa application only has to prove where you intend to stay. Paying for it up front ties up money you may never use &mdash; and cancellation windows rarely survive a consulate backlog.</p>
+            
+            <div class="hbv-warn">
+                <span class="hbv-warn-ic">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </span>
+                <div>
+                    <b>Do not prepay a hotel before your visa is approved.</b>
+                    <p>Embassies see free-cancellation reservations every day. They do not expect you to lose money on a non-refundable booking &mdash; they expect to see where you intend to stay.</p>
+                </div>
+            </div>
+            <a href="/#bookingForm" class="hbv-glass">
+                Avoid paying upfront
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+        </div>
+        <div class="hbv-compare">
+            <div class="hbv-cmp hbv-cmp-bad">
+                <span class="hbv-cmp-ic hbv-cmp-ic-bad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+                <div class="hbv-cmp-label">Prepaid hotel booking</div>
+                <div class="hbv-cmp-price">₹1,2990&ndash;500+</div>
+                <ul>
+                    <li>Money locked until the trip</li>
+                    <li>Cancellation restrictions</li>
+                    <li>Waiting for confirmation</li>
+                </ul>
+            </div>
+            <div class="hbv-cmp-vs">₹0<small>risk</small></div>
+            <div class="hbv-cmp hbv-cmp-good">
+                <span class="hbv-cmp-ic hbv-cmp-ic-good"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                <div class="hbv-cmp-label">DummyTicket confirmation</div>
+                <div class="hbv-cmp-price hbv-cmp-price-good">₹0</div>
+                <ul>
+                    <li>Free, no card required</li>
+                    <li>Instant PDF download</li>
+                    <li>Made for visa applications</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="hbv-sec">
+    <div class="hbv-band">
+        <div class="hbv-embassy">
+            <div class="hbv-embassy-copy">
+                <div class="section-tag">For visa applications</div>
+                <h2 class="hbv-h2">Everything your application needs.</h2>
+                <p class="hbv-lead">Embassy officers look for specific details in an accommodation confirmation. Missing even one of them can delay or reject an application.</p>
+                <a href="/#bookingForm" class="hbv-cta1 hbv-cta-sm">
+                    Generate my confirmation
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
+            <div class="hbv-embassy-doc" aria-hidden="true">
+                <div class="hbv-paper">
+                    <div class="hbv-paper-head">
+                        <span class="hbv-doc-brand">DummyTicket</span>
+                        <span class="hbv-doc-tag">CONFIRMED</span>
+                    </div>
+                    <div class="hbv-paper-title">HOTEL CONFIRMATION</div>
+                    <div class="hbv-paper-rows">
+                        <div><span>Hotel name</span><b>Grand View Hotel</b></div>
+                        <div><span>Address</span><b>12 Rue de Rivoli, 75004 Paris</b></div>
+                        <div><span>Guest</span><b>A. Traveller</b></div>
+                        <div><span>Check-in</span><b>14 Oct 2026</b></div>
+                        <div><span>Check-out</span><b>21 Oct 2026</b></div>
+                        <div><span>Confirmation no.</span><b>MJ-4471-2026</b></div>
+                    </div>
+                    <div class="hbv-paper-foot">Issued 10 Sep 2026 &middot; DummyTicket.com</div>
+                </div>
+                <div class="hbv-accept">
+                    <span>For all major visa types</span>
+                    <div class="hbv-accept-flags">
+                        <img src="images/flags/fr.svg" width="26" height="18" alt="Schengen" loading="lazy">
+                        <img src="images/flags/gb.svg" width="26" height="18" alt="United Kingdom" loading="lazy">
+                        <img src="images/flags/ca.svg" width="26" height="18" alt="Canada" loading="lazy">
+                        <img src="images/flags/au.svg" width="26" height="18" alt="Australia" loading="lazy">
+                        <img src="images/flags/ae.svg" width="26" height="18" alt="United Arab Emirates" loading="lazy">
+                        <b>+195 more</b>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hbv-tabelle">
+            <table>
+                <caption>What a hotel booking for a visa application must contain</caption>
+                <thead>
+                    <tr><th scope="col">Field</th><th scope="col">Why the consulate checks it</th></tr>
+                </thead>
+                <tbody>
+                    <tr><th scope="row">Hotel name and full address</th><td>Street, city, postal code and country. Must match the destination on the visa application and the travel itinerary.</td></tr>
+                    <tr><th scope="row">Check-in and check-out dates</th><td>Must cover every night of the stay. For Schengen visas a gap in accommodation is one of the most common rejection reasons.</td></tr>
+                    <tr><th scope="row">Guest name as in the passport</th><td>Spelled exactly as in the travel document. Name mismatches are flagged by officers; all travellers should be listed.</td></tr>
+                    <tr><th scope="row">Booking reference number</th><td>A unique reference code. On a booking made with the hotel or a platform, it lets the booking be looked up.</td></tr>
+                    <tr><th scope="row">Room type and board</th><td>Single, double or suite, plus any included meals. Not always mandatory, but a complete document raises fewer questions.</td></tr>
+                    <tr><th scope="row">Rate per night or total</th><td>Officers may cross-check it against the financial documents to see that the stay is affordable.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="hbv-sec hbv-sec-eng">
+    <div class="hbv-band">
+        <div class="section-tag">Verification</div>
+        <h2 class="hbv-h2">Do embassies actually check the booking?</h2>
+        <p class="hbv-lead">It depends on the consulate. Some call the hotel, most check the document for completeness.</p>
+        <div class="hbv-tabelle">
+            <table>
+                <caption>How strictly consulates verify a hotel booking, by country</caption>
+                <thead>
+                    <tr><th scope="col">Level</th><th scope="col">Countries</th><th scope="col">What is expected</th></tr>
+                </thead>
+                <tbody>
+                    <tr><th scope="row">Thorough verification</th><td>Germany, Netherlands, Switzerland, Norway</td><td>May call the hotel. A free-cancellation booking made with the hotel or a booking platform is the safe choice.</td></tr>
+                    <tr><th scope="row">Spot checks</th><td>France, Italy, Spain, United Kingdom, Canada</td><td>Bookings are checked occasionally. A complete confirmation PDF with all required fields is usually enough; a check with the hotel would not find a generated document.</td></tr>
+                    <tr><th scope="row">Visual check only</th><td>United States, Australia, UAE, Thailand, most of Asia</td><td>The document is reviewed for completeness. A complete, well-formatted confirmation is usually enough.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+
+<section class="hbv-sec">
+    <div class="hbv-band">
+        <div class="hbv-dest-head">
+            <div>
+                <div class="section-tag">Destinations</div>
+                <h2 class="hbv-h2">Where are you travelling?</h2>
+                <p class="hbv-lead">Pick a destination and the booking assistant opens with it already filled in.</p>
+            </div>
+        </div>
+        <div class="hbv-dest-grid">
+                        <a class="hbv-dest" href="/#bookingForm">
+                <img class="hbv-dest-img" src="images/hotel-booking/dest-paris.webp" width="800" height="600" alt="Paris" loading="lazy">
+                <span class="hbv-dest-scrim"></span>
+                <span class="hbv-dest-body">
+                    <span class="hbv-dest-name">
+                        <img src="images/flags/fr.svg" width="22" height="15" alt="" aria-hidden="true">
+                        France
+                    </span>
+                    <span class="hbv-dest-cities">Paris · Nice · Lyon</span>
+                    <span class="hbv-dest-go">Generate booking for Paris
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </span>
+                </span>
+            </a>
+                        <a class="hbv-dest" href="/#bookingForm">
+                <img class="hbv-dest-img" src="images/hotel-booking/dest-rome.webp" width="800" height="600" alt="Rome" loading="lazy">
+                <span class="hbv-dest-scrim"></span>
+                <span class="hbv-dest-body">
+                    <span class="hbv-dest-name">
+                        <img src="images/flags/it.svg" width="22" height="15" alt="" aria-hidden="true">
+                        Italy
+                    </span>
+                    <span class="hbv-dest-cities">Rome · Milan · Venice</span>
+                    <span class="hbv-dest-go">Generate booking for Rome
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </span>
+                </span>
+            </a>
+                        <a class="hbv-dest" href="/#bookingForm">
+                <img class="hbv-dest-img" src="images/hotel-booking/dest-barcelona.webp" width="800" height="600" alt="Barcelona" loading="lazy">
+                <span class="hbv-dest-scrim"></span>
+                <span class="hbv-dest-body">
+                    <span class="hbv-dest-name">
+                        <img src="images/flags/es.svg" width="22" height="15" alt="" aria-hidden="true">
+                        Spain
+                    </span>
+                    <span class="hbv-dest-cities">Barcelona · Madrid</span>
+                    <span class="hbv-dest-go">Generate booking for Barcelona
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </span>
+                </span>
+            </a>
+                        <a class="hbv-dest" href="/#bookingForm">
+                <img class="hbv-dest-img" src="images/hotel-booking/dest-london.webp" width="800" height="600" alt="London" loading="lazy">
+                <span class="hbv-dest-scrim"></span>
+                <span class="hbv-dest-body">
+                    <span class="hbv-dest-name">
+                        <img src="images/flags/gb.svg" width="22" height="15" alt="" aria-hidden="true">
+                        United Kingdom
+                    </span>
+                    <span class="hbv-dest-cities">London · Manchester</span>
+                    <span class="hbv-dest-go">Generate booking for London
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </span>
+                </span>
+            </a>
+                        <a class="hbv-dest" href="/#bookingForm">
+                <img class="hbv-dest-img" src="images/hotel-booking/dest-tokyo.webp" width="800" height="600" alt="Tokyo" loading="lazy">
+                <span class="hbv-dest-scrim"></span>
+                <span class="hbv-dest-body">
+                    <span class="hbv-dest-name">
+                        <img src="images/flags/jp.svg" width="22" height="15" alt="" aria-hidden="true">
+                        Japan
+                    </span>
+                    <span class="hbv-dest-cities">Tokyo · Osaka</span>
+                    <span class="hbv-dest-go">Generate booking for Tokyo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </span>
+                </span>
+            </a>
+                        <a class="hbv-dest" href="/#bookingForm">
+                <img class="hbv-dest-img" src="images/hotel-booking/dest-dubai.webp" width="800" height="600" alt="Dubai" loading="lazy">
+                <span class="hbv-dest-scrim"></span>
+                <span class="hbv-dest-body">
+                    <span class="hbv-dest-name">
+                        <img src="images/flags/ae.svg" width="22" height="15" alt="" aria-hidden="true">
+                        United Arab Emirates
+                    </span>
+                    <span class="hbv-dest-cities">Dubai · Abu Dhabi</span>
+                    <span class="hbv-dest-go">Generate booking for Dubai
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </span>
+                </span>
+            </a>
+                    </div>
+    </div>
+</section>
+
+
+
+<style>
+.oc-tw{ width:100vw; margin-inline:calc(50% - 50vw); position:relative; overflow:hidden; padding:5.5rem var(--mj-gutter); background:radial-gradient(100% 130% at 50% -20%, #3d2785 0%, #241858 40%, #150e30 75%, #0e0922 100%); }
+.oc-tw::before{ content:''; position:absolute; inset:0; background:radial-gradient(50% 60% at 15% 115%, rgba(37, 99, 235,0.18), transparent 70%); pointer-events:none; z-index:0; }
+/* Parallax marquee of airport codes (language-neutral, reinforces global reach) */
+.oc-tw-marquee{ position:absolute; left:-8%; top:58%; width:140%; transform:translate(var(--px,0px),-50%); will-change:transform; pointer-events:none; z-index:0; -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent); mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent); }
+.oc-tw-track{ display:inline-flex; white-space:nowrap; animation:oc-tw-slide 48s linear infinite; }
+.oc-tw-set{ display:inline-block; font-size:clamp(3rem,8vw,6.5rem); font-weight:900; letter-spacing:-1px; line-height:1; color:transparent; -webkit-text-stroke:1px rgba(196,181,253,0.10); padding-right:2.5rem; }
+@keyframes oc-tw-slide{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+.oc-tw-track-rev{ animation-name:oc-tw-slide-rev; }
+@keyframes oc-tw-slide-rev{ from{ transform:translateX(-50%); } to{ transform:translateX(0); } }
+.oc-tw-m2, .oc-tw-m3, .oc-tw-m4{ display:none; }
+@media (prefers-reduced-motion:reduce){ .oc-tw-track, .oc-tw-track-rev{ animation:none; } }
+.oc-tw-inner{ position:relative; z-index:1; max-width:1100px; margin:0 auto; }
+.oc-tw-head{ text-align:center; max-width:760px; margin:0 auto 3.25rem; }
+.oc-tw-eyebrow{ display:inline-flex; align-items:center; gap:0.5rem; background:rgba(167,139,250,0.14); border:1px solid rgba(167,139,250,0.3); color:#93c5fd; padding:0.4rem 1rem; border-radius:999px; font-size:0.72rem; font-weight:800; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:1.1rem; }
+.oc-tw-h2{ font-size:clamp(1.7rem,3.4vw,2.5rem); font-weight:900; color:#fff; letter-spacing:-0.7px; line-height:1.15; margin:0 0 0.85rem; }
+.oc-tw-sub{ color:rgba(237,233,254,0.7); font-size:1.02rem; line-height:1.6; margin:0; }
+.oc-tw-stats{ display:flex; align-items:stretch; justify-content:center; flex-wrap:wrap; }
+.oc-tw-stat{ flex:1 1 0; min-width:170px; text-align:center; padding:0.5rem 1.25rem; }
+.oc-tw-ico{ display:flex; justify-content:center; margin-bottom:1.05rem; }
+.oc-tw-ico svg{ width:36px; height:36px; filter:drop-shadow(0 3px 13px rgba(59, 130, 246,0.6)); }
+.oc-tw-num{ font-size:clamp(2.4rem,4.6vw,3.4rem); font-weight:900; line-height:1; letter-spacing:-1.5px; color:#fff; text-shadow:0 8px 34px rgba(0, 98, 224,0.55); }
+.oc-tw-label{ margin-top:0.6rem; font-size:0.9rem; font-weight:600; color:rgba(237,233,254,0.58); }
+.oc-tw-div{ flex:0 0 auto; width:1px; align-self:stretch; min-height:104px; background:linear-gradient(180deg, transparent, rgba(196,181,253,0.28), transparent); }
+@media (max-width:780px){ .oc-tw-div{ display:none; } .oc-tw-stats{ display:grid; grid-template-columns:1fr 1fr; gap:2.75rem 1rem; } .oc-tw-stat{ padding:0; min-width:0; } .oc-tw-marquee{ top:20%; } .oc-tw-m2{ display:block; top:44%; } .oc-tw-m3{ display:block; top:67%; } .oc-tw-m4{ display:block; top:90%; } }
+@media (max-width:440px){ .oc-tw{ padding:3.75rem var(--mj-gutter); } .oc-tw-stats{ grid-template-columns:1fr; gap:2.5rem; } }
+</style>
+<section class="oc-tw" data-tw>
+    <svg width="0" height="0" aria-hidden="true" style="position:absolute" focusable="false"><defs>
+        <linearGradient id="twIcoGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5f3ff"/><stop offset=".45" stop-color="#93c5fd"/><stop offset="1" stop-color="#2563eb"/></linearGradient>
+        <linearGradient id="twIcoGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fde68a"/><stop offset="1" stop-color="#f59e0b"/></linearGradient>
+    </defs></svg>
+    <div class="oc-tw-marquee" data-tw-parallax>
+        <div class="oc-tw-track">
+            <span class="oc-tw-set">JFK · LHR · CDG · DXB · NRT · SIN · SYD · FRA · HKG · LAX · IST · BKK · GRU · AMS · YYZ · DOH · </span>
+            <span class="oc-tw-set" aria-hidden="true">JFK · LHR · CDG · DXB · NRT · SIN · SYD · FRA · HKG · LAX · IST · BKK · GRU · AMS · YYZ · DOH · </span>
+        </div>
+    </div>
+    <div class="oc-tw-marquee oc-tw-m2" data-tw-parallax aria-hidden="true">
+        <div class="oc-tw-track oc-tw-track-rev">
+            <span class="oc-tw-set">DOH · YYZ · AMS · GRU · BKK · IST · LAX · HKG · FRA · SYD · SIN · NRT · DXB · CDG · LHR · JFK · </span>
+            <span class="oc-tw-set">DOH · YYZ · AMS · GRU · BKK · IST · LAX · HKG · FRA · SYD · SIN · NRT · DXB · CDG · LHR · JFK · </span>
+        </div>
+    </div>
+    <div class="oc-tw-marquee oc-tw-m3" data-tw-parallax aria-hidden="true">
+        <div class="oc-tw-track">
+            <span class="oc-tw-set">SIN · DXB · LHR · JFK · NRT · GRU · CDG · HKG · BKK · SYD · AMS · LAX · IST · YYZ · FRA · DOH · </span>
+            <span class="oc-tw-set">SIN · DXB · LHR · JFK · NRT · GRU · CDG · HKG · BKK · SYD · AMS · LAX · IST · YYZ · FRA · DOH · </span>
+        </div>
+    </div>
+    <div class="oc-tw-marquee oc-tw-m4" data-tw-parallax aria-hidden="true">
+        <div class="oc-tw-track oc-tw-track-rev">
+            <span class="oc-tw-set">YYZ · FRA · BKK · CDG · HKG · JFK · DXB · SIN · DOH · LHR · NRT · AMS · GRU · SYD · IST · LAX · </span>
+            <span class="oc-tw-set">YYZ · FRA · BKK · CDG · HKG · JFK · DXB · SIN · DOH · LHR · NRT · AMS · GRU · SYD · IST · LAX · </span>
+        </div>
+    </div>
+    <div class="oc-tw-inner">
+        <div class="oc-tw-head">
+            <div class="oc-tw-eyebrow">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Trusted Worldwide
+            </div>
+            <h2 class="oc-tw-h2">Trusted by Travelers Around the World</h2>
+            <p class="oc-tw-sub">Join 10,000+ travelers who got their visa approved with DummyTicket</p>
+        </div>
+        <div class="oc-tw-stats">
+            <div class="oc-tw-stat">
+                <span class="oc-tw-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="url(#twIcoGrad)" opacity="0.22"/><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" stroke="url(#twIcoGrad)" stroke-width="1.6"/><path d="M2.5 20.5v-.8A5.7 5.7 0 0 1 8.2 14h1.6a5.7 5.7 0 0 1 5.7 5.7v.8" stroke="url(#twIcoGrad)" stroke-width="1.6" stroke-linecap="round"/><path d="M16.5 3.6a4 4 0 0 1 0 7.4M21.5 20.5v-.8a5.7 5.7 0 0 0-3.8-5.4" stroke="url(#twIcoGrad)" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+                <div class="oc-tw-num countup" data-target="10000" data-suffix="+" data-final="10,000+">10,000+</div>
+                <div class="oc-tw-label">Travelers Served</div>
+            </div>
+            <div class="oc-tw-div"></div>
+            <div class="oc-tw-stat">
+                <span class="oc-tw-ico"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" fill="url(#twIcoGrad)" opacity="0.22"/><circle cx="12" cy="12" r="9" stroke="url(#twIcoGrad)" stroke-width="1.6"/><path d="M3 12h18" stroke="url(#twIcoGrad)" stroke-width="1.6"/><path d="M12 3c2.5 2.4 3.9 5.6 3.9 9s-1.4 6.6-3.9 9c-2.5-2.4-3.9-5.6-3.9-9S9.5 5.4 12 3z" stroke="url(#twIcoGrad)" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+                <div class="oc-tw-num countup" data-target="195" data-suffix="+" data-final="195+">195+</div>
+                <div class="oc-tw-label">Countries Covered</div>
+            </div>
+            <div class="oc-tw-div"></div>
+            <div class="oc-tw-stat">
+                <span class="oc-tw-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3.2l2.7 5.4 6 .9-4.3 4.2 1 6L12 17l-5.4 2.8 1-6-4.3-4.2 6-.9z" fill="url(#twIcoGold)" opacity="0.34"/><path d="M12 3.2l2.7 5.4 6 .9-4.3 4.2 1 6L12 17l-5.4 2.8 1-6-4.3-4.2 6-.9z" stroke="url(#twIcoGold)" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+                <div class="oc-tw-num countup" data-target="4.8" data-suffix="/5" data-decimal="true" data-final="4.8/5">4.8/5</div>
+                <div class="oc-tw-label">Customer Rating</div>
+            </div>
+            <div class="oc-tw-div"></div>
+            <div class="oc-tw-stat">
+                <span class="oc-tw-ico"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" fill="url(#twIcoGrad)" opacity="0.22"/><circle cx="12" cy="12" r="9" stroke="url(#twIcoGrad)" stroke-width="1.6"/><path d="M12 7v5.2l3.4 2" stroke="url(#twIcoGrad)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <div class="oc-tw-num"><span class="countup" data-target="30" data-suffix="" data-final="30">30</span> sec</div>
+                <div class="oc-tw-label">Average Delivery</div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  /* ---- count-up ---- */
+  var counters = document.querySelectorAll('.countup');
+  function easeOutExpo(t){ return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+  function animateCounter(el){
+    var target = parseFloat(el.dataset.target), suffix = el.dataset.suffix || '';
+    var duration = 2500, startTime = performance.now(), isDecimal = target < 10;
+    el.textContent = isDecimal ? '0.0' + suffix : '0' + suffix;
+    function update(now){
+      var progress = Math.min((now - startTime) / duration, 1), val = easeOutExpo(progress) * target;
+      el.textContent = isDecimal ? val.toFixed(1) + suffix : Math.floor(val).toLocaleString('en-US') + suffix;
+      if (progress < 1) requestAnimationFrame(update);
+      else el.textContent = isDecimal ? target.toFixed(1) + suffix : target.toLocaleString('en-US') + suffix;
+    }
+    requestAnimationFrame(update);
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if (e.isIntersecting && !e.target.dataset.animated){ e.target.dataset.animated = 'true'; animateCounter(e.target); } });
+  }, { threshold: 0.3 });
+  counters.forEach(function(c){ io.observe(c); });
+
+  /* ---- scroll parallax (left↔right drift of the marquee) ---- */
+  var section = document.querySelector('[data-tw]');
+  var layers = document.querySelectorAll('[data-tw-parallax]');
+  if (section && layers.length && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var ticking = false;
+    function onScroll(){
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(function(){
+        var r = section.getBoundingClientRect(), vh = window.innerHeight;
+        var p = (vh - r.top) / (vh + r.height);            // 0..1 as section passes through
+        p = Math.max(0, Math.min(1, p));
+        var off = (p - 0.5) * 140;
+        layers.forEach(function(layer, i){
+          layer.style.setProperty('--px', (i % 2 ? -off : off).toFixed(1) + 'px');  // opposite drift per row
+        });
+        ticking = false;
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+});
+</script>
+
+
+<section class="hbv-sec">
+    <div class="hbv-band">
+        <div class="hbv-dest-head">
+            <div>
+                <div class="section-tag">Success stories</div>
+                
+                <h2 class="hbv-h2">What applicants say about the booking</h2>
+                
+                <p class="hbv-lead">Real reviews from the DummyTicket review wall.</p>
+            </div>
+        </div>
+        <div class="hbv-story-grid">
+                        <article class="hbv-story">
+                <header>
+                    <span class="hbv-story-flag"><span class="fi fi-lb" style="border-radius:2px;"></span></span>
+                    <span class="hbv-story-meta">
+                        <b>Lebanon</b>
+                        <small>Schengen Visa (France)</small>                    </span>
+                    <span class="hbv-story-stars">
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 6.18 21l1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.82 4.73L17.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 6.18 21l1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.82 4.73L17.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 6.18 21l1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.82 4.73L17.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 6.18 21l1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.82 4.73L17.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 6.18 21l1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.82 4.73L17.82 21z"/></svg>                    </span>
+                </header>
+                <p class="hbv-story-text">My husband wanted to book actual flights before the visa was approved. I said that is insane, what if they refuse us and we are stuck with nonrefundable tickets to Paris. He said they offer refundable fares. I said have you seen what refundable fares cost on A...</p>
+                <footer><b>Nour Khoury</b><span>7 months ago</span></footer>
+            </article>
+                        <article class="hbv-story">
+                <header>
+                    <span class="hbv-story-flag"><span class="fi fi-in" style="border-radius:2px;"></span></span>
+                    <span class="hbv-story-meta">
+                        <b>India</b>
+                        <small>Schengen Visa (Italy)</small>                    </span>
+                    <span class="hbv-story-stars">
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 6.18 21l1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.82 4.73L17.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 6.18 21l1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.82 4.73L17.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 6.18 21l1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.82 4.73L17.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 6.18 21l1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.82 4.73L17.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 6.18 21l1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.82 4.73L17.82 21z"/></svg>                    </span>
+                </header>
+                <p class="hbv-story-text">Schengen visa number seven using DummyTicket reservations. Italy twice, France three times, Spain twice. Never once questioned by any consulate. I stopped thinking about flight reservations as a task somewhere around application number four. It takes less time tha...</p>
+                <footer><b>Anil Kapoor</b><span>6 months ago</span></footer>
+            </article>
+                        <article class="hbv-story">
+                <header>
+                    <span class="hbv-story-flag"><span class="fi fi-bd" style="border-radius:2px;"></span></span>
+                    <span class="hbv-story-meta">
+                        <b>Bangladesh</b>
+                        <small>Schengen Visa (France)</small>                    </span>
+                    <span class="hbv-story-stars">
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 6.18 21l1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.82 4.73L17.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 6.18 21l1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.82 4.73L17.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 6.18 21l1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.82 4.73L17.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 6.18 21l1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.82 4.73L17.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 6.18 21l1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.82 4.73L17.82 21z"/></svg>                    </span>
+                </header>
+                <p class="hbv-story-text">Let me tell you about the agent on Gulshan Avenue. He sits behind a glass counter, types your name into the same kind of website I found in two seconds on Google, clicks a button, prints a page, and charges you 4,500 taka. Four thousand five hundred taka for s...</p>
+                <footer><b>Rafiq Hossain</b><span>8 months ago</span></footer>
+            </article>
+                    </div>
+        <div class="hbv-mid-cta">
+            <a href="/#bookingForm" class="hbv-cta1 hbv-cta-sm">
+                Join 10,000+ travellers
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+        </div>
+    </div>
+</section>
+
+
+<div class="hbv-guide">
+    <div style="max-width:1280px;margin:0 auto;padding:2.5rem 1.5rem;">
+
+    
+    <div class="card" style="margin-bottom:2rem;">
+        <div class="section-tag">Guide</div>
+        
+        <h2 class="section-h2" id="hotel-reservation-for-visa-without-prepayment">Hotel Reservation for Visa Without Prepayment</h2>
+        
+        <p style="color:var(--text2);font-size:0.95rem;line-height:1.75;margin-bottom:1rem;">
+            The document goes by several names: hotel reservation for visa, proof of accommodation, temporary hotel confirmation. Whichever term an embassy uses, it asks for the same thing &mdash; evidence of where you will sleep on every night of the trip.
+        </p>
+        <p style="color:var(--text2);font-size:0.95rem;line-height:1.75;margin-bottom:1rem;">
+            The problem: most embassies explicitly advise against making non-refundable hotel bookings before visa approval. If your visa is denied, you lose your money. A dummy hotel booking solves this by providing an accommodation confirmation made for the visa application, without financial risk.
+        </p>
+        <p style="color:var(--text2);font-size:0.95rem;line-height:1.75;margin-bottom:1.5rem;">
+            DummyTicket generates a free hotel booking PDF with hotel name, address, check-in/check-out dates, guest details, and a booking reference in 30 seconds. Use it for your visa application &mdash; completely free, no account needed.
+        </p>
+        <a href="hotel-booking.html#bookingForm" class="btn-primary" style="margin-top:0.5rem;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+            Generate Free Hotel Booking
+        </a>
+    </div>
+
+    
+    <div class="card" style="margin-bottom:2rem;">
+        <div class="section-tag">Terminology</div>
+        <h2 class="section-h2" id="is-a-dummy-hotel-booking-the-same-as-a-made-up-hotel-booking">Is a dummy hotel booking the same as a made-up hotel booking?</h2>
+        <p style="color:var(--text2);font-size:0.95rem;line-height:1.75;margin-bottom:1rem;">
+            No, and the difference matters. People search for &ldquo;dummy hotel booking&rdquo; when they mean a reservation made for a visa application rather than for a stay &mdash; a document made for the application, not for the stay. A made-up hotel booking in the literal sense is an edited confirmation that pretends to come from a hotel or booking platform: invented hotels, altered documents built to deceive. Those are what consulates and fraud detection services look for, and using one is a criminal matter.
+        </p>
+        <p style="color:var(--text2);font-size:0.95rem;line-height:1.75;margin-bottom:0;">
+            A dummy hotel booking is neither. It is a reservation document generated for your visa application &mdash; it is not held by the hotel, and it is not prepaid. If your consulate checks bookings with the hotel, use a free-cancellation booking made with the hotel or a booking platform instead.
+        </p>
+    </div>
+
+    
+
+    
+    <div class="card" style="margin-bottom:2rem;">
+        <div class="section-tag">Visa Applications</div>
+        <h2 class="section-h2" id="why-do-embassies-require-proof-of-accommodation">Why Do Embassies Require Proof of Accommodation?</h2>
+        <p style="color:var(--text2);font-size:0.95rem;line-height:1.75;margin-bottom:1rem;">
+            Embassy officers need to verify that you have a place to stay during your visit. Proof of accommodation is one of the core requirements for almost every visa type worldwide. Without it, your application will be incomplete and likely rejected. The accommodation document must show hotel name, address, dates, and the applicant name matching the passport.
+        </p>
+        <p style="color:var(--text2);font-size:0.95rem;line-height:1.75;margin-bottom:1.25rem;">
+            Crucially, embassies do not want you to prepay hotels before visa approval. They understand that non-refundable bookings create financial risk for applicants. A free-cancellation reservation or a dummy hotel booking is exactly what they expect to see. Here is what major visa authorities require:
+        </p>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;">
+                        <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:0.85rem 1rem;background:var(--bg2);border-radius:12px;">
+                <div style="width:24px;height:24px;min-width:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(16,185,129,0.12);">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div>
+                    <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:0.2rem;">Schengen Visa (29 European countries)</div>
+                    <div class="hbv-fliess" style="font-size:0.82rem;color:var(--text2);line-height:1.5;">All Schengen consulates require proof of accommodation for every night of your stay. A hotel reservation, Airbnb confirmation, or invitation letter from a host is accepted. The booking does not need to be prepaid &mdash; a free cancellation reservation is the standard approach. Schengen consulates explicitly state: do not buy non-refundable bookings before visa approval.</div>
+                </div>
+            </div>
+                        <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:0.85rem 1rem;background:var(--bg2);border-radius:12px;">
+                <div style="width:24px;height:24px;min-width:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(16,185,129,0.12);">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div>
+                    <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:0.2rem;">UK Standard Visitor Visa</div>
+                    <div class="hbv-fliess" style="font-size:0.82rem;color:var(--text2);line-height:1.5;">UKVI requires evidence of where you will stay during your visit. A hotel booking confirmation showing your name, dates, and the hotel address satisfies this. The UK Home Office guidance specifically says applicants should provide details of accommodation &mdash; not proof of payment.</div>
+                </div>
+            </div>
+                        <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:0.85rem 1rem;background:var(--bg2);border-radius:12px;">
+                <div style="width:24px;height:24px;min-width:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(16,185,129,0.12);">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div>
+                    <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:0.2rem;">US B1/B2 Tourist Visa</div>
+                    <div class="hbv-fliess" style="font-size:0.82rem;color:var(--text2);line-height:1.5;">While not strictly mandatory at the interview, showing your hotel arrangements demonstrates genuine travel intent and significantly strengthens your application. US consular officers want to see that you have a concrete travel plan, not just a vague idea of visiting.</div>
+                </div>
+            </div>
+                        <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:0.85rem 1rem;background:var(--bg2);border-radius:12px;">
+                <div style="width:24px;height:24px;min-width:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(16,185,129,0.12);">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div>
+                    <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:0.2rem;">Canada Visitor Visa</div>
+                    <div class="hbv-fliess" style="font-size:0.82rem;color:var(--text2);line-height:1.5;">IRCC requires a detailed travel plan including accommodation for each location. A hotel booking for every city you plan to visit is recommended. Canadian visa officers look for a coherent itinerary that matches your stated purpose of visit.</div>
+                </div>
+            </div>
+                        <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:0.85rem 1rem;background:var(--bg2);border-radius:12px;">
+                <div style="width:24px;height:24px;min-width:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(16,185,129,0.12);">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div>
+                    <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:0.2rem;">Australia ETA / e-Visa</div>
+                    <div class="hbv-fliess" style="font-size:0.82rem;color:var(--text2);line-height:1.5;">Proof of accommodation supports your genuine visitor intent. Australian immigration expects to see evidence of planned activities and accommodation. A hotel reservation for your planned dates strengthens the application.</div>
+                </div>
+            </div>
+                        <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:0.85rem 1rem;background:var(--bg2);border-radius:12px;">
+                <div style="width:24px;height:24px;min-width:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(16,185,129,0.12);">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div>
+                    <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:0.2rem;">UAE / Dubai Tourist Visa</div>
+                    <div class="hbv-fliess" style="font-size:0.82rem;color:var(--text2);line-height:1.5;">Hotels in the UAE often require advance booking. A hotel reservation is part of the standard application checklist for UAE tourist visas. Many UAE visa processing centers will not accept an application without an accommodation confirmation.</div>
+                </div>
+            </div>
+                    </div>
+    </div>
+
+    
+
+    
+
+    
+    <div class="card" style="margin-bottom:2rem;">
+        <div class="section-tag">Digital Nomads &amp; Travelers</div>
+        <h2 class="section-h2" id="hotel-booking-for-digital-nomads-long-term-travelers">Hotel Booking for Digital Nomads &amp; Long-Term Travelers</h2>
+        <p style="color:var(--text2);font-size:0.95rem;line-height:1.75;margin-bottom:1rem;">
+            If you are a digital nomad, backpacker, or long-term traveler, you face a unique challenge: you need to show embassies where you will stay, but you might not know your exact plans yet. A dummy hotel booking solves this perfectly.
+        </p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;" class="nomad-grid">
+                        <div style="background:var(--bg2);border-radius:12px;padding:1rem;">
+                <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:0.4rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2.5" style="display:inline;margin-right:0.3rem;vertical-align:middle;"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+                    Schengen visa applications
+                </div>
+                <div class="hbv-fliess" style="font-size:0.82rem;color:var(--text2);line-height:1.6;">Applying for a Schengen visa requires accommodation proof for every night. If you plan to visit multiple cities (Paris, Rome, Barcelona), generate a hotel booking for each stop to show a complete travel plan.</div>
+            </div>
+                        <div style="background:var(--bg2);border-radius:12px;padding:1rem;">
+                <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:0.4rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2.5" style="display:inline;margin-right:0.3rem;vertical-align:middle;"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+                    Southeast Asia travel
+                </div>
+                <div class="hbv-fliess" style="font-size:0.82rem;color:var(--text2);line-height:1.6;">Countries like Thailand, Indonesia, and Vietnam may ask for proof of accommodation at immigration. A hotel booking for your first few nights shows you have plans without locking in your entire trip.</div>
+            </div>
+                        <div style="background:var(--bg2);border-radius:12px;padding:1rem;">
+                <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:0.4rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2.5" style="display:inline;margin-right:0.3rem;vertical-align:middle;"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+                    Airbnb &amp; hostels
+                </div>
+                <div class="hbv-fliess" style="font-size:0.82rem;color:var(--text2);line-height:1.6;">Staying in Airbnbs or hostels? Embassies accept various accommodation types. If your Airbnb host cannot provide a formal confirmation, a hotel booking for the same dates works as an alternative.</div>
+            </div>
+                        <div style="background:var(--bg2);border-radius:12px;padding:1rem;">
+                <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:0.4rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2.5" style="display:inline;margin-right:0.3rem;vertical-align:middle;"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+                    Multiple-city trips
+                </div>
+                <div class="hbv-fliess" style="font-size:0.82rem;color:var(--text2);line-height:1.6;">Visiting 3-4 countries on one trip? Generate a separate hotel booking for each destination. This shows embassies a coherent, well-planned itinerary &mdash; exactly what they want to see.</div>
+            </div>
+                    </div>
+    </div>
+
+</div>
+
+
+<section style="max-width:1280px;margin:2rem auto 4rem;padding:0 1.5rem;">
+    <article>
+        <h2 style="font-size:2rem;font-weight:800;color:var(--text);margin-bottom:1rem;text-align:center;" id="the-complete-guide-to-hotel-bookings-for-visa-applications-in-2026">The Complete Guide to Hotel Bookings for Visa Applications in 2026</h2>
+        <p style="color:var(--text2);text-align:center;margin-bottom:3rem;font-size:1.05rem;">Everything you need to know about accommodation proof for embassies, consulates, and immigration worldwide</p>
+
+        <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:2.5rem;margin-bottom:2rem;line-height:1.85;color:var(--text2);font-size:0.98rem;">
+
+            
+
+            <h3 style="color:var(--text);font-size:1.3rem;font-weight:700;margin-top:2rem;margin-bottom:1rem;">Why Embassies Do Not Want Prepaid Hotel Reservations</h3>
+            <p style="margin-bottom:1.5rem;">One of the most important things visa applicants must understand is that embassies explicitly discourage non-refundable hotel bookings before visa approval. The official Schengen visa application guidelines state that applicants should provide hotel reservations &mdash; not confirmed, prepaid bookings. This distinction is critical and often misunderstood by first-time applicants.</p>
+            <p style="margin-bottom:1.5rem;">The reasoning is straightforward: if a visa is denied, the applicant loses any money spent on non-refundable hotel reservations. Embassies do not want to be responsible for creating financial hardship. They process thousands of applications with free-cancellation bookings and dummy hotel reservations every day. A hotel booking from Booking.com with free cancellation, an Airbnb reservation, or a generated accommodation confirmation document like those from DummyTicket are all common forms of proof.</p>
+            <p style="margin-bottom:1.5rem;">The requirement itself is written into law. Annex II of the EU Visa Code &mdash; Regulation (EC) No 810/2009, the regulation that governs every Schengen visa application &mdash; lists the supporting documents a consulate may request, and for accommodation it names a <em>reservation</em>: &ldquo;proof of accommodation&rdquo;, given as a hotel reservation, lease or voucher. It does not ask for a paid stay, and nothing in the Visa Code requires one. <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX%3A02009R0810-20240628" rel="noopener nofollow" target="_blank" style="color:var(--purple);font-weight:700;">Read Annex II of the Visa Code</a>.</p>
+
+            
+
+            <h3 style="color:var(--text);font-size:1.3rem;font-weight:700;margin-top:2rem;margin-bottom:1rem;">How Embassy Officers Evaluate Hotel Bookings</h3>
+            <p style="margin-bottom:1.5rem;">Understanding how visa officers review accommodation documents helps you prepare better. Officers typically spend 30-60 seconds reviewing each supporting document. They look for: (1) the guest name matching the passport exactly, (2) dates that align with the travel itinerary and flight bookings, (3) a hotel in the correct destination city, (4) a realistic accommodation choice that matches the applicant's stated financial situation, and (5) a professional format with a confirmation number.</p>
+            <p style="margin-bottom:1.5rem;">Red flags that can trigger additional scrutiny include: dates that do not match other documents, a hotel booking for a city different from the stated destination, extremely cheap or extremely expensive hotels inconsistent with the applicant's bank statements, multiple bookings for the same nights at different hotels, and poor-quality documents with missing information. Avoid these inconsistencies by carefully cross-referencing all your visa application documents before submission.</p>
+
+            
+
+            <h3 style="color:var(--text);font-size:1.3rem;font-weight:700;margin-top:2rem;margin-bottom:1rem;">Dummy Hotel Booking for Schengen Visa: The Complete Checklist</h3>
+            <p style="margin-bottom:1rem;">Schengen visa applications are the most demanding when it comes to accommodation documentation. Use this checklist to ensure your hotel bookings are complete:</p>
+            <p style="margin-bottom:0.5rem;padding-left:1rem;"><strong style="color:var(--text);">1. Coverage:</strong> Hotel bookings must cover every single night from your entry date to your exit date. No gaps allowed between properties.</p>
+            <p style="margin-bottom:0.5rem;padding-left:1rem;"><strong style="color:var(--text);">2. Multi-country trips:</strong> For trips across multiple Schengen countries, provide separate hotel bookings for each country with dates that connect seamlessly.</p>
+            <p style="margin-bottom:0.5rem;padding-left:1rem;"><strong style="color:var(--text);">3. Main destination rule:</strong> Apply at the embassy of the country where you will spend the most nights. Your hotel bookings clearly demonstrate which country is your primary destination.</p>
+            <p style="margin-bottom:0.5rem;padding-left:1rem;"><strong style="color:var(--text);">4. Matching dates:</strong> Hotel check-in dates must match your flight arrival dates. If you arrive in Paris on March 3rd, your hotel check-in should be March 3rd &mdash; not March 4th.</p>
+            <p style="margin-bottom:0.5rem;padding-left:1rem;"><strong style="color:var(--text);">5. Guest details:</strong> Every traveler in the group must be named on the hotel booking. Children traveling with parents should also be listed.</p>
+            <p style="margin-bottom:1.5rem;padding-left:1rem;"><strong style="color:var(--text);">6. Format:</strong> A printed PDF is preferred. The document must be clear, legible, and contain the hotel name, address, dates, guest names, and a confirmation reference.</p>
+
+            <h3 style="color:var(--text);font-size:1.3rem;font-weight:700;margin-top:2rem;margin-bottom:1rem;">Alternatives to Hotel Bookings: What Else Embassies Accept</h3>
+            <p style="margin-bottom:1.5rem;">While hotel bookings are the most common form of accommodation proof, embassies also accept other types of documentation. Airbnb or Booking.com reservations with free cancellation are widely accepted &mdash; just ensure the confirmation shows all required details. An invitation letter from a host in the destination country (especially common for family visit visas) can replace hotel bookings for nights spent at the host's address. For business visas, a letter from the inviting company confirming they have arranged accommodation is also accepted.</p>
+            <p style="margin-bottom:1.5rem;">Hostel reservations, serviced apartment bookings, and even camping ground reservations are valid as long as they include the property name, address, dates, and guest names. The key is that the embassy needs to know where you will be staying each night &mdash; the type of accommodation matters less than the completeness of the documentation.</p>
+
+            <h3 style="color:var(--text);font-size:1.3rem;font-weight:700;margin-top:2rem;margin-bottom:1rem;">How DummyTicket Hotel Booking Generator Works</h3>
+            
+            <p style="color:var(--text2);font-size:0.95rem;line-height:1.8;margin-bottom:1rem;">The generated document is free, needs no account and can be downloaded instantly. You can generate as many bookings as a multi-city trip requires. Combined with a dummy flight ticket from our flight reservation tool and a travel itinerary, it forms a complete visa application package.</p>
+
+        </div>
+    </article>
+</section>
+
+
+
+<div style="max-width:1280px;margin:0 auto;padding:0 1.5rem 2rem;">
+    <div class="card" style="margin-bottom:2rem;">
+        <div class="section-tag">FAQ</div>
+        <h2 class="section-h2" id="dummy-hotel-booking-for-visa-frequently-asked-questions">Dummy Hotel Booking for Visa — Frequently Asked Questions</h2>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:0.5rem;">
+                                    <div class="faq-item">
+                <div class="faq-q" tabindex="0" role="button" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaq(this)}">
+                    <span>Is the dummy hotel booking free, and do I get it as a PDF?</span>
+                    <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </div>
+                <div class="faq-a">Yes. The dummy hotel booking on DummyTicket is free &mdash; no account and no credit card. You enter the city, the dates and the guest names, and the confirmation is generated as a PDF in about 30 seconds, ready to print or attach to your visa application.</div>
+            </div>
+                        <div class="faq-item">
+                <div class="faq-q" tabindex="0" role="button" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaq(this)}">
+                    <span>Is a dummy hotel booking accepted for Schengen visa?</span>
+                    <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </div>
+                <div class="faq-a">Yes. All 29 Schengen consulates accept hotel reservations as proof of accommodation. The Schengen visa application form (Article 25) specifically requires accommodation details for every night of your stay. The booking does not need to be prepaid. A free-cancellation reservation or a booking confirmation PDF from DummyTicket is made for this requirement. Many successful Schengen visa applicants use dummy hotel bookings.</div>
+            </div>
+                        <div class="faq-item">
+                <div class="faq-q" tabindex="0" role="button" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaq(this)}">
+                    <span>Do I need a hotel reservation before visa approval?</span>
+                    <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </div>
+                <div class="faq-a">Yes, for most visa types. Embassies require proof of accommodation as part of the application package. However, they explicitly advise against making non-refundable bookings before visa approval. The official Schengen visa guidelines state that applicants should show a flight reservation and hotel booking &mdash; not confirmed paid tickets or prepaid hotels. A dummy hotel booking is the standard, accepted solution.</div>
+            </div>
+                        <div class="faq-item">
+                <div class="faq-q" tabindex="0" role="button" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaq(this)}">
+                    <span>Can I cancel my hotel booking after visa approval?</span>
+                    <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </div>
+                <div class="faq-a">If you used a real hotel booking with free cancellation (from Booking.com, Expedia, etc.), yes &mdash; cancel it after visa approval and book your preferred accommodation. If you used a DummyTicket dummy hotel booking, there is nothing to cancel &mdash; it is a document generated for visa purposes only. Most experienced travelers use a combination: a dummy booking for the visa, then book their actual preferred accommodation after approval.</div>
+            </div>
+                        <div class="faq-item">
+                <div class="faq-q" tabindex="0" role="button" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaq(this)}">
+                    <span>Is it legal to use a dummy hotel booking for visa?</span>
+                    <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </div>
+                <div class="faq-a">Yes. Using a temporary hotel reservation for visa applications is completely legal and standard practice worldwide. Embassies process thousands of these daily. The document shows your intended accommodation plans &mdash; it is not a fraudulent document. Just like a flight reservation (dummy ticket) is accepted for visa applications, a hotel booking confirmation is accepted as proof of accommodation.</div>
+            </div>
+                        <div class="faq-item">
+                <div class="faq-q" tabindex="0" role="button" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaq(this)}">
+                    <span>How many hotel bookings do I need for a multi-city trip?</span>
+                    <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </div>
+                <div class="faq-a">You need proof of accommodation for every night of your trip. For a multi-city Schengen trip (e.g., Paris 3 nights, Rome 2 nights, Barcelona 3 nights), you need a separate hotel booking for each city. Gaps in accommodation coverage are one of the most common reasons for Schengen visa rejection. DummyTicket lets you generate unlimited hotel bookings for free.</div>
+            </div>
+                        <div class="faq-item">
+                <div class="faq-q" tabindex="0" role="button" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaq(this)}">
+                    <span>Do I need a hotel booking for a transit visa?</span>
+                    <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </div>
+                <div class="faq-a">It depends on the transit country and duration. For short transits (under 24 hours) at the airport, accommodation proof is usually not required. For longer transits or if you plan to leave the airport, you may need a hotel booking. Always check the specific requirements of the transit country embassy.</div>
+            </div>
+                        <div class="faq-item">
+                <div class="faq-q" tabindex="0" role="button" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaq(this)}">
+                    <span>Can I use a hotel booking from Booking.com for my visa?</span>
+                    <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </div>
+                <div class="faq-a">Yes. Booking.com reservations with free cancellation are widely accepted by embassies. Many visa applicants book a refundable hotel on Booking.com, use the confirmation for the visa application, and cancel after approval. The downside is that you need a credit card to make the reservation, and some hotels charge immediately. A DummyTicket dummy hotel booking gives you a confirmation document for the application with zero financial risk &mdash; unlike a platform booking, it is not held by the hotel.</div>
+            </div>
+                        <div class="faq-item">
+                <div class="faq-q" tabindex="0" role="button" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaq(this)}">
+                    <span>What happens if the embassy rejects my hotel booking?</span>
+                    <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </div>
+                <div class="faq-a">If an embassy finds your accommodation proof insufficient, they will typically request additional documentation rather than reject the visa outright. Common issues include: dates not matching your travel itinerary, guest name not matching passport, or missing hotel address. Ensure all details on your hotel booking match your other visa documents exactly.</div>
+            </div>
+                        <div class="faq-item">
+                <div class="faq-q" tabindex="0" role="button" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaq(this)}">
+                    <span>Is a hotel booking required for a US visa interview?</span>
+                    <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </div>
+                <div class="faq-a">A hotel booking is not strictly required for a US B1/B2 visa interview, but it is highly recommended. US consular officers want to see that you have concrete travel plans. Presenting a hotel booking along with your flight itinerary demonstrates genuine travel intent and strengthens your case significantly. Many successful US visa applicants include hotel bookings in their documentation.</div>
+            </div>
+                        <div class="faq-item">
+                <div class="faq-q" tabindex="0" role="button" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaq(this)}">
+                    <span>What is proof of accommodation for a visa?</span>
+                    <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </div>
+                <div class="faq-a">Proof of accommodation is the document a consulate accepts as evidence of where you will stay for every night of your trip. It can be a hotel booking confirmation, a rental agreement, an invitation letter from a host, or an Airbnb reservation. What matters is that it names the address, the dates and the traveller, and that the dates leave no gap in the itinerary.</div>
+            </div>
+                        <div class="faq-item">
+                <div class="faq-q" tabindex="0" role="button" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaq(this)}">
+                    <span>What proof of accommodation does a digital nomad visa require?</span>
+                    <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </div>
+                <div class="faq-a">Most digital nomad visas ask for accommodation covering at least the first weeks of the stay, not the whole permit. Portugal’s D8 and Spain’s digital nomad visa accept a rental contract or a hotel booking; Croatia and Estonia accept a booking confirmation for the initial period. Because long-stay plans usually change, a free booking confirmation for the opening weeks is the common way applicants meet the requirement without committing money.</div>
+            </div>
+                        <div class="faq-item">
+                <div class="faq-q" tabindex="0" role="button" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaq(this)}">
+                    <span>How do I show proof of accommodation without paying for a hotel?</span>
+                    <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </div>
+                <div class="faq-a">Three routes are accepted. A free-cancellation reservation on a booking platform, which you cancel after approval. An invitation letter from a host, which in France and Germany takes an official form (attestation d’accueil, Verpflichtungserklaerung). Or a hotel booking confirmation generated for the application, which is what DummyTicket produces &mdash; no card, no prepayment, no cancellation to remember.</div>
+            </div>
+                        <div class="faq-item">
+                <div class="faq-q" tabindex="0" role="button" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaq(this)}">
+                    <span>Does an Airbnb reservation count as proof of accommodation?</span>
+                    <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </div>
+                <div class="faq-a">Usually yes &mdash; consulates accept Airbnb for visa applications, provided the confirmation carries the full address, the exact dates, the guest name and the host details. Consulates reject Airbnb proof when the listing shows only a district instead of a street address, or when the guest name does not match the passport. If the host cannot supply a formal confirmation, a hotel booking is the safer document.</div>
+            </div>
+                        <div class="faq-item">
+                <div class="faq-q" tabindex="0" role="button" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaq(this)}">
+                    <span>What does a proof of accommodation document look like?</span>
+                    <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </div>
+                <div class="faq-a">It is a one-page confirmation carrying six things: the hotel or property name, the full postal address, check-in and check-out dates, the guest name exactly as in the passport, a booking reference number, and the room type or rate. A document missing any of the six is what officers query most often.</div>
+            </div>
+                        <div class="faq-item">
+                <div class="faq-q" tabindex="0" role="button" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaq(this)}">
+                    <span>Is proof of accommodation required for a Schengen visa?</span>
+                    <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </div>
+                <div class="faq-a">Yes. The Schengen Visa Code lists accommodation evidence among the supporting documents, and it must cover every night of the intended stay. It does not have to be prepaid &mdash; the consulates explicitly do not expect applicants to commit money before a decision.</div>
+            </div>
+                    </div>
+    </div>
+
+    
+
+    
+    
+    <section class="thr-band" style="margin-block:2.5rem;">
+        <div class="thr-inner">
+            <div class="thr-eyebrow">Related Tools</div>
+            <h2 class="thr-h2" id="complete-your-visa-application">Complete Your Visa Application</h2>
+            <p class="thr-sub">A hotel booking is one document of several. These are the others a consulate usually asks for &mdash; all free, all in the same format.</p>
+            <div class="thr-grid">
+                <a href="/dummy-ticket" class="thr-card">
+                    <span class="thr-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M17.8 19.2 16 11l3.5-3.5a2.5 2.5 0 1 0-3.5-3.5L12.5 7.5 4.3 5.7a1 1 0 0 0-1 1.6l6.2 4.2-2.4 2.4-2.6-.6a.8.8 0 0 0-.8 1.3l2 2 2 2a.8.8 0 0 0 1.3-.8l-.6-2.6 2.4-2.4 4.2 6.2a1 1 0 0 0 1.6-1Z" fill="currentColor" opacity="0.18"/><path d="M17.8 19.2 16 11l3.5-3.5a2.5 2.5 0 1 0-3.5-3.5L12.5 7.5 4.3 5.7a1 1 0 0 0-1 1.6l6.2 4.2-2.4 2.4-2.6-.6a.8.8 0 0 0-.8 1.3l2 2 2 2a.8.8 0 0 0 1.3-.8l-.6-2.6 2.4-2.4 4.2 6.2a1 1 0 0 0 1.6-1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
+                    <div class="thr-title">Dummy Flight Ticket</div>
+                    <div class="thr-desc">Free flight reservation PDF with a booking reference (real PNR with Premium, ₹399) — the onward-travel proof consulates ask for alongside your accommodation.</div>
+                    <div class="thr-foot"><span class="thr-arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+                </a>
+                <a href="/travel-itinerary" class="thr-card">
+                    <span class="thr-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2Z" fill="currentColor" opacity="0.18"/><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" stroke="currentColor" stroke-width="1.6"/></svg></span>
+                    <div class="thr-title">Travel Itinerary</div>
+                    <div class="thr-desc">A day-by-day plan showing the whole trip — the document that ties your flights and your hotel dates together.</div>
+                    <div class="thr-foot"><span class="thr-arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+                </a>
+                <a href="/invitation-letter" class="thr-card">
+                    <span class="thr-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16v12H4z" fill="currentColor" opacity="0.18"/><path d="M4 6h16v12H4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    <div class="thr-title">Invitation Letter</div>
+                    <div class="thr-desc">Staying with family or a host instead of a hotel? This is the accommodation proof consulates accept in its place.</div>
+                    <div class="thr-foot"><span class="thr-arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+                </a>
+                <a href="/embassy-letter" class="thr-card">
+                    <span class="thr-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2h9l5 5v15H6z" fill="currentColor" opacity="0.18"/><path d="M6 2h9l5 5v15H6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M15 2v5h5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 13h7M9 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+                    <div class="thr-title">Embassy Cover Letter</div>
+                    <div class="thr-desc">A cover letter addressed to the consulate that explains your purpose and lists what you enclosed.</div>
+                    <div class="thr-foot"><span class="thr-arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+                </a>
+                <a href="/visa-cost-calculator" class="thr-card">
+                    <span class="thr-ico"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.18"/><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6"/><path d="M15 9.5a3 3 0 0 0-3-1.5c-1.7 0-3 .9-3 2.2 0 1.5 1.6 1.9 3 2.3 1.4.4 3 .8 3 2.3 0 1.3-1.3 2.2-3 2.2a3 3 0 0 1-3-1.5M12 6.5v11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    <div class="thr-title">Visa Cost Calculator</div>
+                    <div class="thr-desc">What the application actually costs — fees, service charges and insurance, by country.</div>
+                    <div class="thr-foot"><span class="thr-arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+                </a>
+                <a href="/embassy-finder" class="thr-card">
+                    <span class="thr-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" fill="currentColor" opacity="0.18"/><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.6"/></svg></span>
+                    <div class="thr-title">Embassy Finder</div>
+                    <div class="thr-desc">Address, opening hours and appointment route for the consulate you have to apply at.</div>
+                    <div class="thr-foot"><span class="thr-arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+                </a>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+                                        {"@type": "Question", "name": "Is the dummy hotel booking free, and do I get it as a PDF?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The dummy hotel booking on DummyTicket is free &mdash; no account and no credit card. You enter the city, the dates and the guest names, and the confirmation is generated as a PDF in about 30 seconds, ready to print or attach to your visa application."}}
+                                ,            {"@type": "Question", "name": "Is a dummy hotel booking accepted for Schengen visa?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. All 29 Schengen consulates accept hotel reservations as proof of accommodation. The Schengen visa application form (Article 25) specifically requires accommodation details for every night of your stay. The booking does not need to be prepaid. A free-cancellation reservation or a booking confirmation PDF from DummyTicket is made for this requirement. Many successful Schengen visa applicants use dummy hotel bookings."}}
+                                ,            {"@type": "Question", "name": "Do I need a hotel reservation before visa approval?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, for most visa types. Embassies require proof of accommodation as part of the application package. However, they explicitly advise against making non-refundable bookings before visa approval. The official Schengen visa guidelines state that applicants should show a flight reservation and hotel booking &mdash; not confirmed paid tickets or prepaid hotels. A dummy hotel booking is the standard, accepted solution."}}
+                                ,            {"@type": "Question", "name": "Can I cancel my hotel booking after visa approval?", "acceptedAnswer": {"@type": "Answer", "text": "If you used a real hotel booking with free cancellation (from Booking.com, Expedia, etc.), yes &mdash; cancel it after visa approval and book your preferred accommodation. If you used a DummyTicket dummy hotel booking, there is nothing to cancel &mdash; it is a document generated for visa purposes only. Most experienced travelers use a combination: a dummy booking for the visa, then book their actual preferred accommodation after approval."}}
+                                ,            {"@type": "Question", "name": "Is it legal to use a dummy hotel booking for visa?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Using a temporary hotel reservation for visa applications is completely legal and standard practice worldwide. Embassies process thousands of these daily. The document shows your intended accommodation plans &mdash; it is not a fraudulent document. Just like a flight reservation (dummy ticket) is accepted for visa applications, a hotel booking confirmation is accepted as proof of accommodation."}}
+                                ,            {"@type": "Question", "name": "How many hotel bookings do I need for a multi-city trip?", "acceptedAnswer": {"@type": "Answer", "text": "You need proof of accommodation for every night of your trip. For a multi-city Schengen trip (e.g., Paris 3 nights, Rome 2 nights, Barcelona 3 nights), you need a separate hotel booking for each city. Gaps in accommodation coverage are one of the most common reasons for Schengen visa rejection. DummyTicket lets you generate unlimited hotel bookings for free."}}
+                                ,            {"@type": "Question", "name": "Do I need a hotel booking for a transit visa?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on the transit country and duration. For short transits (under 24 hours) at the airport, accommodation proof is usually not required. For longer transits or if you plan to leave the airport, you may need a hotel booking. Always check the specific requirements of the transit country embassy."}}
+                                ,            {"@type": "Question", "name": "Can I use a hotel booking from Booking.com for my visa?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Booking.com reservations with free cancellation are widely accepted by embassies. Many visa applicants book a refundable hotel on Booking.com, use the confirmation for the visa application, and cancel after approval. The downside is that you need a credit card to make the reservation, and some hotels charge immediately. A DummyTicket dummy hotel booking gives you a confirmation document for the application with zero financial risk &mdash; unlike a platform booking, it is not held by the hotel."}}
+                                ,            {"@type": "Question", "name": "What happens if the embassy rejects my hotel booking?", "acceptedAnswer": {"@type": "Answer", "text": "If an embassy finds your accommodation proof insufficient, they will typically request additional documentation rather than reject the visa outright. Common issues include: dates not matching your travel itinerary, guest name not matching passport, or missing hotel address. Ensure all details on your hotel booking match your other visa documents exactly."}}
+                                ,            {"@type": "Question", "name": "Is a hotel booking required for a US visa interview?", "acceptedAnswer": {"@type": "Answer", "text": "A hotel booking is not strictly required for a US B1\/B2 visa interview, but it is highly recommended. US consular officers want to see that you have concrete travel plans. Presenting a hotel booking along with your flight itinerary demonstrates genuine travel intent and strengthens your case significantly. Many successful US visa applicants include hotel bookings in their documentation."}}
+                                ,            {"@type": "Question", "name": "What is proof of accommodation for a visa?", "acceptedAnswer": {"@type": "Answer", "text": "Proof of accommodation is the document a consulate accepts as evidence of where you will stay for every night of your trip. It can be a hotel booking confirmation, a rental agreement, an invitation letter from a host, or an Airbnb reservation. What matters is that it names the address, the dates and the traveller, and that the dates leave no gap in the itinerary."}}
+                                ,            {"@type": "Question", "name": "What proof of accommodation does a digital nomad visa require?", "acceptedAnswer": {"@type": "Answer", "text": "Most digital nomad visas ask for accommodation covering at least the first weeks of the stay, not the whole permit. Portugal\u2019s D8 and Spain\u2019s digital nomad visa accept a rental contract or a hotel booking; Croatia and Estonia accept a booking confirmation for the initial period. Because long-stay plans usually change, a free booking confirmation for the opening weeks is the common way applicants meet the requirement without committing money."}}
+                                ,            {"@type": "Question", "name": "How do I show proof of accommodation without paying for a hotel?", "acceptedAnswer": {"@type": "Answer", "text": "Three routes are accepted. A free-cancellation reservation on a booking platform, which you cancel after approval. An invitation letter from a host, which in France and Germany takes an official form (attestation d\u2019accueil, Verpflichtungserklaerung). Or a hotel booking confirmation generated for the application, which is what DummyTicket produces &mdash; no card, no prepayment, no cancellation to remember."}}
+                                ,            {"@type": "Question", "name": "Does an Airbnb reservation count as proof of accommodation?", "acceptedAnswer": {"@type": "Answer", "text": "Usually yes &mdash; consulates accept Airbnb for visa applications, provided the confirmation carries the full address, the exact dates, the guest name and the host details. Consulates reject Airbnb proof when the listing shows only a district instead of a street address, or when the guest name does not match the passport. If the host cannot supply a formal confirmation, a hotel booking is the safer document."}}
+                                ,            {"@type": "Question", "name": "What does a proof of accommodation document look like?", "acceptedAnswer": {"@type": "Answer", "text": "It is a one-page confirmation carrying six things: the hotel or property name, the full postal address, check-in and check-out dates, the guest name exactly as in the passport, a booking reference number, and the room type or rate. A document missing any of the six is what officers query most often."}}
+                                ,            {"@type": "Question", "name": "Is proof of accommodation required for a Schengen visa?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The Schengen Visa Code lists accommodation evidence among the supporting documents, and it must cover every night of the intended stay. It does not have to be prepaid &mdash; the consulates explicitly do not expect applicants to commit money before a decision."}}
+                        ]
+}
+</script>
+
+</div>
+
+
+
+    <section class="eg-sec" aria-label="Expert guides">
+    <div class="eg-head">
+        <span class="eg-eyebrow">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Expert Guides
+        </span>
+        <div class="eg-nav" aria-hidden="true">
+            <button type="button" class="eg-arrow" data-eg-dir="-1" aria-label="Scroll left"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+            <button type="button" class="eg-arrow" data-eg-dir="1" aria-label="Scroll right"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+    </div>
+
+    <div class="eg-track" role="list">
+                <a href="blog/schengen-visa-checklist-2026-complete-guide-documents-requirements.html" class="eg-card" role="listitem">
+            <div class="eg-thumb">
+                                                
+                <img class="eg-img" src="storage/blog/schengen-visa-checklist-2026-660.webp"
+                                          srcset="storage/blog/schengen-visa-checklist-2026-660.webp 660w, storage/blog/schengen-visa-checklist-2026.webp 1200w"
+                     sizes="(max-width: 767px) 302px, 328px"
+                                          alt="Schengen visa checklist 2026 showing complete document requirements including passport, application form, photos, travel insurance, flight reservation, accommodation proof, bank statements, and employment documents for all 29 Schengen countries" loading="lazy" decoding="async" width="600" height="400">
+                                <span class="eg-badge">Guide</span>
+            </div>
+            <div class="eg-body">
+                <h3 class="eg-title">Schengen Visa Checklist 2026: Complete Guide to Documents &amp; Requirements</h3>
+                <p class="eg-desc">Complete Schengen visa checklist for 2026. Every document you need: passport, photos, i…</p>                <span class="eg-more">Read guide <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+            </div>
+        </a>
+            </div>
+</section>
+
+<style>
+.eg-sec{ position:relative; width:100vw; margin-inline:calc(50% - 50vw); padding:3.75rem 0 4.25rem; background:var(--bg2); overflow:hidden; }
+.eg-sec::before{ content:''; position:absolute; top:-10%; left:50%; transform:translateX(-50%); width:min(900px,95%); height:60%; background:radial-gradient(ellipse at center, rgba(0, 98, 224,0.12), transparent 70%); pointer-events:none; z-index:0; }
+[data-theme="dark"] .eg-sec::before{ background:radial-gradient(ellipse at center, rgba(59, 130, 246,0.16), transparent 70%); }
+.eg-head{ position:relative; z-index:1; max-width:1280px; margin:0 auto 1.6rem; padding:0 1.5rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.eg-eyebrow{ display:inline-flex; align-items:center; gap:0.55rem; font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:1.6px; color:var(--purple); }
+.eg-nav{ display:inline-flex; gap:0.5rem; }
+.eg-arrow{ width:42px; height:42px; border-radius:50%; border:1px solid var(--card-border); background:var(--card-bg); color:var(--text); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; transition:all .2s; }
+.eg-arrow:hover{ border-color:var(--purple); color:var(--purple); transform:translateY(-1px); box-shadow:0 6px 18px rgba(0, 98, 224,0.18); }
+.eg-arrow:disabled{ opacity:0.35; cursor:default; box-shadow:none; transform:none; border-color:var(--card-border); color:var(--text); }
+.eg-track{ position:relative; z-index:1; display:flex; gap:1.25rem; overflow-x:auto; overflow-y:hidden; padding:0.5rem max(1.5rem, calc(50vw - 640px)) 1.5rem; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+.eg-track::-webkit-scrollbar{ display:none; }
+.eg-card{ flex:0 0 330px; background:var(--card-bg); border:1px solid var(--card-border); border-radius:18px; overflow:hidden; text-decoration:none; display:flex; flex-direction:column; transition:transform .3s ease, border-color .3s ease, box-shadow .3s ease; }
+.eg-card:hover{ transform:translateY(-6px); border-color:var(--purple); box-shadow:0 18px 40px rgba(0,0,0,0.18); }
+[data-theme="dark"] .eg-card:hover{ box-shadow:0 20px 48px rgba(0,0,0,0.45); }
+.eg-thumb{ position:relative; aspect-ratio:16/10; overflow:hidden; background:linear-gradient(135deg, var(--bg2), var(--card-border)); }
+.eg-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .4s ease; will-change:transform; }
+.eg-card:hover .eg-img{ transform:scale(1.05); }
+.eg-img-ph{ background:linear-gradient(135deg, rgba(0, 98, 224,0.25), rgba(37,99,235,0.18)); }
+.eg-thumb::after{ content:''; position:absolute; inset:0; background:linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.35)); pointer-events:none; }
+.eg-badge{ position:absolute; top:0.7rem; left:0.7rem; z-index:2; font-size:0.66rem; font-weight:800; letter-spacing:0.6px; text-transform:uppercase; color:#fff; background:rgba(0, 98, 224,0.92); padding:0.28rem 0.6rem; border-radius:50px; backdrop-filter:blur(4px); }
+.eg-body{ display:flex; flex-direction:column; gap:0.5rem; padding:1.05rem 1.15rem 1.2rem; flex:1; }
+.eg-title{ margin:0; font-weight:800; font-size:0.97rem; line-height:1.32; color:var(--text); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.eg-desc{ margin:0; font-size:0.81rem; line-height:1.5; color:var(--text2); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.eg-more{ margin-top:auto; padding-top:0.25rem; display:inline-flex; align-items:center; gap:0.4rem; color:var(--purple); font-weight:700; font-size:0.8rem; }
+.eg-more svg{ transition:transform .2s ease; }
+.eg-card:hover .eg-more svg{ transform:translateX(4px); }
+@media (max-width:600px){ .eg-card{ flex-basis:78vw; } .eg-nav{ display:none; } }
+@media (prefers-reduced-motion:reduce){ .eg-img{ transition:none; } .eg-card:hover .eg-img{ transform:none; } }
+</style>
+<script>
+(function(){
+    var track = document.querySelector('.eg-sec .eg-track');
+    if(!track || track.dataset.egInit) return;
+    track.dataset.egInit = '1';
+    var root = track.closest('.eg-sec');
+    var originals = Array.prototype.slice.call(track.querySelectorAll('.eg-card'));
+    if(!originals.length) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* Endless in both directions.
+       The arrows used to disable themselves at each edge. With four cards the
+       track overflowed by ~150px, so the left arrow was dead on load and the
+       right one after a single press — the control looked broken because it had
+       already reached its limit. The card set is now repeated until it exceeds
+       the viewport, and whenever the position leaves the middle band it jumps
+       back by exactly one set width. The sets are identical, so the jump is
+       invisible and pressing never runs out.
+
+       All arithmetic runs in a normalised 0..max space: in RTL Chrome reports
+       scrollLeft as NEGATIVE, which made every comparison below true and pinned
+       the Arabic, Hebrew and Urdu carousels at the edge. */
+    var rtlNeg = false, setW = 0, cards = originals;
+
+    function pos(){ return rtlNeg ? -track.scrollLeft : track.scrollLeft; }
+    function setPos(v){ track.scrollLeft = rtlNeg ? -v : v; }
+
+    function detectDirection(){
+        if(getComputedStyle(track).direction !== 'rtl') return;
+        var keep = track.scrollLeft;
+        track.scrollLeft = -1;
+        rtlNeg = track.scrollLeft < 0;
+        track.scrollLeft = keep;
+    }
+
+    function buildLoop(){
+        var cs = getComputedStyle(track);
+        var gap = parseFloat(cs.columnGap || cs.gap) || 20;
+        var cardW = originals[0].offsetWidth || 330;
+        var rough = originals.length * (cardW + gap);
+        var sets = Math.min(8, Math.max(3, Math.ceil(1.5 + track.clientWidth / rough) + 1));
+
+        var frag = document.createDocumentFragment();
+        for(var i = 1; i < sets; i++){
+            for(var c = 0; c < originals.length; c++){
+                var clone = originals[c].cloneNode(true);
+                clone.setAttribute('data-eg-clone', '1');
+                clone.setAttribute('aria-hidden', 'true');   // duplicates are decoration,
+                clone.setAttribute('tabindex', '-1');        // not extra destinations
+                frag.appendChild(clone);
+            }
+        }
+        track.appendChild(frag);
+        cards = Array.prototype.slice.call(track.querySelectorAll('.eg-card'));
+
+        // Measured from the real layout, so it is correct in RTL too.
+        setW = Math.abs(cards[originals.length].offsetLeft - cards[0].offsetLeft) || rough;
+        setPos(setW);
+    }
+
+    // Returns the correction applied so a running tween can re-base on it.
+    // Loops rather than correcting once: a trackpad fling can land several set
+    // widths outside the band, and a single step would leave it there.
+    function wrap(){
+        if(!setW) return 0;
+        var total = 0, guard = 0;
+        while(pos() < setW * 0.5 && guard++ < 20){ setPos(pos() + setW); total += setW; }
+        while(pos() > setW * 1.5 && guard++ < 20){ setPos(pos() - setW); total -= setW; }
+        return total;
+    }
+
+    var anim = null;
+    function tweenBy(delta){
+        if(anim) cancelAnimationFrame(anim);
+        var start = pos(), t0 = null, dur = 460;
+        if(reduce){ setPos(start + delta); wrap(); onScroll(); return; }
+        function step(ts){
+            if(t0 === null) t0 = ts;
+            var p = Math.min((ts - t0) / dur, 1);
+            var e = p < 0.5 ? 2*p*p : 1 - Math.pow(-2*p + 2, 2)/2;
+            setPos(start + delta * e);
+            start += wrap();
+            if(p < 1) anim = requestAnimationFrame(step);
+        }
+        anim = requestAnimationFrame(step);
+    }
+
+    root.querySelectorAll('[data-eg-dir]').forEach(function(btn){
+        btn.disabled = false;
+        btn.addEventListener('click', function(){
+            var w = originals[0] ? originals[0].offsetWidth : 330;
+            // In RTL the chevron pointing left advances the reel, so the sign flips.
+            var sign = rtlNeg ? -1 : 1;
+            tweenBy((w + 20) * 1.5 * parseInt(btn.getAttribute('data-eg-dir'), 10) * sign);
+        });
+    });
+
+    var ticking = false;
+    function parallax(){
+        ticking = false;
+        var mid = window.innerWidth / 2;
+        for(var i=0;i<cards.length;i++){
+            var img = cards[i].querySelector('.eg-img');
+            if(!img) continue;
+            var r = cards[i].getBoundingClientRect();
+            if(r.right < -200 || r.left > window.innerWidth + 200) continue;
+            var d = ((r.left + r.width/2) - mid) / window.innerWidth;
+            cards[i].style.setProperty('--eg-px', (-d * 26).toFixed(1) + 'px');
+        }
+    }
+    function onScroll(){ wrap(); if(!reduce && !ticking){ ticking = true; requestAnimationFrame(parallax); } }
+
+    track.addEventListener('scroll', onScroll, { passive:true });
+    window.addEventListener('resize', function(){ wrap(); onScroll(); }, { passive:true });
+
+    detectDirection();
+    buildLoop();
+    if(!reduce) parallax();
+
+    var down=false, startX=0, startPos=0, moved=false;
+    track.addEventListener('pointerdown', function(e){ if(e.pointerType==='mouse'){ down=true; moved=false; startX=e.clientX; startPos=pos(); } });
+    track.addEventListener('pointermove', function(e){
+        if(!down) return;
+        var dx = e.clientX - startX;
+        if(Math.abs(dx) > 4) moved = true;
+        setPos(startPos - (rtlNeg ? -dx : dx));
+        startPos += wrap();
+    });
+    function endDrag(){ down=false; }
+    track.addEventListener('pointerup', endDrag);
+    track.addEventListener('pointercancel', endDrag);
+    track.addEventListener('pointerleave', endDrag);
+    track.addEventListener('click', function(e){ if(moved){ e.preventDefault(); } }, true);
+})();
+</script>
+
+
+<section class="hbv-final">
+    <div class="hbv-final-inner">
+        <h2>Your free hotel booking PDF is just 30 seconds away.</h2>
+        <p>Free. Instant. For visa applications in 195+ countries.</p>
+        <a href="/#bookingForm" class="hbv-final-cta">
+            Generate Free Hotel Booking
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <div class="hbv-final-trust">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> No card</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> No account</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Instant PDF</span>
+        </div>
+    </div>
+</section>
+
+
+
+</div>
+
+<style>
+#hbv{
+    --hbv-r:22px;
+    /* Farbe des wandernden Lichtpunkts auf dem Hauptknopf.
+       Am Standbild geprueft: im hellen Erscheinungsbild war der Effekt UNSICHTBAR.
+       Der Ring liegt am aeusseren Rand des Knopfes, direkt neben dem Seitengrund —
+       und weiss neben weiss ist nichts. Im dunklen Design stimmt weiss, im hellen
+       braucht es einen gesaettigten Ton, der sich sowohl vom weissen Grund als auch
+       vom dunkelvioletten Knopf abhebt. */
+    --hbv-funke:#ffffff;
+    --hbv-funke-hell:rgba(233,226,255,.85);
+    --hbv-funke-schweif:rgba(196,181,253,.35);
+    --hbv-funke-schein:rgba(233,226,255,.9);
+    /* Die BAHN, auf der der Punkt laeuft. Sie ist der Grund, warum der Effekt im
+       hellen Erscheinungsbild ueberhaupt zu sehen ist: Leuchten braucht Dunkelheit,
+       und auf weissem Grund gibt es keine. Ohne Bahn war weiss neben weiss nichts —
+       ein gesaettigter Punkt statt weiss half auch nicht, weil er dem Knopf zu
+       aehnlich sah. Mit Bahn liegt ein sichtbarer Ring um den Knopf, und darauf
+       laeuft ein heller Punkt. Im Dunkeln bleibt die Bahn fast unsichtbar. */
+    --hbv-bahn:rgba(255,255,255,.13);
+}
+[data-theme="light"] #hbv{
+    --hbv-bahn:var(--purple);
+    --hbv-funke-schweif:rgba(255,255,255,.4);
+    --hbv-funke-schein:rgba(255,255,255,.95);
+}
+#hbv *{ min-width:0; }
+#hbv img{ max-width:100%; }
+
+/* ─── gemeinsame Bausteine ─────────────────────────────────────── */
+#hbv .hbv-band{ max-width:1280px; margin:0 auto; padding:0 1.5rem; }
+#hbv .hbv-sec{ padding:4rem 0; }
+#hbv .hbv-h2{ font-size:clamp(1.6rem,3vw,2.35rem); font-weight:900; line-height:1.18; letter-spacing:-.02em; color:var(--text); margin:.6rem 0 .9rem; }
+#hbv .hbv-h2-light{ color:#fff; }
+#hbv .hbv-lead{ color:var(--text2); font-size:1rem; line-height:1.75; max-width:52ch; }
+#hbv .hbv-lead-light{ color:rgba(255,255,255,.78); }
+#hbv .hbv-tag-light{ color:#93c5fd; }
+
+/* Der Hauptknopf mit wanderndem Lichtpunkt auf dem Rand.
+
+   WIE ES GEBAUT IST — und warum nicht anders. Naheliegend waere gewesen, den
+   Winkel eines conic-gradient per @property zu animieren. Das sieht gleich aus,
+   zwingt den Browser aber, den Verlauf in JEDEM Bild neu zu zeichnen; bei fuenf
+   dieser Knoepfe auf einer Seite ist das dauerhafte Rechenlast auf dem Hauptfaden.
+   Stattdessen liegt hier ein UNBEWEGTER Verlauf auf einem uebergrossen Quadrat,
+   und gedreht wird das Quadrat. Eine Drehung laeuft auf der Grafikkarte.
+
+   Der Aufbau in drei Ebenen:
+     ::before  das drehende Quadrat mit dem Verlauf   (z-index -2)
+     ::after   die eigentliche Knopfflaeche, 2 px kleiner (z-index -1)
+     Inhalt    Text und Pfeil, ganz oben
+   Sichtbar bleibt vom Verlauf also nur der 2-px-Ring aussen herum — und darin
+   wandert die helle Stelle einmal pro Umlauf um den Knopf.
+
+   isolation:isolate ist noetig, damit die negativen z-index-Ebenen im Knopf
+   bleiben und nicht hinter den Abschnitt darunter rutschen. overflow:hidden
+   beschneidet das Quadrat auf die runde Knopfform; der aeussere Schein bleibt
+   davon unberuehrt, weil box-shadow nicht vom eigenen overflow beschnitten wird.
+
+   Die Flaeche liegt jetzt in ::after, deshalb ist background hier transparent —
+   wer das zurueckdreht, deckt den Ring wieder zu. */
+#hbv .hbv-cta1{
+    position:relative; isolation:isolate; overflow:hidden;
+    display:inline-flex; align-items:center; gap:.55rem; padding:1rem 1.9rem;
+    background:transparent; color:#fff;
+    border-radius:14px; font-weight:800; font-size:1rem; text-decoration:none;
+    box-shadow:0 14px 34px var(--purple-glow); transition:transform .22s, box-shadow .22s;
+}
+#hbv .hbv-cta1::before{
+    content:''; position:absolute; z-index:-2;
+    top:50%; inset-inline-start:50%; width:190%; aspect-ratio:1;
+    translate:-50% -50%;
+    /* Der Lichtpunkt ist ein SCHMALER Ausschnitt des Umlaufs.
+
+       Erster Versuch waren 34 % Bogen. Am Standbild gepruefte Wirkung: auf einem
+       Knopf im Seitenverhaeltnis 4:1 deckt ein Drittel des Umlaufs eine ganze
+       kurze Kante ab — das sah nach glaenzendem Rand aus, nicht nach wanderndem
+       Punkt. Jetzt sind es 14 %: ein heisser weisser Kern bei 80 %, davor ein
+       kurzer violetter Schweif, dahinter nichts. Das liest sich als Bewegung.
+
+       Der Schweif liegt VOR dem Kern (kleinere Prozentwerte), weil der Verlauf im
+       Uhrzeigersinn laeuft und der Punkt seinen Schweif hinter sich herzieht. */
+    background:conic-gradient(from 0deg,
+        var(--hbv-bahn) 0 68%,
+        var(--hbv-funke-schweif) 74%,
+        var(--hbv-funke-hell) 78.5%,
+        var(--hbv-funke) 80.5%,
+        var(--hbv-funke-hell) 82.5%,
+        var(--hbv-bahn) 86% 100%);
+    /* Der Schein um den Kern. Auf das Pseudoelement gelegt, nicht auf den Knopf —
+       so leuchtet nur der Punkt, nicht der ganze Rand. */
+    filter:drop-shadow(0 0 3px var(--hbv-funke-schein));
+    animation:hbv-schlange 3.2s linear infinite;
+    pointer-events:none;
+}
+#hbv .hbv-cta1::after{
+    content:''; position:absolute; z-index:-1; inset:2.5px;
+    border-radius:11.5px;
+    background:linear-gradient(120deg,var(--purple),var(--purple2));
+    pointer-events:none;
+}
+@keyframes hbv-schlange{ to{ rotate:360deg; } }
+#hbv .hbv-cta1:hover{ transform:translateY(-2px); box-shadow:0 20px 44px var(--purple-glow); }
+/* Beim Zeigen laeuft der Punkt schneller — die einzige Aenderung am Effekt, damit
+   der Knopf auf den Mauszeiger reagiert, ohne dass etwas springt. */
+#hbv .hbv-cta1:hover::before{ animation-duration:1.4s; }
+#hbv .hbv-cta1 svg{ width:17px; height:17px; transition:transform .22s; }
+#hbv .hbv-cta1:hover svg{ transform:translateX(3px); }
+/* Der kleine Knopf hat einen kleineren Radius — sonst steht der Ring innen ab. */
+#hbv .hbv-cta-sm::after{ border-radius:10px; }
+#hbv .hbv-cta-sm{ padding:.85rem 1.5rem; font-size:.94rem; }
+#hbv .hbv-cta2{
+    display:inline-flex; align-items:center; gap:.5rem; padding:.85rem 1.4rem;
+    background:var(--purple-light); color:var(--purple); border-radius:12px;
+    font-weight:800; font-size:.92rem; text-decoration:none; transition:background .22s,color .22s;
+}
+#hbv .hbv-cta2:hover{ background:var(--purple); color:#fff; }
+#hbv .hbv-cta2 svg{ width:15px; height:15px; }
+
+/* Glasknopf auf dunklem Grund, mit dem Lichtstreifen des Hauses. */
+#hbv .hbv-glass{
+    position:relative; overflow:hidden; display:inline-flex; align-items:center; gap:.55rem;
+    padding:.95rem 1.8rem; border-radius:14px; text-decoration:none; font-weight:800;
+    color:#fff; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.28);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); transition:background .22s;
+}
+#hbv .hbv-glass:hover{ background:rgba(255,255,255,.18); }
+#hbv .hbv-glass svg{ width:17px; height:17px; }
+#hbv .hbv-glass::before{
+    content:''; position:absolute; inset:0 auto 0 -60%; width:45%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+    transform:skewX(-18deg); transition:left .55s ease;
+}
+#hbv .hbv-glass:hover::before{ left:120%; }
+
+#hbv .hbv-ic-green{ background:rgba(5,150,105,.12); color:#059669; }
+#hbv .hbv-ic-purple{ background:var(--purple-light); color:var(--purple); }
+#hbv .hbv-ic-amber{ background:rgba(217,119,6,.12); color:#d97706; }
+#hbv .hbv-ic-blue{ background:rgba(59,130,246,.12); color:#3b82f6; }
+
+/* ─── 1 · Hero ─────────────────────────────────────────────────── */
+#hbv .hbv-hero{
+    position:relative; overflow:hidden; width:100vw; margin-inline:calc(50% - 50vw);
+    padding:4rem 1.5rem 4.5rem;
+    background:radial-gradient(125% 135% at 78% 22%, var(--purple-glow), var(--bg2) 62%);
+}
+#hbv .hbv-hero-inner{
+    position:relative; z-index:1; max-width:1280px; margin:0 auto;
+    display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:3rem; align-items:center;
+}
+#hbv .hbv-badge{
+    display:inline-flex; align-items:center; gap:.45rem; padding:.42rem .95rem;
+    background:rgba(5,150,105,.12); color:#059669; border-radius:99px;
+    font-size:.76rem; font-weight:800; letter-spacing:.03em; text-transform:uppercase;
+}
+#hbv .hbv-badge svg{ width:13px; height:13px; }
+#hbv .hbv-h1{
+    font-size:clamp(2.1rem,4.4vw,3.35rem); font-weight:900; line-height:1.08;
+    letter-spacing:-.03em; color:var(--text); margin:1.15rem 0 1rem;
+}
+#hbv .hbv-h1 .hl{ background:linear-gradient(120deg,var(--purple),var(--purple2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+#hbv .hbv-sub{ color:var(--text2); font-size:1.08rem; line-height:1.7; max-width:46ch; }
+#hbv .hbv-hero-cta{ display:flex; flex-wrap:wrap; align-items:center; gap:1rem; margin-top:2rem; }
+
+#hbv .hbv-hero-stage{ position:relative; aspect-ratio:4/3; }
+#hbv .hbv-hero-photo{
+    width:100%; height:100%; object-fit:cover; border-radius:var(--hbv-r);
+    box-shadow:0 30px 70px rgba(15,10,30,.22);
+}
+#hbv .hbv-doc{
+    position:absolute; inset-inline-end:-4%; bottom:8%; width:min(64%,290px);
+    background:var(--card-bg); border:1px solid var(--card-border); border-radius:18px;
+    padding:1.1rem 1.2rem; box-shadow:0 26px 60px rgba(15,10,30,.3);
+}
+#hbv .hbv-doc-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:.75rem; }
+#hbv .hbv-doc-brand{ font-weight:900; font-size:.9rem; color:var(--purple); letter-spacing:-.02em; }
+#hbv .hbv-doc-tag{ font-size:.6rem; font-weight:900; letter-spacing:.08em; color:#059669; background:rgba(5,150,105,.12); padding:.22rem .5rem; border-radius:5px; }
+#hbv .hbv-doc-title{ font-size:.82rem; font-weight:800; color:var(--text); padding-bottom:.6rem; border-bottom:1px solid var(--border); }
+#hbv .hbv-doc-rows{ display:flex; flex-direction:column; gap:.42rem; margin-top:.7rem; }
+#hbv .hbv-doc-rows div{ display:flex; justify-content:space-between; gap:.6rem; font-size:.7rem; }
+#hbv .hbv-doc-rows span{ color:var(--text2); }
+#hbv .hbv-doc-rows b{ color:var(--text); font-weight:700; text-align:end; }
+
+#hbv .hbv-float{
+    position:absolute; display:inline-flex; align-items:center; gap:.5rem;
+    padding:.6rem .95rem; background:var(--card-bg); border:1px solid var(--card-border);
+    border-radius:12px; font-size:.78rem; font-weight:800; color:var(--text);
+    box-shadow:0 14px 34px rgba(15,10,30,.16); white-space:nowrap;
+}
+#hbv .hbv-float-ic{ display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:7px; }
+#hbv .hbv-float-ic svg{ width:12px; height:12px; }
+#hbv .hbv-float-1{ top:7%;  inset-inline-end:-5%; }
+#hbv .hbv-float-2{ top:30%; inset-inline-start:-7%; }
+#hbv .hbv-float-3{ bottom:14%; inset-inline-start:-6%; }
+/* FREE-PDF-Abzeichen (partials/ticket-pdf-badge) an der Stelle der frueheren Plakette
+   "PDF ready": unten links am Foto, weg vom Dokument rechts. Der Baustein bringt fuer die
+   Ticket-Karte right/left/bottom in px mit; die werden hier zuerst geloescht, sonst stuenden
+   links UND rechts fest und das Abzeichen zoege sich ueber die ganze Breite. display:flex
+   liefert auf der Startseite die Seite selbst — ohne stuende das Symbol ueber der Pille. */
+#hbv .hbv-tpb{ position:absolute; display:flex; z-index:2; top:auto; left:auto; right:auto; bottom:14%; inset-inline-start:-6%; }
+
+/* ─── 1b · Antwortkasten ───────────────────────────────────────── */
+/* Der Block, auf den speakable zeigt. Er muss als Antwort lesbar sein, bevor er
+   schoen ist — deshalb steht die Definition als erster Satz und nicht als
+   Aufzaehlung. */
+#hbv .hbv-antwort{ padding:3rem 0 0; }
+#hbv .hbv-antwort-kasten{
+    position:relative; padding:1.9rem 2rem; border-radius:var(--hbv-r);
+    background:var(--card-bg); border:1px solid var(--card-border);
+    border-inline-start:4px solid var(--purple);
+    box-shadow:0 14px 38px rgba(15,10,30,.07);
+}
+#hbv .hbv-antwort-h{ font-size:1.12rem; font-weight:900; color:var(--text); margin:0 0 .7rem; letter-spacing:-.01em; }
+#hbv .aag-summary-text{ margin:0; font-size:1rem; line-height:1.78; color:var(--text2); max-width:76ch; }
+#hbv .hbv-antwort-fakten{
+    display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1rem;
+    margin:1.5rem 0 0; padding-top:1.35rem; border-top:1px solid var(--border);
+}
+#hbv .hbv-antwort-fakten dt{ font-size:.7rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:var(--text2); }
+#hbv .hbv-antwort-fakten dd{ margin:.25rem 0 0; font-size:.9rem; font-weight:800; color:var(--text); }
+
+/* ─── 3b · Formular ────────────────────────────────────────────── */
+#hbv .hbv-formular{ padding:4rem 0; }
+#hbv .hbv-formular-kopf{ max-width:44ch; margin-bottom:2rem; }
+
+/* ─── 2 · Vertrauensleiste ─────────────────────────────────────── */
+#hbv .hbv-trust{ max-width:1280px; margin:-2.2rem auto 0; padding:0 1.5rem; position:relative; z-index:5; }
+#hbv .hbv-trust-inner{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.85rem; }
+#hbv .hbv-trust-cell{
+    display:flex; align-items:center; gap:.8rem; padding:1.05rem 1.15rem;
+    background:var(--card-bg); border:1px solid var(--card-border); border-radius:15px;
+    box-shadow:0 10px 26px rgba(15,10,30,.06);
+}
+#hbv .hbv-trust-ic{ flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:11px; }
+#hbv .hbv-trust-ic svg{ width:17px; height:17px; }
+#hbv .hbv-trust-cell b{ display:block; font-size:.86rem; font-weight:800; color:var(--text); }
+#hbv .hbv-trust-cell small{ display:block; font-size:.75rem; color:var(--text2); margin-top:.12rem; }
+
+/* ─── 3 · Ablauf ───────────────────────────────────────────────── */
+#hbv .hbv-how-grid{ display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); gap:3rem; align-items:center; }
+#hbv .hbv-steps{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; counter-reset:hbv-s; }
+#hbv .hbv-steps li{
+    position:relative; display:flex; flex-direction:column; gap:.5rem;
+    padding:1.6rem 1.3rem 1.5rem; background:var(--card-bg);
+    border:1px solid var(--card-border); border-radius:var(--hbv-r);
+    transition:transform .25s, border-color .25s, box-shadow .25s;
+}
+#hbv .hbv-steps li:hover{ transform:translateY(-6px); border-color:var(--purple); box-shadow:0 20px 44px var(--purple-glow); }
+/* Die Nummer traegt den Schritt — es gibt kein Icon mehr, seit der Ablauf eine
+   echte <ol> ist. Eine Liste, die auch ohne CSS als Reihenfolge lesbar bleibt. */
+#hbv .hbv-step-n{ display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:10px; background:var(--purple-light); color:var(--purple); font-size:.8rem; font-weight:900; letter-spacing:0; }
+#hbv .hbv-steps b{ font-size:1rem; font-weight:800; color:var(--text); }
+#hbv .hbv-steps small{ font-size:.83rem; line-height:1.6; color:var(--text2); }
+
+/* ─── Hinweiskasten ueber dem Formular ─────────────────────────── */
+/*
+   Der Kasten "Enter your own travel details" kommt aus der Livewire-Komponente
+   (hub-content/livewire/partials/plan-banner.blade.php) und laeuft auf vier
+   Seiten. Angefasst wird er hier NICHT — alles unten steht unter #hbv und gilt
+   damit nur fuer diesen Entwurf. Nach der Abnahme kann es in den Baustein
+   wandern; solange bleiben Startseite, /proof-of-onward-travel und
+   /free-dummy-ticket unberuehrt.
+
+   ANLASS: der Auftraggeber hat auf den Kasten geklickt und nichts konnte
+   ausgefuellt werden. Er sieht aus wie ein Eingabefeld — Rahmen, Stift-Symbol,
+   heller Grund — ist aber nur ein Hinweis. Zwei Pfeile nach unten sagen jetzt,
+   wo wirklich getippt wird, und ein Klick fuehrt dorthin.
+
+   ::before ist im Baustein vergeben (der Lichthof), ::after war frei. Die Pfeile
+   liegen als Maske darauf, nicht als Bild: so folgt ihre Farbe dem Erscheinungs-
+   bild, statt hell oder dunkel fest verdrahtet zu sein.
+*/
+#hbv{
+    --hbv-pfeil:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+}
+#hbv .mj-plan{ padding-inline:2.5rem; cursor:pointer; }
+#hbv .mj-plan::after{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:var(--purple);
+    -webkit-mask-image:var(--hbv-pfeil), var(--hbv-pfeil);
+            mask-image:var(--hbv-pfeil), var(--hbv-pfeil);
+    -webkit-mask-position:left .85rem center, right .85rem center;
+            mask-position:left .85rem center, right .85rem center;
+    -webkit-mask-repeat:no-repeat, no-repeat;
+            mask-repeat:no-repeat, no-repeat;
+    -webkit-mask-size:15px 15px, 15px 15px;
+            mask-size:15px 15px, 15px 15px;
+    animation:hbv-wippen 1.9s ease-in-out infinite;
+}
+/* Dieselbe Ruhe wie beim Atmen des Kastens: die Pfeile wippen, sie zappeln nicht.
+   Die Pause an beiden Enden ist der Unterschied zwischen "zeigt nach unten" und
+   "huepft". */
+@keyframes hbv-wippen{
+    0%, 100%{ transform:translateY(-2px); }
+    50%     { transform:translateY(2px); }
+}
+#hbv .mj-plan:hover{ border-color:var(--purple); }
+
+/* Der Zustand nach dem ersten Klick: das Ziel leuchtet violett auf, ohne dass das
+   Formular nach Fehler aussieht. Rot kommt erst beim zweiten Klick, und das macht
+   dann form-feedback.js. */
+#hbv .form-card .hbv-zeigen{
+    outline:2px solid var(--purple) !important;
+    outline-offset:2px;
+    border-radius:12px;
+    animation:hbv-zeigen 1.6s ease-out 1;
+}
+@keyframes hbv-zeigen{
+    0%  { box-shadow:0 0 0 0 var(--purple-glow); }
+    60% { box-shadow:0 0 0 10px transparent; }
+    100%{ box-shadow:0 0 0 0 transparent; }
+}
+
+/* ─── 4 · Risiko ───────────────────────────────────────────────── */
+#hbv .hbv-risk{
+    position:relative; overflow:hidden; width:100vw; margin-inline:calc(50% - 50vw);
+    padding:4.5rem 1.5rem;
+    background:radial-gradient(95% 130% at 50% -25%, #4a2da0, #2a1c63 45%, #160f33 78%, #100a26);
+}
+#hbv .hbv-risk-inner{ position:relative; z-index:1; max-width:1280px; margin:0 auto; display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:3rem; align-items:center; }
+#hbv .hbv-risk-copy .hbv-glass{ margin-top:1.8rem; }
+/* Der geretteten Warnung aus dem alten Vergleichsblock. Bernstein auf dunklem
+   Grund, damit sie sich vom Fliesstext abhebt, ohne wie ein Fehler auszusehen. */
+#hbv .hbv-warn{
+    display:flex; gap:.85rem; margin-top:1.6rem; padding:1.1rem 1.25rem;
+    background:rgba(217,119,6,.14); border:1px solid rgba(251,191,36,.34); border-radius:16px;
+}
+#hbv .hbv-warn-ic{ flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:9px; background:rgba(251,191,36,.18); color:#fcd34d; }
+#hbv .hbv-warn-ic svg{ width:16px; height:16px; }
+#hbv .hbv-warn b{ display:block; font-size:.92rem; font-weight:800; color:#fde68a; margin-bottom:.3rem; }
+#hbv .hbv-warn p{ margin:0; font-size:.86rem; line-height:1.65; color:rgba(255,255,255,.76); }
+#hbv .hbv-compare{ display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); gap:1rem; align-items:center; }
+#hbv .hbv-cmp{ position:relative; padding:1.7rem 1.4rem 1.5rem; border-radius:var(--hbv-r); background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+[data-theme="light"] #hbv .hbv-cmp{ background:#1a1430; border-color:rgba(255,255,255,0.16); }
+#hbv .hbv-cmp-good{ background:rgba(255,255,255,.1); border-color:rgba(167,139,250,.45); }
+#hbv .hbv-cmp-ic{ display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:9px; margin-bottom:.85rem; }
+#hbv .hbv-cmp-ic svg{ width:15px; height:15px; }
+#hbv .hbv-cmp-ic-bad{ background:rgba(239,68,68,.18); color:#fca5a5; }
+#hbv .hbv-cmp-ic-good{ background:rgba(52,211,153,.18); color:#6ee7b7; }
+#hbv .hbv-cmp-label{ font-size:.8rem; font-weight:800; color:rgba(255,255,255,.72); }
+#hbv .hbv-cmp-price{ font-size:1.9rem; font-weight:900; color:#fff; letter-spacing:-.03em; margin:.15rem 0 .9rem; }
+#hbv .hbv-cmp-price-good{ color:#6ee7b7; }
+#hbv .hbv-cmp ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.5rem; }
+#hbv .hbv-cmp li{ position:relative; padding-inline-start:1rem; font-size:.83rem; line-height:1.5; color:rgba(255,255,255,.76); }
+#hbv .hbv-cmp li::before{ content:''; position:absolute; inset-inline-start:0; top:.55em; width:5px; height:5px; border-radius:50%; background:currentColor; opacity:.55; }
+#hbv .hbv-cmp-vs{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    width:96px; height:96px; border-radius:50%; flex:0 0 auto;
+    background:linear-gradient(135deg,#059669,#047857); color:#fff;
+    font-size:1.5rem; font-weight:900; letter-spacing:-.03em;
+    box-shadow:0 18px 40px rgba(5,150,105,.4);
+}
+#hbv .hbv-cmp-vs small{ font-size:.6rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; opacity:.85; }
+
+/* ─── 5 · Was die Botschaft sieht ──────────────────────────────── */
+#hbv .hbv-embassy{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:3rem; align-items:center; }
+#hbv .hbv-checks{ list-style:none; margin:1.4rem 0 0; padding:0; display:flex; flex-direction:column; gap:.72rem; }
+#hbv .hbv-checks li{ display:flex; align-items:flex-start; gap:.6rem; font-size:.92rem; color:var(--text); font-weight:600; }
+#hbv .hbv-checks svg{ flex:0 0 auto; width:15px; height:15px; margin-top:.28em; color:#059669; }
+#hbv .hbv-embassy-copy .hbv-cta1{ margin-top:1.8rem; }
+#hbv .hbv-paper{
+    background:var(--card-bg); border:1px solid var(--card-border); border-radius:var(--hbv-r);
+    padding:1.6rem 1.7rem; box-shadow:0 26px 64px rgba(15,10,30,.16);
+}
+#hbv .hbv-paper-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
+#hbv .hbv-paper-title{ font-size:.78rem; font-weight:900; letter-spacing:.12em; color:var(--text2); padding-bottom:.85rem; border-bottom:2px solid var(--purple); }
+#hbv .hbv-paper-rows{ display:flex; flex-direction:column; gap:.7rem; margin:1.1rem 0; }
+#hbv .hbv-paper-rows div{ display:flex; justify-content:space-between; gap:1rem; font-size:.82rem; padding-bottom:.7rem; border-bottom:1px solid var(--border); }
+#hbv .hbv-paper-rows div:last-child{ border-bottom:none; padding-bottom:0; }
+#hbv .hbv-paper-rows span{ color:var(--text2); }
+#hbv .hbv-paper-rows b{ color:var(--text); font-weight:700; text-align:end; }
+#hbv .hbv-paper-foot{ font-size:.68rem; color:var(--text2); text-align:center; }
+#hbv .hbv-accept{ margin-top:1rem; padding:1rem 1.2rem; background:var(--bg2); border:1px solid var(--border); border-radius:15px; }
+#hbv .hbv-accept > span{ display:block; font-size:.76rem; font-weight:800; color:var(--text2); margin-bottom:.65rem; }
+#hbv .hbv-accept-flags{ display:flex; align-items:center; flex-wrap:wrap; gap:.55rem; }
+#hbv .hbv-accept-flags img{ width:26px; height:18px; border-radius:3px; box-shadow:0 1px 4px rgba(0,0,0,.18); }
+#hbv .hbv-accept-flags b{ font-size:.76rem; font-weight:800; color:var(--purple); }
+
+/* ─── Tabellen ─────────────────────────────────────────────────── */
+/* Die Seite hatte null Tabellen. Diese hier sind der Grund, warum eine
+   Antwortmaschine ueberhaupt etwas uebernehmen kann — deshalb echtes
+   <table>/<th scope>/<caption>-Markup und keine nachgebauten Raster.
+   Der Behaelter scrollt fuer sich, damit die Seite bei 390 px nicht kippt
+   (Hausregel: breite Tabellen scrollen, sie ragen nie ueber). */
+#hbv .hbv-tabelle{ margin-top:2.5rem; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+#hbv .hbv-tabelle table{
+    width:100%; min-width:520px; border-collapse:collapse;
+    background:var(--card-bg); border:1px solid var(--card-border); border-radius:var(--hbv-r);
+    overflow:hidden; font-size:.88rem;
+}
+#hbv .hbv-tabelle caption{
+    caption-side:top; text-align:start; padding:0 0 .85rem;
+    font-size:.76rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--text2);
+}
+#hbv .hbv-tabelle thead th{
+    background:var(--bg2); text-align:start; padding:.9rem 1.1rem;
+    font-size:.74rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:var(--text2);
+    border-bottom:1px solid var(--border);
+}
+#hbv .hbv-tabelle tbody th{
+    text-align:start; padding:.95rem 1.1rem; font-weight:800; color:var(--text);
+    vertical-align:top; white-space:normal;
+}
+#hbv .hbv-tabelle tbody td{ padding:.95rem 1.1rem; color:var(--text2); line-height:1.6; vertical-align:top; }
+#hbv .hbv-tabelle tbody tr + tr th,
+#hbv .hbv-tabelle tbody tr + tr td{ border-top:1px solid var(--border); }
+#hbv .hbv-tabelle tbody tr:hover th,
+#hbv .hbv-tabelle tbody tr:hover td{ background:var(--purple-light); }
+/* Der Abschnitt mit der Pruefungs-Tabelle sitzt auf dem zweiten Grundton,
+   damit zwei Tabellen hintereinander nicht wie eine wirken. */
+#hbv .hbv-sec-eng{ background:var(--bg2); }
+
+/* ─── 6 · Zielkacheln ──────────────────────────────────────────── */
+#hbv .hbv-dest-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:1.5rem; flex-wrap:wrap; margin-bottom:2rem; }
+#hbv .hbv-dest-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.15rem; }
+#hbv .hbv-dest{
+    position:relative; display:block; overflow:hidden; border-radius:var(--hbv-r);
+    aspect-ratio:4/3; text-decoration:none; isolation:isolate;
+    transition:transform .3s, box-shadow .3s;
+}
+#hbv .hbv-dest:hover{ transform:translateY(-6px); box-shadow:0 24px 52px rgba(15,10,30,.26); }
+#hbv .hbv-dest-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .55s ease; }
+#hbv .hbv-dest:hover .hbv-dest-img{ transform:scale(1.07); }
+#hbv .hbv-dest-scrim{ position:absolute; inset:0; background:linear-gradient(to top, rgba(16,10,38,.9) 8%, rgba(16,10,38,.45) 45%, rgba(16,10,38,.05) 78%); }
+#hbv .hbv-dest-body{ position:absolute; inset-inline:0; bottom:0; padding:1.2rem 1.3rem; display:flex; flex-direction:column; gap:.3rem; }
+#hbv .hbv-dest-name{ display:flex; align-items:center; gap:.5rem; font-size:1.05rem; font-weight:900; color:#fff; letter-spacing:-.02em; }
+#hbv .hbv-dest-name img{ width:22px; height:15px; border-radius:2px; box-shadow:0 1px 4px rgba(0,0,0,.35); }
+#hbv .hbv-dest-cities{ font-size:.8rem; color:rgba(255,255,255,.72); }
+[data-theme="light"] #hbv .hbv-dest-cities{ color:var(--text2,#4b5563); }
+#hbv .hbv-dest-go{
+    display:inline-flex; align-items:center; gap:.4rem; margin-top:.5rem;
+    font-size:.82rem; font-weight:800; color:#93c5fd;
+    max-height:0; opacity:0; overflow:hidden; transition:max-height .3s ease, opacity .3s ease;
+}
+#hbv .hbv-dest-go svg{ width:14px; height:14px; }
+#hbv .hbv-dest:hover .hbv-dest-go,
+#hbv .hbv-dest:focus-visible .hbv-dest-go{ max-height:2rem; opacity:1; }
+
+/* ─── 9 · Kundenstimmen ────────────────────────────────────────── */
+#hbv .hbv-story-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.15rem; }
+#hbv .hbv-story{
+    display:flex; flex-direction:column; gap:.9rem; padding:1.6rem 1.5rem;
+    background:var(--card-bg); border:1px solid var(--card-border); border-radius:var(--hbv-r);
+    transition:transform .25s, border-color .25s, box-shadow .25s;
+}
+#hbv .hbv-story:hover{ transform:translateY(-5px); border-color:var(--purple); box-shadow:0 20px 44px var(--purple-glow); }
+#hbv .hbv-story header{ display:flex; align-items:center; gap:.7rem; }
+#hbv .hbv-story-flag .fi{ display:inline-block; width:26px; height:18px; border-radius:3px; }
+#hbv .hbv-story-meta{ flex:1 1 auto; display:flex; flex-direction:column; }
+#hbv .hbv-story-meta b{ font-size:.85rem; font-weight:800; color:var(--text); }
+#hbv .hbv-story-meta small{ font-size:.73rem; color:var(--purple); font-weight:700; }
+#hbv .hbv-story-stars{ display:inline-flex; gap:1px; }
+#hbv .hbv-story-stars svg{ width:13px; height:13px; color:#f59e0b; }
+#hbv .hbv-story-text{ font-size:.88rem; line-height:1.7; color:var(--text2); margin:0; }
+#hbv .hbv-story footer{ display:flex; align-items:center; justify-content:space-between; gap:.6rem; padding-top:.85rem; border-top:1px solid var(--border); }
+#hbv .hbv-story footer b{ font-size:.83rem; font-weight:800; color:var(--text); }
+#hbv .hbv-story footer span{ font-size:.75rem; color:var(--text2); }
+#hbv .hbv-mid-cta{ display:flex; justify-content:center; margin-top:2.2rem; }
+
+/* ─── Zeilenlaenge ─────────────────────────────────────────────── */
+/*
+    GEMESSEN, nicht geschaetzt. Zeichen je Zeile bei 1440 px, gerechnet als
+    nutzbare Breite geteilt durch die Breite eines Durchschnittszeichens in der
+    Schrift des jeweiligen Elements:
+
+        Langtext        140      Textkarten      147
+        FAQ-Antworten   161      Entwurfs-Leads   65  (tragen laengst max-width)
+
+    Angenehm zu lesen sind 60 bis 85. Ueber 100 verliert das Auge beim
+    Zeilenwechsel den Anschluss — auf einer Seite, die zu zwei Dritteln aus
+    Fliesstext besteht, ist das der groesste Lesekomfort-Posten ueberhaupt.
+
+    WARUM ch UND NICHT px: ch ist die Breite der Ziffer 0 in der laufenden
+    Schrift. Damit haelt die Deckelung auch, wenn jemand die Schriftgroesse
+    aendert oder eine Sprache mit anderen Zeichen laeuft. 1ch entspricht in
+    dieser Schrift rund 1,41 gemessenen Durchschnittszeichen — 68ch sind also
+    rund 96 Zeichen.
+
+    ZUR ZAHL 68: der erste Ansatz waren 60ch (rund 85 Zeichen, das obere Ende des
+    angenehmen Bereichs). Das las sich gut, liess aber rechts im Kasten eine
+    sichtbar leere Bahn — der Kasten geht ueber die volle Breite, der Text hoerte
+    bei gut der Halfte auf. 68ch halbiert die Luecke und bleibt weit unter den
+    140 bis 161 Zeichen, mit denen die Seite vorher lief. Es ist eine Abwaegung
+    zwischen Lesekomfort und Bildwirkung, keine Regel — und sie haengt an dieser
+    einen Zahl.
+
+    ABSCHNITTSBREITEN BLEIBEN UNBERUEHRT. Gedeckelt wird der TEXT, nicht der
+    Kasten: Ueberschriften, Tabellen, Raster und Kacheln behalten die volle
+    Breite. Sonst waere aus dem Ausrichten von eben wieder ein Einruecken
+    geworden.
+
+    Tabellenzellen sind bewusst ausgenommen — dort bestimmt die Spalte die
+    Breite, eine Deckelung wuerde das Raster zerreissen.
+*/
+#hbv{ --hbv-zeile:68ch; }
+
+#hbv .hbv-guide .card > p,
+#hbv .hbv-guide .card > ul,
+#hbv .hbv-guide .card > ol,
+#hbv .hbv-guide section > div > p,
+#hbv .hbv-guide section > div > ul,
+#hbv .hbv-guide section > div > ol,
+#hbv .hbv-guide .faq-a,
+#hbv .hbv-guide .hbv-fliess,
+#hbv .aag-summary-text{ max-width:var(--hbv-zeile); }
+
+/* Die Aufzaehlungen im Langtext sind eigene Absaetze in <div>-Huellen; ohne
+   diese Zeile blieben genau sie bei voller Breite stehen.
+
+   .hbv-fliess ist eine Klasse, die ich im Fliesstext gesetzt habe, weil dort
+   Textbloecke ohne jede Klasse stehen — nur mit Inline-Stil. Ein Selektor auf
+   den Inline-Stil (div[style*="line-height:1.5"]) haette ebenso funktioniert und
+   waere still ausgefallen, sobald jemand den Wert aendert. Genau diese Falle
+   steckt an anderer Stelle schon in index.blade.php. */
+#hbv .hbv-guide section p,
+#hbv .hbv-guide section li{ max-width:var(--hbv-zeile); }
+
+/* Hier stand bis zur Nachmessung eine Media Query, die die Deckelung unterhalb
+   von 1100 px abschaltete — mit der Begruendung, die Spalte sei dort ohnehin
+   schmaler. Sie ist es nicht: bei 1100 px kamen die FAQ-Antworten auf 137
+   Zeichen, der Langtext auf 119. Die Regel hat also genau dort abgeschaltet, wo
+   sie noch gebraucht wurde.
+
+   max-width ist eine Obergrenze, keine Untergrenze. Ist die Spalte schmaler als
+   60ch, tut die Regel von selbst nichts — es gibt nichts abzuschalten. */
+
+/* ─── 10 · Fliesstext ──────────────────────────────────────────── */
+/* Die alte Fassung trug ihre eigenen Abstaende; hier bekommt sie den Rahmen der
+   uebrigen Abschnitte, damit sie nicht wie ein angeklebter Rest wirkt. */
+#hbv .hbv-guide{ padding:1rem 0 2rem; }
+#hbv .hbv-guide > div:first-child{ padding-top:0!important; }
+
+/* FAQ — Hausrezept: randloses Akkordeon mit Winkel statt Plus, KEIN Kasten.
+   Der Fliesstext liefert die Fragen in einer .card; die Hausregel verlangt, dass
+   das Akkordeon buendig sitzt. Ueber :has() geloest, damit der uebernommene Text
+   dafuer nicht angefasst werden muss. */
+#hbv .hbv-guide .card:has(.faq-item){
+    background:transparent!important; border:none!important; border-radius:0!important;
+    padding:0!important; box-shadow:none!important;
+}
+#hbv .hbv-guide .faq-item{ background:transparent!important; border:none!important; border-bottom:1px solid var(--border)!important; border-radius:0!important; }
+#hbv .hbv-guide .faq-q{ padding:1.3rem .5rem!important; font-size:1rem!important; transition:color .2s; }
+#hbv .hbv-guide .faq-item:hover .faq-q span{ color:var(--purple); }
+#hbv .hbv-guide .faq-a{ padding:0 .5rem!important; }
+#hbv .hbv-guide .faq-item.open .faq-a{ padding-bottom:1.35rem!important; }
+#hbv .hbv-guide .faq-icon{ background:transparent!important; width:22px!important; height:22px!important; border-radius:0!important; display:flex; align-items:center; justify-content:center; }
+#hbv .hbv-guide .faq-icon svg{ display:none!important; }
+#hbv .hbv-guide .faq-icon::after{
+    content:''; display:block; width:9px; height:9px;
+    border-right:2px solid var(--text2); border-bottom:2px solid var(--text2);
+    transform:rotate(45deg) translateY(-2px); transition:transform .3s, border-color .25s;
+}
+#hbv .hbv-guide .faq-item:hover .faq-icon::after{ border-color:var(--purple); }
+#hbv .hbv-guide .faq-item.open .faq-icon::after{ transform:rotate(225deg) translateY(-2px); border-color:var(--purple); }
+#hbv .hbv-guide .faq-list:not(.faq-expanded) .faq-item:nth-child(n+7){ display:none!important; }
+#hbv .hbv-guide .faq-more{
+    display:flex; align-items:center; gap:.4rem; margin:1.5rem auto 0; padding:.5rem;
+    background:transparent; color:var(--purple); border:none; font-weight:700;
+    font-size:.92rem; font-family:inherit; cursor:pointer; transition:gap .2s, opacity .2s;
+}
+#hbv .hbv-guide .faq-more:hover{ opacity:.72; gap:.55rem; }
+#hbv .hbv-guide .faq-more svg{ width:13px; height:13px; transition:transform .3s; }
+#hbv .hbv-guide .faq-more[aria-expanded="true"] svg{ transform:rotate(180deg); }
+
+/* ─── 12 · Abschluss ───────────────────────────────────────────── */
+#hbv .hbv-final{
+    position:relative; overflow:hidden; width:100vw; margin-inline:calc(50% - 50vw);
+    padding:4.5rem 1.5rem; text-align:center;
+    background:radial-gradient(95% 140% at 50% 0%, #4a2da0, #2a1c63 48%, #160f33 82%, #100a26);
+}
+#hbv .hbv-final-inner{ position:relative; z-index:1; max-width:720px; margin:0 auto; }
+#hbv .hbv-final h2{ font-size:clamp(1.7rem,3.2vw,2.5rem); font-weight:900; line-height:1.15; letter-spacing:-.025em; color:#fff; margin:0 0 .8rem; }
+#hbv .hbv-final p{ color:rgba(255,255,255,.76); font-size:1rem; margin:0 0 2rem; }
+#hbv .hbv-final-cta{
+    display:inline-flex; align-items:center; gap:.55rem; padding:1.05rem 2.1rem;
+    background:#fff; color:#2a1c63; border-radius:14px; font-weight:900; font-size:1.02rem;
+    text-decoration:none; box-shadow:0 18px 44px rgba(0,0,0,.3); transition:transform .22s;
+}
+#hbv .hbv-final-cta:hover{ transform:translateY(-2px); }
+#hbv .hbv-final-cta svg{ width:17px; height:17px; }
+#hbv .hbv-final-trust{ display:flex; flex-wrap:wrap; justify-content:center; gap:1.4rem; margin-top:1.8rem; }
+#hbv .hbv-final-trust span{ display:inline-flex; align-items:center; gap:.4rem; font-size:.82rem; font-weight:700; color:rgba(255,255,255,.72); }
+#hbv .hbv-final-trust svg{ width:13px; height:13px; color:#6ee7b7; }
+
+/* ─── RTL ──────────────────────────────────────────────────────── */
+/* Die Pfeile zeigen in Leserichtung; der Lichtstreifen des Glasknopfes ebenso. */
+[dir="rtl"] #hbv .hbv-cta1 svg,
+[dir="rtl"] #hbv .hbv-cta2 svg,
+[dir="rtl"] #hbv .hbv-dest-go svg,
+[dir="rtl"] #hbv .hbv-glass svg,
+[dir="rtl"] #hbv .hbv-final-cta svg{ transform:scaleX(-1); }
+[dir="rtl"] #hbv .hbv-cta1:hover svg{ transform:scaleX(-1) translateX(3px); }
+[dir="rtl"] #hbv .hbv-glass::before{ inset:0 -60% 0 auto; }
+[dir="rtl"] #hbv .hbv-glass:hover::before{ left:auto; right:120%; }
+
+/* ─── Bildschirmbreiten ────────────────────────────────────────── */
+@media(max-width:1080px){
+    #hbv .hbv-dest-grid,
+    #hbv .hbv-story-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:980px){
+    #hbv .hbv-hero-inner,
+    #hbv .hbv-how-grid,
+    #hbv .hbv-risk-inner,
+    #hbv .hbv-embassy{ grid-template-columns:minmax(0,1fr); gap:2.5rem; }
+    #hbv .hbv-hero-stage{ max-width:520px; margin-inline:auto; width:100%; }
+    #hbv .hbv-float-2{ inset-inline-start:-2%; }
+    #hbv .hbv-float-1,
+    #hbv .hbv-float-3{ inset-inline-end:-2%; }
+    #hbv .hbv-tpb{ inset-inline-start:-2%; }
+    #hbv .hbv-trust-inner{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    #hbv .hbv-antwort-fakten{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:760px){
+    #hbv .hbv-sec{ padding:3rem 0; }
+    #hbv .hbv-hero{ padding:2.75rem 1.25rem 3.25rem; }
+    #hbv .hbv-steps{ grid-template-columns:minmax(0,1fr); }
+    #hbv .hbv-compare{ grid-template-columns:minmax(0,1fr); }
+    /* Die Null-Risiko-Scheibe rueckt zwischen die Karten statt daneben. */
+    #hbv .hbv-cmp-vs{ margin-inline:auto; width:80px; height:80px; font-size:1.3rem; }
+    #hbv .hbv-dest-grid,
+    #hbv .hbv-story-grid{ grid-template-columns:minmax(0,1fr); }
+    #hbv .hbv-hero-cta{ gap:.75rem; }
+    #hbv .hbv-hero-cta .hbv-cta1{ width:100%; justify-content:center; }
+}
+/* Unter 560 px hat die Buehne keinen Platz mehr fuer Foto, Dokument UND drei
+   Plaketten. Gemessen bei 390 px: das Dokument lag auf dem Foto, "Confirmation
+   generated" lag auf dem Dokument, "PDF ready" auf beidem — vom Zimmer war ein
+   Streifen uebrig. Die Plaketten sind Beiwerk und gehen; das Dokument ist die
+   Aussage und rueckt unter das Foto.
+
+   Die Plaketten stehen mit aria-hidden im Markup — sie zu verbergen nimmt einem
+   Screenreader nichts weg.
+
+   Ausnahme seit 13.09.2026: das FREE-PDF-Abzeichen bleibt — verkleinert oben links im
+   Foto, wo weder das hochgerueckte Dokument noch eine Plakette liegt. */
+@media(max-width:560px){
+    #hbv .hbv-hero-stage{ aspect-ratio:auto; }
+    #hbv .hbv-hero-photo{ height:auto; aspect-ratio:16/10; }
+    #hbv .hbv-float{ display:none; }
+    #hbv .hbv-tpb{ top:14px; bottom:auto; inset-inline-start:12px; transform:scale(.8); transform-origin:top left; }
+    [dir="rtl"] #hbv .hbv-tpb{ transform-origin:top right; }
+    /* relative statt static: ein unpositionierter Block malt seinen Hintergrund VOR dem
+       Foto (Inline-Inhalt). Gemessen 13.09.: das Foto deckte den oberen Rand der Karte zu,
+       "DummyTicket" und "CONFIRMED" standen direkt auf dem Zimmer. */
+    #hbv .hbv-doc{
+        position:relative; z-index:1; width:auto; margin:-2.5rem 0.75rem 0;
+        box-shadow:0 18px 44px rgba(15,10,30,.28);
+    }
+    #hbv .hbv-doc-rows div{ font-size:.75rem; }
+}
+@media(max-width:420px){
+    #hbv .hbv-trust-inner{ grid-template-columns:minmax(0,1fr); }
+    #hbv .hbv-antwort-kasten{ padding:1.4rem 1.35rem; }
+}
+/* Wer Bewegung abgestellt hat, bekommt den Ring unbewegt — er sieht dann aus wie
+   ein heller Rand, der Knopf verliert nichts. ::after gehoert seit dem
+   Lichtpunkt-Effekt dazu, sonst liefe das drehende Quadrat weiter. */
+@media(prefers-reduced-motion:reduce){
+    #hbv *,
+    #hbv *::before,
+    #hbv *::after{ transition:none!important; animation:none!important; }
+}
+</style>
+
+<script>
+(function () {
+    var wurzel = document.getElementById('hbv');
+    if (!wurzel) return;
+
+    /* ── Der Hinweiskasten fuehrt ins Formular ───────────────────────────
+       Er sieht aus wie ein Eingabefeld (Rahmen, Stift, heller Grund), ist aber
+       nur ein Hinweis — der Auftraggeber hat daraufgeklickt und konnte nichts
+       ausfuellen. Zwei Stufen:
+
+         1. Klick  -> Sprung zum ersten leeren Pflichtfeld, Cursor hinein,
+                      violetter Rahmen. Fuehrt, ohne zu tadeln.
+         2. Klick  -> das Ereignis 'tab-already-active'. Das ist KEIN neuer
+                      Mechanismus: public_html/js/form-feedback.js hoert darauf,
+                      setzt fv-checked (leere Pflichtfelder werden rot) und
+                      ruettelt die Karte. Gebaut wurde es fuer das fehlgeschlagene
+                      Absenden — genau die Rueckmeldung, die hier gebraucht wird.
+
+       Warum nicht sofort rot: das Formular saehe nach Fehler aus, bevor der
+       Kunde ein Zeichen getippt hat.
+
+       Am DOKUMENT gehorcht, nicht am Kasten: Livewire tauscht bei jedem Commit
+       die gemorphten Elemente aus, ein direkt gebundener Zuhoerer waere danach
+       weg. Aus demselben Grund haelt form-feedback.js seinen Zustand am html-Element. */
+    var hinweisGeklickt = false;
+    document.addEventListener('click', function (e) {
+        var kasten = e.target.closest ? e.target.closest('#hbv .mj-plan') : null;
+        if (!kasten) return;
+
+        var karte = wurzel.querySelector('.form-card');
+        if (!karte) return;
+
+        if (hinweisGeklickt) {
+            /* Zweite Stufe: die ECHTE Pruefung, nicht nur die Faerbung.
+               Vorher stand hier nur 'tab-already-active' — das faerbt die leeren
+               Pflichtfelder rot und ruettelt, laesst aber die Hinweise unter den
+               Feldern aus. Genau dieser Zustand ist aufgefallen: sieben rote Rahmen
+               und null Meldungen.
+               HotelBookingForm::pruefeNur() laeuft ueber dieselbe Regelliste wie das
+               Absenden und erzeugt nichts. Faellt die Pruefung durch, schickt sie
+               'form-invalid'; form-feedback.js uebernimmt von da an wie beim echten
+               Absenden — faerben, ruetteln, zur ersten Meldung springen. */
+            var knoten = karte.closest('[wire\\:id]') || wurzel.querySelector('[wire\\:id]');
+            var kennung = knoten && knoten.getAttribute('wire:id');
+            if (kennung && window.Livewire && window.Livewire.find(kennung)) {
+                window.Livewire.find(kennung).call('pruefeNur');
+            } else {
+                /* Ohne Livewire bleibt wenigstens die Faerbung — besser als nichts. */
+                window.dispatchEvent(new Event('tab-already-active'));
+            }
+            return;
+        }
+        hinweisGeklickt = true;
+
+        /* Das erste leere Pflichtfeld, das man auch sehen kann. :invalid deckt
+           auch ausgeblendete Felder ab — offsetParent schliesst die aus. */
+        var ziel = null;
+        var felder = karte.querySelectorAll('input[required], select[required], textarea[required]');
+        for (var i = 0; i < felder.length; i++) {
+            if (!felder[i].value && felder[i].offsetParent !== null) { ziel = felder[i]; break; }
+        }
+        if (!ziel) { ziel = karte.querySelector('input, select, textarea'); }
+        if (!ziel) return;
+
+        /* 64 px feste Navigation plus Luft — derselbe Wert wie in form-feedback.js,
+           dort im Markup nachgemessen und nicht geschaetzt. */
+        var y = ziel.getBoundingClientRect().top + window.scrollY - 64 - 28;
+        window.scrollTo({ top: y, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+
+        ziel.classList.add('hbv-zeigen');
+        window.setTimeout(function () { ziel.classList.remove('hbv-zeigen'); }, 1700);
+        window.setTimeout(function () { try { ziel.focus({ preventScroll: true }); } catch (err) { ziel.focus(); } }, 420);
+    });
+
+    /* Das Hausrezept fuer die FAQ: ab der siebten Frage eingeklappt.
+       Die Fragen selbst kommen unveraendert aus dem Fliesstext. */
+    var fragen = wurzel.querySelectorAll('.hbv-guide .faq-item');
+    if (fragen.length > 6) {
+        var liste = fragen[0].parentNode;
+        liste.classList.add('faq-list');
+        var winkel = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+        var knopf = document.createElement('button');
+        knopf.type = 'button';
+        knopf.className = 'faq-more';
+        function zeichnen() {
+            var offen = liste.classList.contains('faq-expanded');
+            knopf.innerHTML = (offen ? "Show fewer" : "Show all questions") + ' ' + winkel;
+            knopf.setAttribute('aria-expanded', offen ? 'true' : 'false');
+        }
+        zeichnen();
+        knopf.addEventListener('click', function () { liste.classList.toggle('faq-expanded'); zeichnen(); });
+        liste.parentNode.insertBefore(knopf, liste.nextSibling);
+    }
+})();
+</script>

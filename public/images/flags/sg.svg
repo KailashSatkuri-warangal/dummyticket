@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20">
+  <!-- Flagge Singapurs. Die Geometrie stammt aus der gemeinfreien Vorlage
+       commons.wikimedia.org/wiki/File:Flag_of_Singapore.svg (Public domain,
+       Vektorisierung Zscout370 nach der amtlichen Vorlage der Regierung
+       Singapurs), viewBox 54x36. Das amtliche Verhaeltnis 3:2 entspricht
+       genau dem Hausformat 30x20, deshalb genuegt ein gleichmaessiger
+       Faktor 30/54 = 20/36 = 0.5555556 — nichts wird verzerrt.
+       Der Mond entsteht wie im Original durch UEBERMALEN: weisser Kreis,
+       darueber ein groesserer roter. Kein evenodd noetig.
+       Die fuenf Sterne sind derselbe Pfad, fuenfmal um (15.03, 9) gedreht. -->
+  <g transform="scale(0.5555556)">
+    <path d="M0 0h54v36H0z" fill="#FFFFFF"/>
+    <path d="M0 0h54v18H0z" fill="#ED2939"/>
+    <circle cx="11.405" cy="9" r="6.625" fill="#FFFFFF"/>
+    <circle cx="15.03" cy="9" r="7.25" fill="#ED2939"/>
+    <g fill="#FFFFFF">
+      <path d="m15.03 3.475-1.01393 3.120554 2.654502-1.928609h-3.281145l2.654502 1.928609z"/>
+      <path d="m15.03 3.475-1.01393 3.120554 2.654502-1.928609h-3.281145l2.654502 1.928609z" transform="rotate(72 15.03 9)"/>
+      <path d="m15.03 3.475-1.01393 3.120554 2.654502-1.928609h-3.281145l2.654502 1.928609z" transform="rotate(144 15.03 9)"/>
+      <path d="m15.03 3.475-1.01393 3.120554 2.654502-1.928609h-3.281145l2.654502 1.928609z" transform="rotate(216 15.03 9)"/>
+      <path d="m15.03 3.475-1.01393 3.120554 2.654502-1.928609h-3.281145l2.654502 1.928609z" transform="rotate(288 15.03 9)"/>
+    </g>
+  </g>
+</svg>

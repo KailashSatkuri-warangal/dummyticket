@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 280" fill="none">
+  <!-- Card background -->
+  <rect width="160" height="280" rx="16" fill="#f5f3ff"/>
+
+  <!-- Sky glow -->
+  <ellipse cx="80" cy="90" rx="68" ry="52" fill="#ede9fe"/>
+
+  <!-- ARABIAN SEA (Mumbai harbour background) -->
+  <path d="M0,205 Q40,198 80,202 Q120,198 160,205 L160,220 Q120,216 80,220 Q40,216 0,220 Z" fill="#c4b5fd" opacity="0.35"/>
+  <path d="M0,208 Q40,203 80,207 Q120,203 160,208" stroke="#a78bfa" stroke-width="0.8" opacity="0.4"/>
+  <path d="M0,215 Q40,210 80,214 Q120,210 160,215" stroke="#a78bfa" stroke-width="0.6" opacity="0.3"/>
+
+  <!-- BOATS on harbour (classic Mumbai fishing boats) -->
+  <path d="M18,208 Q22,205 30,206 L28,210 Q22,210 18,208 Z" fill="#8b5cf6" opacity="0.45"/>
+  <line x1="24" y1="205" x2="24" y2="200" stroke="#6d28d9" stroke-width="0.8" opacity="0.5"/>
+  <path d="M125,210 Q130,207 138,208 L136,212 Q130,212 125,210 Z" fill="#7c3aed" opacity="0.4"/>
+  <line x1="131" y1="207" x2="131" y2="202" stroke="#6d28d9" stroke-width="0.8" opacity="0.4"/>
+
+  <!-- STONE PLINTH / ESPLANADE BASE -->
+  <rect x="8" y="192" width="144" height="14" rx="2" fill="#5b21b6"/>
+  <!-- Plinth decorative step -->
+  <rect x="14" y="188" width="132" height="6" rx="1.5" fill="#6d28d9"/>
+
+  <!-- SIDE WINGS (lower flanking halls) — LEFT -->
+  <rect x="14" y="140" width="34" height="50" rx="2" fill="#7c3aed"/>
+  <!-- Left wing latticed windows (Gujarati-style jali patterns) -->
+  <rect x="18" y="148" width="8" height="12" rx="1.5" fill="#ede9fe" opacity="0.55"/>
+  <rect x="29" y="148" width="8" height="12" rx="1.5" fill="#ede9fe" opacity="0.55"/>
+  <rect x="18" y="165" width="8" height="12" rx="1.5" fill="#ede9fe" opacity="0.5"/>
+  <rect x="29" y="165" width="8" height="12" rx="1.5" fill="#ede9fe" opacity="0.5"/>
+  <!-- Left wing crenellated parapet -->
+  <rect x="14" y="133" width="5" height="9" rx="0.5" fill="#6d28d9"/>
+  <rect x="21" y="133" width="5" height="9" rx="0.5" fill="#6d28d9"/>
+  <rect x="28" y="133" width="5" height="9" rx="0.5" fill="#6d28d9"/>
+  <rect x="35" y="133" width="5" height="9" rx="0.5" fill="#6d28d9"/>
+  <rect x="42" y="133" width="5" height="9" rx="0.5" fill="#6d28d9"/>
+
+  <!-- SIDE WINGS — RIGHT -->
+  <rect x="112" y="140" width="34" height="50" rx="2" fill="#7c3aed"/>
+  <!-- Right wing latticed windows -->
+  <rect x="116" y="148" width="8" height="12" rx="1.5" fill="#ede9fe" opacity="0.55"/>
+  <rect x="127" y="148" width="8" height="12" rx="1.5" fill="#ede9fe" opacity="0.55"/>
+  <rect x="116" y="165" width="8" height="12" rx="1.5" fill="#ede9fe" opacity="0.5"/>
+  <rect x="127" y="165" width="8" height="12" rx="1.5" fill="#ede9fe" opacity="0.5"/>
+  <!-- Right wing crenellated parapet -->
+  <rect x="112" y="133" width="5" height="9" rx="0.5" fill="#6d28d9"/>
+  <rect x="119" y="133" width="5" height="9" rx="0.5" fill="#6d28d9"/>
+  <rect x="126" y="133" width="5" height="9" rx="0.5" fill="#6d28d9"/>
+  <rect x="133" y="133" width="5" height="9" rx="0.5" fill="#6d28d9"/>
+  <rect x="140" y="133" width="5" height="9" rx="0.5" fill="#6d28d9"/>
+
+  <!-- CORNER TURRETS — left pair (domed cylindrical towers) -->
+  <!-- Outer-left turret -->
+  <rect x="10" y="120" width="12" height="72" rx="3" fill="#6d28d9"/>
+  <ellipse cx="16" cy="119" rx="7" ry="9" fill="#7c3aed"/>
+  <line x1="16" y1="110" x2="16" y2="100" stroke="#5b21b6" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="16" cy="99" r="2" fill="#5b21b6"/>
+  <!-- Inner-left turret -->
+  <rect x="46" y="128" width="12" height="64" rx="3" fill="#7c3aed"/>
+  <ellipse cx="52" cy="127" rx="7" ry="9" fill="#8b5cf6"/>
+  <line x1="52" y1="118" x2="52" y2="108" stroke="#6d28d9" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="52" cy="107" r="2" fill="#6d28d9"/>
+
+  <!-- CORNER TURRETS — right pair -->
+  <!-- Inner-right turret -->
+  <rect x="102" y="128" width="12" height="64" rx="3" fill="#7c3aed"/>
+  <ellipse cx="108" cy="127" rx="7" ry="9" fill="#8b5cf6"/>
+  <line x1="108" y1="118" x2="108" y2="108" stroke="#6d28d9" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="108" cy="107" r="2" fill="#6d28d9"/>
+  <!-- Outer-right turret -->
+  <rect x="138" y="120" width="12" height="72" rx="3" fill="#6d28d9"/>
+  <ellipse cx="144" cy="119" rx="7" ry="9" fill="#7c3aed"/>
+  <line x1="144" y1="110" x2="144" y2="100" stroke="#5b21b6" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="144" cy="99" r="2" fill="#5b21b6"/>
+
+  <!-- MAIN CENTRAL ARCH (the iconic basalt arch, 26m high) -->
+  <!-- Arch body -->
+  <rect x="58" y="122" width="44" height="70" rx="3" fill="#8b5cf6"/>
+  <!-- Main arch opening (the grand passage) -->
+  <rect x="66" y="138" width="28" height="50" rx="2" fill="#4c1d95"/>
+  <path d="M66,155 Q80,138 94,155" fill="#3b0764"/>
+  <!-- Arch decorative inner border -->
+  <path d="M64,155 Q80,136 96,155" fill="none" stroke="#c4b5fd" stroke-width="1.2" opacity="0.6"/>
+  <!-- Arch keystone (top center stone) -->
+  <rect x="77" y="136" width="6" height="8" rx="1" fill="#6d28d9"/>
+
+  <!-- DECORATIVE JALI PANELS flanking the main arch -->
+  <rect x="60" y="140" width="5" height="22" rx="1" fill="#7c3aed" opacity="0.7"/>
+  <rect x="62" y="142" width="1.5" height="6" rx="0.5" fill="#c4b5fd" opacity="0.5"/>
+  <rect x="62" y="150" width="1.5" height="6" rx="0.5" fill="#c4b5fd" opacity="0.5"/>
+  <rect x="95" y="140" width="5" height="22" rx="1" fill="#7c3aed" opacity="0.7"/>
+  <rect x="96.5" y="142" width="1.5" height="6" rx="0.5" fill="#c4b5fd" opacity="0.5"/>
+  <rect x="96.5" y="150" width="1.5" height="6" rx="0.5" fill="#c4b5fd" opacity="0.5"/>
+
+  <!-- CENTRAL DOME over the arch -->
+  <!-- Drum -->
+  <rect x="64" y="107" width="32" height="17" rx="2" fill="#7c3aed"/>
+  <!-- Drum windows -->
+  <rect x="67" y="110" width="6" height="10" rx="1.5" fill="#ede9fe" opacity="0.5"/>
+  <rect x="76" y="110" width="6" height="10" rx="1.5" fill="#ede9fe" opacity="0.5"/>
+  <rect x="85" y="110" width="6" height="10" rx="1.5" fill="#ede9fe" opacity="0.5"/>
+  <!-- The dome -->
+  <path d="M60,107 Q60,87 72,76 Q80,68 88,76 Q100,87 100,107 Z" fill="#8b5cf6"/>
+  <path d="M68,107 Q68,91 76,82 Q80,76 84,82 Q92,91 92,107 Z" fill="#a78bfa" opacity="0.35"/>
+  <!-- Dome finial -->
+  <line x1="80" y1="68" x2="80" y2="54" stroke="#5b21b6" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="80" cy="67" r="3" fill="#6d28d9"/>
+  <circle cx="80" cy="53" r="2" fill="#5b21b6"/>
+  <line x1="74" y1="59" x2="86" y2="59" stroke="#5b21b6" stroke-width="1.2" stroke-linecap="round"/>
+
+  <!-- DECORATIVE BANDS -->
+  <rect x="58" y="121" width="44" height="2" rx="0.5" fill="#c4b5fd" opacity="0.5"/>
+  <rect x="14" y="139" width="34" height="2" rx="0.5" fill="#c4b5fd" opacity="0.4"/>
+  <rect x="112" y="139" width="34" height="2" rx="0.5" fill="#c4b5fd" opacity="0.4"/>
+
+  <!-- GROUND / ESPLANADE PAVING -->
+  <rect x="0" y="230" width="160" height="15" rx="2" fill="#ddd6fe" opacity="0.4"/>
+  <line x1="0" y1="233" x2="160" y2="233" stroke="#c4b5fd" stroke-width="0.5" opacity="0.3"/>
+  <line x1="0" y1="238" x2="160" y2="238" stroke="#c4b5fd" stroke-width="0.5" opacity="0.25"/>
+  <!-- Paving vertical joints -->
+  <line x1="40" y1="230" x2="40" y2="245" stroke="#c4b5fd" stroke-width="0.5" opacity="0.25"/>
+  <line x1="80" y1="230" x2="80" y2="245" stroke="#c4b5fd" stroke-width="0.5" opacity="0.25"/>
+  <line x1="120" y1="230" x2="120" y2="245" stroke="#c4b5fd" stroke-width="0.5" opacity="0.25"/>
+
+  <!-- Decorative sparkles -->
+  <circle cx="142" cy="50" r="2" fill="#a78bfa" opacity="0.5"/>
+  <circle cx="150" cy="78" r="1.5" fill="#c4b5fd" opacity="0.4"/>
+  <circle cx="12" cy="52" r="1.5" fill="#a78bfa" opacity="0.4"/>
+
+  <!-- LABEL -->
+  <text x="80" y="256" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#5b21b6">Gateway of India</text>
+  <text x="80" y="269" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9.5" fill="#7c3aed" opacity="0.85">Mumbai · India</text>
+</svg>

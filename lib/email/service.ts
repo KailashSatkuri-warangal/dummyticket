@@ -138,7 +138,7 @@ export async function sendTransactionalEmailWithRetry(
 
   // ── Gmail SMTP via Nodemailer (primary) ────────────────────────────────────
   const gmailUser = process.env.GMAIL_USER;
-  const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
+  const gmailAppPassword = process.env.GMAIL_APP_PASSWORD?.replace(/\s+/g, '');
 
   if (gmailUser && gmailAppPassword) {
     while (attempt <= maxRetries) {

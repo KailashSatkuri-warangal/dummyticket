@@ -1,60 +1,27 @@
-import React from 'react';
+import fs from 'fs';
+import path from 'path';
 import type { Metadata } from 'next';
-import { getBrandConfig } from '@/lib/config/brand';
-import { ShieldCheck, Scale, FileText } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'About the Platform — Transparent Flight Search & Confirmed Itineraries',
-  description:
-    'Learn how our flight comparison and booking platform enforces transparent pricing, server-verified payments, and honest document labeling.',
+  title: "About DummyTicket – Free Dummy Ticket Service Since 2021",
+  description: "About DummyTicket: free dummy tickets for visa applications since 2021, trusted by 10,000+ travelers in 195 countries. Free PDF or real PNR with Premium.",
 };
 
-export default function AboutPage() {
-  const brand = getBrandConfig();
+export default function Page() {
+  const filePath = path.join(process.cwd(), 'content', 'pages', 'about.html');
+  let html = fs.readFileSync(filePath, 'utf8');
+
+  // Make hardcoded desktop grids responsive on mobile screens
+  html = html
+    .replace(/grid-template-columns:\s*1fr\s+1fr;/g, 'grid-template-columns:repeat(auto-fit, minmax(min(100%, 320px), 1fr));')
+    .replace(/grid-template-columns:\s*repeat\(4,\s*1fr\);/g, 'grid-template-columns:repeat(auto-fit, minmax(min(100%, 180px), 1fr));')
+    .replace(/grid-template-columns:\s*repeat\(3,\s*1fr\);/g, 'grid-template-columns:repeat(auto-fit, minmax(min(100%, 240px), 1fr));')
+    .replace(/grid-template-columns:\s*repeat\(2,\s*1fr\);/g, 'grid-template-columns:repeat(auto-fit, minmax(min(100%, 260px), 1fr));')
+    .replace(/gap:\s*4rem;/g, 'gap:1.5rem;');
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8 space-y-8">
-      <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-card space-y-5">
-        <span className="eyebrow">
-          About {brand.name}
-        </span>
-        <h1 className="text-3xl font-extrabold text-navy-900">
-          Built for Transparent Flight Comparison & Honest Travel Documentation
-        </h1>
-        <p className="text-sm text-slate-600 leading-relaxed">
-          {brand.name} ({brand.legalEntityName}) is a full-stack aviation search, booking management, and confirmed-itinerary delivery platform designed around strict pricing transparency and compliance.
-        </p>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 pt-4 text-xs">
-          <div className="rounded-xl border border-slate-200 p-4 space-y-2">
-            <Scale className="h-5 w-5 text-brand-600" />
-            <h2 className="font-bold text-sm text-navy-900">
-              Auditable Fare Snapshots
-            </h2>
-            <p className="text-slate-600">
-              Every quote separates base fare, statutory airport taxes, and disclosed platform fees. Any fare change requires explicit customer confirmation.
-            </p>
-          </div>
-          <div className="rounded-xl border border-slate-200 p-4 space-y-2">
-            <FileText className="h-5 w-5 text-brand-600" />
-            <h2 className="font-bold text-sm text-navy-900">
-              Confirmed Reservations
-            </h2>
-            <p className="text-slate-600">
-              Every completed booking is issued with an airline confirmation (PNR), downloadable itinerary, and separate payment receipt.
-            </p>
-          </div>
-          <div className="rounded-xl border border-slate-200 p-4 space-y-2">
-            <ShieldCheck className="h-5 w-5 text-brand-600" />
-            <h2 className="font-bold text-sm text-navy-900">
-              Server-Verified Security
-            </h2>
-            <p className="text-slate-600">
-              Powered by Supabase Row Level Security (RLS), HMAC-SHA256 Razorpay verification, and masked travel document storage.
-            </p>
-          </div>
-        </div>
-      </div>
+    <div className="myjet-page-wrapper overflow-x-hidden w-full max-w-full">
+      <div dangerouslySetInnerHTML={{ __html: html }} />
     </div>
   );
 }

@@ -17,6 +17,7 @@ import { calculateCompleteFare } from '@/lib/pricing/engine';
 import { formatDuration, formatInr } from '@/lib/config/brand';
 import { BookingStepper } from '@/components/booking/BookingStepper';
 import { FlightGlobeAnimation } from '@/components/ui/FlightGlobeAnimation';
+import { saveRecentBooking } from '@/lib/booking/recent-storage';
 import type { CabinClass, PassengerInput } from '@/types';
 
 export default function CheckoutPage() {
@@ -224,6 +225,26 @@ export default function CheckoutPage() {
       }
 
       const createdBooking = bookingData.booking;
+
+      try {
+        saveRecentBooking({
+          bookingReference: createdBooking.bookingReference,
+          pnr: createdBooking.airlinePnr || createdBooking.bookingReference,
+          origin: offer?.origin.iataCode || 'DEL',
+          destination: offer?.destination.iataCode || 'LHR',
+          departureDate: departDate,
+          passengerName: `${passengers[0]?.firstName || ''} ${passengers[0]?.lastName || ''}`.trim() || 'Traveler',
+          type: 'flight',
+          plan: 'premium',
+          createdAt: new Date().toISOString(),
+          pdfUrl: `/api/tickets/${createdBooking.bookingReference}/pdf`,
+        });
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new Event('dt_booking_saved'));
+        }
+      } catch {
+        // Ignore client storage errors
+      }
 
       // Step 6: Create Server-Side Razorpay Order
       const orderRes = await fetch('/api/payments/create-order', {

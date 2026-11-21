@@ -45,7 +45,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-5xl px-4 pt-24 sm:pt-28 pb-12 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
         <div className="lg:col-span-5 space-y-4">
           <span className="eyebrow">

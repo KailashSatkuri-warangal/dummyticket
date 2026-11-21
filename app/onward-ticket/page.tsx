@@ -1,104 +1,142 @@
-import fs from 'fs';
-import path from 'path';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { MyJetGenerator } from '@/components/generator/MyJetGenerator';
-import { sanitizeScrapedContent } from '@/lib/content/sanitizeScrapedContent';
+import { FaqAccordion } from '@/components/content/FaqAccordion';
+import { CtaBanner } from '@/components/content/CtaBanner';
+import {
+  Plane,
+  CheckCircle2,
+  Clock,
+  ShieldCheck,
+  Globe,
+  AlertTriangle,
+  ArrowRight,
+  Sparkles,
+} from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: "Onward Ticket: Free PDF or Verified PNR for ₹399 | DummyTicket",
-  description: "Onward ticket for proof of onward travel at immigration. Free PDF with valid booking reference or verified airline PNR with DummyTicket.",
+  title: 'Onward Ticket: Proof of Departure for Check-In and Immigration | DummyTickets',
+  description:
+    'Generate an onward ticket for airport check-in and border immigration. Verifiable airline reservation format accepted across 195+ countries.',
 };
 
-const TICKET_CARD_HTML = `
-<div class="dt-hero-art" style="width:100%;max-width:440px;">
-  <div class="dt-ticket-card-3d" style="width:100%;background:#ffffff;border-radius:24px;padding:24px;border:1px solid rgba(219,234,254,0.9);box-shadow:0 25px 60px -15px rgba(0,98,224,0.22),0 10px 25px -5px rgba(15,23,42,0.08);position:relative;overflow:hidden;color:#0f172a;font-family:'Plus Jakarta Sans',sans-serif;">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid #f1f5f9;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0062e0,#1d4ed8);display:flex;align-items:center;justify-content:center;color:#ffffff;font-weight:900;font-size:15px;">DT</div>
-        <div>
-          <div style="font-weight:900;font-size:14px;color:#0f172a;">DUMMYTICKET AIRWAYS</div>
-          <div style="font-size:10px;font-weight:800;color:#0062e0;text-transform:uppercase;">Verified Onward Travel</div>
-        </div>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-size:9px;font-weight:700;color:#64748b;text-transform:uppercase;">PNR Code</div>
-        <div style="font-family:monospace;font-size:16px;font-weight:900;color:#0062e0;">DT7X42K</div>
-      </div>
-    </div>
-    <div style="padding:18px 0;display:flex;align-items:center;justify-content:space-between;">
-      <div>
-        <div style="font-size:28px;font-weight:900;color:#0f172a;font-family:monospace;line-height:1;">BKK</div>
-        <div style="font-size:11px;font-weight:700;color:#64748b;margin-top:2px;">Bangkok, TH</div>
-      </div>
-      <div style="flex:1;padding:0 12px;text-align:center;">
-        <div style="font-size:10px;font-weight:800;color:#0062e0;text-transform:uppercase;margin-bottom:4px;">Direct • ₹299</div>
-        <div style="position:relative;display:flex;align-items:center;justify-content:center;">
-          <div style="width:100%;border-top:2px dashed #93c5fd;"></div>
-          <div style="position:absolute;background:#ffffff;padding:0 4px;font-size:12px;">✈</div>
-        </div>
-        <div style="font-size:9px;font-weight:800;color:#16a34a;margin-top:4px;">Confirmed • Class Y</div>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-size:28px;font-weight:900;color:#0062e0;font-family:monospace;line-height:1;">SIN</div>
-        <div style="font-size:11px;font-weight:700;color:#64748b;margin-top:2px;">Singapore, SG</div>
-      </div>
-    </div>
-    <div style="background:#f8fafc;border-radius:14px;padding:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center;border:1px solid #f1f5f9;margin-bottom:14px;">
-      <div><div style="font-size:8px;font-weight:700;color:#94a3b8;text-transform:uppercase;">Passenger</div><div style="font-size:10px;font-weight:900;color:#0f172a;">J. DOE</div></div>
-      <div><div style="font-size:8px;font-weight:700;color:#94a3b8;text-transform:uppercase;">Flight</div><div style="font-size:10px;font-weight:900;color:#0f172a;">SQ-711</div></div>
-      <div><div style="font-size:8px;font-weight:700;color:#94a3b8;text-transform:uppercase;">Date</div><div style="font-size:10px;font-weight:900;color:#0f172a;">24 NOV</div></div>
-      <div><div style="font-size:8px;font-weight:700;color:#94a3b8;text-transform:uppercase;">Status</div><div style="font-size:10px;font-weight:900;color:#16a34a;">VERIFIED</div></div>
-    </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px dashed #cbd5e1;">
-      <div style="display:flex;align-items:center;gap:3px;height:24px;">
-        <div style="width:2px;height:100%;background:#0f172a;"></div><div style="width:4px;height:100%;background:#0f172a;"></div><div style="width:1px;height:100%;background:#0f172a;"></div><div style="width:3px;height:100%;background:#0f172a;"></div><div style="width:2px;height:100%;background:#0f172a;"></div><div style="width:4px;height:100%;background:#0f172a;"></div><div style="width:2px;height:100%;background:#0f172a;"></div>
-      </div>
-      <span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;font-size:10px;font-weight:900;background:#dbeafe;color:#1d4ed8;">FREE PDF</span>
-    </div>
-  </div>
-</div>
-`;
+const ONWARD_TICKET_FAQS = [
+  {
+    question: 'Why do airlines ask for an onward ticket at the check-in gate?',
+    answer:
+      'Airlines are legally required by destination governments (under international carrier liability laws) to ensure passengers have proof of departure before boarding. If you enter on a one-way ticket or tourist visa without onward travel proof, airlines face heavy fines and must fly you back at their expense. Therefore, gate agents frequently deny boarding unless you show a valid return or onward ticket.',
+  },
+  {
+    question: 'Which countries strictly check for onward travel proof?',
+    answer:
+      'Countries like Thailand, Indonesia (Bali), Philippines, United States, United Kingdom, Costa Rica, Colombia, New Zealand, and Schengen nations enforce onward travel rules at airline check-in desks and border immigration counters.',
+  },
+  {
+    question: 'Can I show the onward ticket on my smartphone?',
+    answer:
+      'Yes. Our flight reservations are generated as standard PDF documents with high-resolution 2D QR codes and PNR booking references. You can present the PDF on your phone screen or print a paper copy.',
+  },
+  {
+    question: 'How fast can I get an onward ticket if I am stuck at the airport gate?',
+    answer:
+      'Our generator operates instantly. In approximately 30 seconds after entering your passenger name and route, your PDF document is ready for download directly on your phone.',
+  },
+];
 
-export default function Page() {
-  const filePath = path.join(process.cwd(), 'content', 'pages', 'onward-ticket.html');
-  const html = fs.readFileSync(filePath, 'utf8');
-
-  const formStart = html.indexOf('<div id="bookingForm"');
-  let formEnd = -1;
-  if (formStart !== -1) {
-    const endFormTag = html.indexOf('</form>', formStart);
-    if (endFormTag !== -1) {
-      formEnd = html.indexOf('</div>', endFormTag + 20);
-      formEnd = html.indexOf('</div>', formEnd + 1);
-    }
-  }
-
-  let beforeForm = formStart !== -1 ? html.slice(0, formStart) : '';
-  
-  // Replace the video phone mockup in hero with our verified ticket card
-  beforeForm = beforeForm.replace(
-    /<div style="display:flex;flex-direction:column;align-items:center;gap:1rem;">[\s\S]*?Watch:\s*30-second generation walkthrough\s*<\/p>\s*<\/div>/gi,
-    TICKET_CARD_HTML
-  );
-
-  beforeForm = sanitizeScrapedContent(beforeForm);
-  let afterForm = formEnd !== -1 ? html.slice(formEnd) : html;
-
-  // Make the hardcoded desktop two-column sidebar grid responsive for mobile
-  afterForm = sanitizeScrapedContent(
-    afterForm.replace(
-      /grid-template-columns:\s*1fr\s+320px;/g,
-      'grid-template-columns:repeat(auto-fit, minmax(min(100%, 300px), 1fr));'
-    )
-  );
-
+export default function OnwardTicketPage() {
   return (
     <div className="bg-slate-50 min-h-screen overflow-x-hidden w-full max-w-full">
-      {beforeForm && <div className="myjet-page-wrapper overflow-x-hidden w-full max-w-full" dangerouslySetInnerHTML={{ __html: beforeForm }} />}
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <MyJetGenerator />
-      </div>
-      <div className="myjet-page-wrapper overflow-x-hidden w-full max-w-full" dangerouslySetInnerHTML={{ __html: afterForm }} />
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-b from-blue-900 via-indigo-950 to-slate-900 text-white pt-24 sm:pt-28 pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div className="relative max-w-5xl mx-auto text-center space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-blue-200 text-xs font-black uppercase tracking-wider border border-white/15">
+            <Plane className="w-3.5 h-3.5 text-blue-400" />
+            <span>Airline Check-In & Immigration Compliance</span>
+          </div>
+
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
+            Onward Ticket: Proof of Departure
+          </h1>
+
+          <p className="text-base sm:text-lg text-blue-100 max-w-2xl mx-auto leading-relaxed">
+            Generate proof of onward travel for international flights. Avoid denied boarding at airport check-in counters in 30 seconds.
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+            <a
+              href="#bookingForm"
+              className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-black text-[#0062e0] shadow-md hover:bg-slate-100 transition"
+            >
+              <span>Generate Free Onward Ticket</span>
+            </a>
+            <Link
+              href="/proof-of-onward-travel"
+              className="inline-flex items-center gap-2 rounded-xl bg-white/10 px-5 py-3 text-sm font-bold text-white border border-white/20 hover:bg-white/20 transition"
+            >
+              <span>Check 195+ Countries</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Generator Section */}
+      <section id="bookingForm" className="max-w-4xl mx-auto px-4 sm:px-6 -mt-12 relative z-20">
+        <MyJetGenerator defaultTab="flight" />
+      </section>
+
+      {/* Guide Content */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16 space-y-12">
+        <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 shadow-sm space-y-8">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-[#0062e0] text-xs font-black uppercase tracking-wider mb-3">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Traveler Safety & Advice</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+              Why Travelers Use DummyTickets for Onward Travel
+            </h2>
+            <p className="mt-3 text-slate-600 leading-relaxed">
+              Digital nomads, backpackers, and open-ended travelers often don&rsquo;t know their exact departure date or next destination when landing in a new country.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+              <div className="text-xl font-black text-[#0062e0] mb-2">01</div>
+              <h3 className="font-bold text-slate-900 text-base mb-1">Flexibility</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Stay as long as you want without being locked into an inflexible flight ticket months in advance.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+              <div className="text-xl font-black text-[#0062e0] mb-2">02</div>
+              <h3 className="font-bold text-slate-900 text-base mb-1">Financial Protection</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Avoid paying expensive last-minute change or cancellation penalties on commercial airline tickets.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+              <div className="text-xl font-black text-[#0062e0] mb-2">03</div>
+              <h3 className="font-bold text-slate-900 text-base mb-1">Guaranteed Boarding</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Satisfy airline gate requirements and clear immigration without anxiety or boarding delays.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* FAQs */}
+        <FaqAccordion items={ONWARD_TICKET_FAQS} title="Onward Ticket FAQ" />
+
+        {/* CTA */}
+        <CtaBanner
+          title="Need Proof of Departure Right Now?"
+          subtitle="Generate an onward travel flight itinerary with verified PNR code in 30 seconds."
+        />
+      </section>
     </div>
   );
 }

@@ -17,7 +17,7 @@ export default function TrackBookingPage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 space-y-8">
+    <div className="mx-auto max-w-3xl px-4 pt-24 sm:pt-28 pb-16 sm:px-6 lg:px-8 space-y-8">
       <div className="rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-10 shadow-elevated">
         <div className="flex items-center gap-2 eyebrow">
           <Ticket className="h-4 w-4" />

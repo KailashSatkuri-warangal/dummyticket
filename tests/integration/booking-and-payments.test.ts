@@ -9,6 +9,8 @@ import {
   createPendingBooking,
   fulfillVerifiedPayment,
   getPlatformStore,
+  insertPaymentOrder,
+  listAllPayments,
 } from '@/lib/booking/store';
 import { AIRLINES, getDeterministicFlightOffers } from '@/lib/flights/dataset';
 import { calculateCompleteFare } from '@/lib/pricing/engine';
@@ -283,5 +285,48 @@ describe('DummyTicket Booking State Transitions, Indian Airlines, Razorpay Secur
   it('enforces admin role authorization', () => {
     expect(isAuthorizedAdminRole('customer')).toBe(false);
     expect(isAuthorizedAdminRole('admin')).toBe(true);
+  });
+
+  it('deduplicates payment records for the same Razorpay order, collapsing pending into captured', async () => {
+    const offer = getDeterministicFlightOffers({
+      from: 'DEL',
+      to: 'BOM',
+      departDate: '2026-12-25',
+    })[0];
+    const snap = calculateCompleteFare({ offer, adults: 1 });
+    const { booking } = await createPendingBooking({
+      flightOfferId: offer.id,
+      fareSnapshot: snap,
+      departDate: '2026-12-25',
+      contactEmail: 'dedup.payment@example.com',
+      contactPhone: '+91 9999988888',
+      passengers: [{ passengerType: 'adult', firstName: 'Kavya', lastName: 'Reddy' }],
+      idempotencyKey: `idem-dedup-${Date.now()}`,
+    });
+
+    const testOrderId = `order_test_${Date.now()}`;
+    await insertPaymentOrder({
+      bookingId: booking.id,
+      bookingReference: booking.bookingReference,
+      razorpayOrderId: testOrderId,
+      amountSubunits: 29900,
+      currency: 'INR',
+      isLiveMode: false,
+    });
+
+    // Fulfill verified payment for the same order
+    await fulfillVerifiedPayment({
+      bookingIdOrRef: booking.id,
+      razorpayOrderId: testOrderId,
+      razorpayPaymentId: `pay_test_${Date.now()}`,
+    });
+
+    const allPayments = await listAllPayments();
+    const matchesForOrder = allPayments.filter((p) => p.razorpayOrderId === testOrderId);
+
+    // Must be exactly 1 payment record, and status must be 'captured' (zero duplicate rows)
+    expect(matchesForOrder.length).toBe(1);
+    expect(matchesForOrder[0].status).toBe('captured');
+    expect(matchesForOrder[0].razorpaySignatureVerified).toBe(true);
   });
 });

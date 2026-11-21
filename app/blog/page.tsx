@@ -21,7 +21,7 @@ export default function BlogListingPage() {
   ];
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 space-y-8">
+    <div className="mx-auto max-w-6xl px-4 pt-24 sm:pt-28 pb-12 sm:px-6 lg:px-8 space-y-8">
       <div className="max-w-3xl">
         <span className="eyebrow">
           Editorial Travel Knowledge Base

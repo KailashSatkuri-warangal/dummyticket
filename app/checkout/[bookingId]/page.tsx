@@ -362,7 +362,7 @@ export default function CheckoutPage() {
     : computedSnapshot.grandTotal;
 
   return (
-    <div className="relative mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
+    <div className="relative mx-auto max-w-6xl px-4 pt-24 sm:pt-28 pb-12 sm:px-6 lg:px-8 space-y-6">
       {/* Flight Moving Around Globe Processing Modal */}
       {submitting && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/70 backdrop-blur-md p-4 transition-all">
@@ -619,18 +619,18 @@ export default function CheckoutPage() {
               />
               <span>
                 I accept the{' '}
-                <Link href="/terms-and-conditions" className="text-brand-600 underline">
-                  Terms & Conditions
+                <Link href="/terms" className="text-brand-600 underline">
+                  Terms of Service
                 </Link>
-                ,{' '}
-                <Link href="/cancellation-policy" className="text-brand-600 underline">
-                  Cancellation Policy
+                , the company{' '}
+                <Link href="/refund-policy" className="text-brand-600 underline font-bold">
+                  Strict No-Refund Policy
                 </Link>
                 , and{' '}
                 <Link href="/privacy-policy" className="text-brand-600 underline">
                   Privacy Policy
                 </Link>
-                .
+                . All sales are final and non-refundable once digital documents are provisioned.
               </span>
             </label>
           </div>

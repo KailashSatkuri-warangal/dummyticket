@@ -6,13 +6,13 @@ import {
   CreditCard,
   Plane,
   Mail,
+  ShieldCheck,
 } from 'lucide-react';
 import {
   getBookingByIdOrReference,
   listBookingEmailLogs,
 } from '@/lib/booking/store';
 import { formatDuration, formatInr } from '@/lib/config/brand';
-import { CancelBookingButton } from '@/components/booking/CancelBookingButton';
 import { LazySignatureBoardingPass as SignatureBoardingPass } from '@/components/tickets/LazyBoardingPass';
 
 export default async function BookingDetailsPage(props: {
@@ -43,7 +43,7 @@ export default async function BookingDetailsPage(props: {
   const emails = await listBookingEmailLogs(booking.id);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
+    <div className="mx-auto max-w-6xl px-4 pt-24 sm:pt-28 pb-12 sm:px-6 lg:px-8 space-y-6">
       <div className="rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-elevated flex flex-wrap items-center justify-between gap-4">
         <div>
           <span className="eyebrow">
@@ -189,11 +189,11 @@ export default async function BookingDetailsPage(props: {
           </div>
         </div>
 
-        {/* Fare & Cancellation Sidebar */}
+        {/* Fare & Summary Sidebar */}
         <div className="lg:col-span-4 space-y-6">
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card space-y-4">
             <h2 className="text-base font-bold text-navy-900">
-              Audited Fare & Cancellation
+              Audited Fare Breakdown
             </h2>
             <div className="space-y-2 text-xs">
               <div className="flex justify-between">
@@ -221,13 +221,15 @@ export default async function BookingDetailsPage(props: {
             </div>
 
             <div className="border-t border-slate-100 pt-4">
-              <CancelBookingButton
-                bookingReference={booking.bookingReference}
-                disabled={
-                  booking.status === 'cancelled' ||
-                  booking.status === 'cancel_requested'
-                }
-              />
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5 space-y-1">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
+                  <ShieldCheck className="h-4 w-4 text-emerald-600" />
+                  <span>Strict No-Refund & No-Cancellation Policy</span>
+                </div>
+                <p className="text-[11px] text-slate-500 leading-normal">
+                  All flight itinerary reservations, onward tickets, and embassy documents are final, instant, and strictly non-refundable once requested.
+                </p>
+              </div>
             </div>
           </div>
         </div>

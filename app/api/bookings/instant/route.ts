@@ -1,7 +1,14 @@
 import { NextResponse } from 'next/server';
 import { getDeterministicFlightOffers } from '@/lib/flights/dataset';
 import { calculateCompleteFare } from '@/lib/pricing/engine';
-import { createPendingBooking, saveFareSnapshot, recordLead } from '@/lib/booking/store';
+import {
+  createPendingBooking,
+  saveFareSnapshot,
+  recordLead,
+  updateBookingRecord,
+  persistEmailLog,
+} from '@/lib/booking/store';
+import { sendTransactionalEmailWithRetry } from '@/lib/email/service';
 
 export async function POST(request: Request) {
   try {
@@ -65,6 +72,41 @@ export async function POST(request: Request) {
       idempotencyKey,
     });
 
+    let finalBooking = booking;
+    if (body.plan === 'free') {
+      const updated = await updateBookingRecord(booking.id, {
+        ticketStatus: 'issued',
+        status: 'confirmed',
+        paymentStatus: 'captured',
+      });
+      if (updated) {
+        finalBooking = updated;
+      }
+    }
+
+    // Dispatch instant ticket confirmation email with direct PDF itinerary link
+    try {
+      const primaryPassenger = passengers[0];
+      const fullName = `${primaryPassenger?.firstName || 'Traveler'} ${primaryPassenger?.lastName || ''}`.trim();
+      const emailLog = await sendTransactionalEmailWithRetry({
+        bookingId: finalBooking.id,
+        bookingReference: finalBooking.bookingReference,
+        recipientEmail: contactEmail,
+        templateName: 'booking_confirmation',
+        variables: {
+          passengerName: fullName,
+          originIata: origin,
+          destinationIata: destination,
+          departureDate: departDate,
+          totalAmountInr: finalBooking.totalAmount,
+          paymentStatus: finalBooking.status === 'confirmed' ? 'CONFIRMED' : 'RESERVATION HELD',
+        },
+      });
+      await persistEmailLog(emailLog);
+    } catch (emailErr) {
+      console.warn('[instant-booking] Failed to send instant itinerary email:', emailErr);
+    }
+
     // Auto-record as customer lead for Admin CRM
     try {
       const primaryPassenger = passengers[0];
@@ -79,7 +121,7 @@ export async function POST(request: Request) {
         tripType: returnDate ? 'roundtrip' : 'oneway',
         passengersCount: passengers.length,
         plan: body.plan === 'free' ? 'free' : 'premium',
-        notes: `Instant ticket booking generated with PNR ${booking.bookingReference}`,
+        notes: `Instant ticket booking generated with PNR ${finalBooking.bookingReference}`,
         status: body.plan === 'free' ? 'converted' : 'new',
       });
     } catch (e) {
@@ -88,8 +130,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      bookingReference: booking.bookingReference,
-      bookingId: booking.id,
+      bookingReference: finalBooking.bookingReference,
+      bookingId: finalBooking.id,
       offerId: offer.id,
     });
   } catch (err) {

@@ -41,6 +41,19 @@ const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const PNR_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
+export interface SupportRequestRecord {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  bookingReference?: string;
+  status: 'new' | 'in_progress' | 'resolved' | 'closed';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  createdAt: string;
+  adminReply?: string;
+}
+
 export interface LeadRecord {
   id: string;
   name: string;
@@ -84,6 +97,7 @@ interface PlatformStoreState {
     createdAt: string;
   }>;
   leads: LeadRecord[];
+  supportRequests: SupportRequestRecord[];
   catalogStore: Map<string, Map<string, any>>;
 }
 
@@ -104,6 +118,43 @@ function createInitialStore(): PlatformStoreState {
     emailLogs: [],
     auditLogs: [],
     refunds: [],
+    supportRequests: [
+      {
+        id: 'sup-101',
+        name: 'Rahul Mehra',
+        email: 'rahul.mehra@example.com',
+        subject: 'VFS Visa appointment date shifted to next week',
+        message: 'My VFS appointment at Delhi Embassy got postponed by 5 days. Can my flight reservation dates be adjusted accordingly?',
+        bookingReference: 'DT-DEL128LHR',
+        status: 'in_progress',
+        priority: 'high',
+        createdAt: new Date().toISOString(),
+        adminReply: 'Working on adjusting the itinerary dates for your new VFS slot.',
+      },
+      {
+        id: 'sup-102',
+        name: 'Priya Sharma',
+        email: 'priya.sharma@example.com',
+        subject: 'Verification of airline PNR for France Schengen application',
+        message: 'Could you please confirm if the PNR generated will be accepted by French consulate in Mumbai?',
+        bookingReference: 'DT-BOM482CDG',
+        status: 'new',
+        priority: 'medium',
+        createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
+      },
+      {
+        id: 'sup-103',
+        name: 'Anand Kumar',
+        email: 'anand.k@example.com',
+        subject: 'Receipt PDF copy requested for expense reimbursement',
+        message: 'Need a stamped tax receipt copy showing GST breakdown for company travel claim.',
+        bookingReference: 'DT-BLR991SIN',
+        status: 'resolved',
+        priority: 'low',
+        createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
+        adminReply: 'Official tax receipt PDF has been emailed to you.',
+      },
+    ],
     leads: [
       {
         id: 'lead-101',
@@ -807,23 +858,44 @@ export async function listAllPayments(): Promise<PaymentRecord[]> {
   const db = await getDb();
   const memPayments = Array.from(getPlatformStore().payments.values());
 
-  if (!db) {
-    return memPayments.sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-  }
-  const { data, error } = await db
-    .from('payments')
-    .select('*, bookings(booking_reference)')
-    .order('created_at', { ascending: false })
-    .limit(500);
+  let rawList: PaymentRecord[] = memPayments;
+  if (db) {
+    const { data } = await db
+      .from('payments')
+      .select('*, bookings(booking_reference)')
+      .order('created_at', { ascending: false })
+      .limit(500);
 
-  const dbPayments = (data ?? []).map(mapPaymentRow);
-  const map = new Map<string, PaymentRecord>();
-  for (const p of [...memPayments, ...dbPayments]) {
-    map.set(p.id, p);
+    const dbPayments = (data ?? []).map(mapPaymentRow);
+    const idMap = new Map<string, PaymentRecord>();
+    for (const p of [...memPayments, ...dbPayments]) {
+      idMap.set(p.id, p);
+    }
+    rawList = Array.from(idMap.values());
   }
-  return Array.from(map.values()).sort(
+
+  // Deduplicate records: collapse pending and captured rows for the same order / booking
+  const dedup = new Map<string, PaymentRecord>();
+  for (const p of rawList) {
+    const key = (p.razorpayOrderId && p.razorpayOrderId.trim()) || p.bookingReference || p.id;
+    const existing = dedup.get(key);
+    if (!existing) {
+      dedup.set(key, p);
+    } else {
+      const isCurrentBetter =
+        (p.status === 'captured' && existing.status !== 'captured') ||
+        (p.razorpaySignatureVerified && !existing.razorpaySignatureVerified) ||
+        (Boolean(p.razorpayPaymentId) && !existing.razorpayPaymentId) ||
+        new Date(p.updatedAt || p.createdAt).getTime() >
+          new Date(existing.updatedAt || existing.createdAt).getTime();
+
+      if (isCurrentBetter) {
+        dedup.set(key, p);
+      }
+    }
+  }
+
+  return Array.from(dedup.values()).sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 }
@@ -1768,8 +1840,19 @@ export async function fulfillVerifiedPayment(params: {
   const eTicketNumbers = booking.passengers.map(() => generateETicketNumber());
   const receiptNumber = `DT-RCPT-${booking.bookingReference.replace(/^DT-/, '')}`;
 
+  const store = getPlatformStore();
+  const existingMemPayment = Array.from(store.payments.values()).find(
+    (p) =>
+      (params.razorpayOrderId && p.razorpayOrderId === params.razorpayOrderId) ||
+      p.bookingId === booking.id ||
+      p.bookingReference === booking.bookingReference
+  );
+
+  const paymentId = existingMemPayment ? existingMemPayment.id : newId();
+  const paymentCreatedAt = existingMemPayment ? existingMemPayment.createdAt : nowIso;
+
   const payment: PaymentRecord = {
-    id: newId(),
+    id: paymentId,
     bookingId: booking.id,
     bookingReference: booking.bookingReference,
     razorpayOrderId: params.razorpayOrderId,
@@ -1781,7 +1864,7 @@ export async function fulfillVerifiedPayment(params: {
     status: 'captured',
     paymentMethod: params.paymentMethod ?? 'Razorpay Verified Checkout',
     isLiveMode: false,
-    createdAt: nowIso,
+    createdAt: paymentCreatedAt,
     updatedAt: nowIso,
   };
 
@@ -1819,7 +1902,6 @@ export async function fulfillVerifiedPayment(params: {
     generatedAt: nowIso,
   };
 
-  const store = getPlatformStore();
   booking.status = 'ticketed';
   booking.paymentStatus = 'captured';
   booking.ticketStatus = 'issued';
@@ -1828,6 +1910,18 @@ export async function fulfillVerifiedPayment(params: {
   booking.updatedAt = nowIso;
   booking.ticket = ticket;
   booking.receipt = receipt;
+
+  // Clean any existing pending records for this order to prevent duplicates
+  for (const [k, v] of store.payments.entries()) {
+    if (
+      k !== payment.id &&
+      ((params.razorpayOrderId && v.razorpayOrderId === params.razorpayOrderId) ||
+        v.bookingId === booking.id ||
+        v.bookingReference === booking.bookingReference)
+    ) {
+      store.payments.delete(k);
+    }
+  }
 
   store.payments.set(payment.id, payment);
   store.receipts.set(booking.bookingReference, receipt);
@@ -2649,6 +2743,62 @@ export async function listAllLeads(): Promise<LeadRecord[]> {
   return [...store.leads];
 }
 
+export async function listAllSupportRequests(): Promise<SupportRequestRecord[]> {
+  const store = getPlatformStore();
+  const db = await getDb();
+  if (db) {
+    try {
+      const { data } = await db
+        .from('support_requests')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (data && data.length > 0) {
+        const dbItems: SupportRequestRecord[] = data.map((row: any) => ({
+          id: row.id,
+          name: row.name || 'Traveler',
+          email: row.email,
+          subject: row.subject || 'Support Request',
+          message: row.message,
+          bookingReference: row.booking_reference || undefined,
+          status: (row.status || 'new') as SupportRequestRecord['status'],
+          priority: 'medium',
+          createdAt: row.created_at,
+        }));
+        const map = new Map<string, SupportRequestRecord>();
+        for (const item of [...store.supportRequests, ...dbItems]) {
+          map.set(item.id, item);
+        }
+        return Array.from(map.values()).sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      }
+    } catch {
+      // Fall back to memory store
+    }
+  }
+  return [...store.supportRequests].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+}
+
+export async function updateSupportRequestStatus(
+  id: string,
+  status: SupportRequestRecord['status'],
+  reply?: string
+): Promise<SupportRequestRecord | null> {
+  const store = getPlatformStore();
+  const idx = store.supportRequests.findIndex((s) => s.id === id);
+  if (idx === -1) return null;
+  store.supportRequests[idx] = {
+    ...store.supportRequests[idx],
+    status,
+    ...(reply !== undefined ? { adminReply: reply } : {}),
+  };
+  return store.supportRequests[idx];
+}
+
 export async function updateLeadStatus(
   id: string,
   status: LeadRecord['status'],
@@ -2664,4 +2814,8 @@ export async function updateLeadStatus(
   };
   return store.leads[idx];
 }
+
+export const readCatalogEntities = listCatalog;
+
+
 

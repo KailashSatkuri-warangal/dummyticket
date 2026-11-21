@@ -623,3 +623,6 @@ export function MyJetGenerator({ defaultTab = 'flight' }: MyJetGeneratorProps = 
     </div>
   );
 }
+
+export const DummyTicketGenerator = MyJetGenerator;
+

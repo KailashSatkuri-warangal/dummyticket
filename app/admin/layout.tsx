@@ -20,10 +20,18 @@ import {
   Settings,
   FileSpreadsheet,
   ShieldCheck,
+  Compass,
+  KeyRound,
+  UserCheck,
+  LifeBuoy,
+  LayoutTemplate,
+  Shield,
 } from 'lucide-react';
 import { RealtimeRefresh } from '@/components/admin/RealtimeRefresh';
 import { AdminLoginGate } from '@/components/admin/AdminLoginGate';
 import { AdminSignOutButton } from '@/components/admin/AdminSignOutButton';
+
+import { AdminMobileNav, ADMIN_NAV_ITEMS } from '@/components/admin/AdminMobileNav';
 
 export default async function AdminLayout({
   children,
@@ -47,59 +55,12 @@ export default async function AdminLayout({
     emailConfirmed: true,
   };
 
-  const navLinks = [
-    { href: '/admin', label: 'Overview', icon: LayoutDashboard },
-    { href: '/admin/bookings', label: 'Bookings & Customers', icon: Ticket },
-    { href: '/admin/payments', label: 'Payments', icon: CreditCard },
-    { href: '/admin/leads', label: 'Customer Leads', icon: Users },
-    { href: '/admin/users', label: 'Users & Roles', icon: Users },
-    { href: '/admin/flights', label: 'Flights Inventory', icon: Plane },
-    { href: '/admin/refunds', label: 'Refunds', icon: RotateCcw },
-    { href: '/admin/pricing', label: 'Pricing Engine', icon: Sliders },
-    { href: '/admin/coupons', label: 'Coupons', icon: Tag },
-    { href: '/admin/notifications', label: 'Notifications', icon: Bell },
-    { href: '/admin/email-templates', label: 'Email Logs', icon: Mail },
-    { href: '/admin/airports', label: 'Airports', icon: Building2 },
-    { href: '/admin/airlines', label: 'Airlines', icon: Plane },
-    { href: '/admin/reviews', label: 'Reviews', icon: MessageSquare },
-    { href: '/admin/blog', label: 'Blog CMS', icon: BookOpen },
-    { href: '/admin/seo', label: 'SEO & Routes', icon: Globe },
-    { href: '/admin/reports', label: 'Revenue Reports', icon: BarChart3 },
-    { href: '/admin/settings', label: 'Site Settings', icon: Settings },
-    { href: '/admin/audit-logs', label: 'Audit Logs', icon: FileSpreadsheet },
-  ];
-
   return (
     <>
       <RealtimeRefresh />
-      <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8 py-6">
-        {/* Mobile Horizontal Quick-Pills Navigation */}
-        <div className="lg:hidden mb-5">
-          <div className="bg-white rounded-2xl border border-slate-200 p-3 shadow-sm mb-3">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-brand-600" />
-                <span className="text-xs font-black text-navy-900">Admin Console</span>
-              </div>
-              <AdminSignOutButton />
-            </div>
-            <div className="flex items-center gap-1.5 overflow-x-auto pt-2 pb-1 no-scrollbar text-xs">
-              {navLinks.slice(0, 8).map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-bold whitespace-nowrap active:bg-blue-50 active:text-blue-700"
-                  >
-                    <Icon className="w-3.5 h-3.5 text-brand-600" />
-                    <span>{item.label}</span>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+      <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-8">
+        {/* Mobile Dynamic 20-Module Drawer & Horizontal Bar */}
+        <AdminMobileNav />
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 items-start">
           {/* Desktop Sidebar Navigation */}
@@ -116,7 +77,7 @@ export default async function AdminLayout({
               </div>
 
               <nav aria-label="Admin Console Navigation" className="space-y-0.5 max-h-[calc(100vh-280px)] overflow-y-auto pr-1">
-                {navLinks.map((item) => {
+                {ADMIN_NAV_ITEMS.map((item) => {
                   const Icon = item.icon;
                   return (
                     <Link

@@ -22,18 +22,17 @@ export function sanitizeScrapedContent(rawHtml: string): string {
     .replace(/\.oc-tw-marquee\s*\{[^}]*\}/gi, '.oc-tw-marquee { display: none !important; }')
     .replace(/<div class="dt-streak[^"]*"><\/div>/gi, '')
     // 5. Ensure clean, root-relative image and asset paths without legacy query/version suffixes
-    .replace(/\.(svg|png|jpg|jpeg|webp)@v=\d+/gi, '.$1')
-    .replace(/src="images\//gi, 'src="/images/')
-    .replace(/src="storage\//gi, 'src="/storage/')
-    .replace(/srcset="images\//gi, 'srcset="/images/')
-    .replace(/srcset="storage\//gi, 'srcset="/storage/')
-    .replace(/href="images\//gi, 'href="/images/')
-    .replace(/href="storage\//gi, 'href="/storage/')
+    .replace(/\.(svg|png|jpg|jpeg|webp)@v=[^"'\s>]*/gi, '.$1')
+    .replace(/src=["']images\//gi, 'src="/images/')
+    .replace(/src=["']storage\//gi, 'src="/storage/')
+    .replace(/srcset=["']images\//gi, 'srcset="/images/')
+    .replace(/srcset=["']storage\//gi, 'srcset="/storage/')
+    .replace(/href=["']images\//gi, 'href="/images/')
+    .replace(/href=["']storage\//gi, 'href="/storage/')
     // 6. Graceful image loading: if any image fails, hide it smoothly rather than showing broken icon
     .replace(/<img\s+(?![^>]*onerror)/gi, '<img onerror="this.onerror=null;this.style.display=\'none\';" ')
-    // 7. Remove remaining myjet24 branding artifacts
+    // 7. Remove remaining myjet24 branding artifacts (preserve CSS wrapper classes)
     .replace(/myjet24\.com/gi, 'dummyticket.com')
     .replace(/myjet24/gi, 'DummyTicket')
-    .replace(/MyJet24/gi, 'DummyTicket')
-    .replace(/myjet/gi, 'dummyticket');
+    .replace(/MyJet24/gi, 'DummyTicket');
 }

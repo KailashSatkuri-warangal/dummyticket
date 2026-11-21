@@ -47,24 +47,14 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
-  if (!user) {
-    if (pathname.startsWith('/account')) {
-      const loginUrl = new URL('/login', request.url);
-      loginUrl.searchParams.set('next', pathname + request.nextUrl.search);
-      return NextResponse.redirect(loginUrl);
-    }
-    return response;
-  }
-
-  if (pathname.startsWith('/admin')) {
-    const { data: roles } = await supabase.rpc('get_my_roles');
-    const roleList = (roles ?? []) as string[];
-    const isAdmin = roleList.some((r) =>
-      ['admin', 'support_agent', 'finance_manager', 'content_editor'].includes(r)
-    );
-    if (!isAdmin) {
-      return NextResponse.redirect(new URL('/account?forbidden=admin', request.url));
-    }
+  // Guest-First Architecture: Customer authentication is completely removed.
+  // Redirect legacy /account, /login, and /signup routes to /track-booking.
+  if (
+    pathname.startsWith('/account') ||
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/signup')
+  ) {
+    return NextResponse.redirect(new URL('/track-booking', request.url));
   }
 
   return response;
@@ -73,6 +63,8 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/account/:path*',
+    '/login',
+    '/signup',
     '/admin/:path*',
   ],
 };

@@ -45,7 +45,7 @@ export default function FaqPage() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8 space-y-6">
+    <div className="mx-auto max-w-4xl px-4 pt-24 sm:pt-28 pb-12 sm:px-6 lg:px-8 space-y-6">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

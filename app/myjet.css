@@ -2184,6 +2184,13 @@ section.hbv-hero {
 /* Universal suppression for legacy video guide bands, phone mockups, and video embeds */
 .oc-video-band,
 .oc-video-inner,
+.oc-video-copy,
+.oc-video-eyebrow,
+.oc-video-h2,
+.oc-video-desc,
+.oc-video-meta,
+.oc-video-cta,
+.oc-glass-cta,
 .oc-video-player,
 .oc-phone-scale,
 .oc-mac-stage,
@@ -2196,7 +2203,8 @@ section.hbv-hero {
 .yt-facade-pill,
 [class*="yt-facade"],
 [data-yt-id],
-[class*="oc-video"] {
+[class*="oc-video"],
+[class*="marvel-device"] {
   display: none !important;
   visibility: hidden !important;
   height: 0 !important;
@@ -2207,6 +2215,94 @@ section.hbv-hero {
   border: 0 !important;
   pointer-events: none !important;
 }
+
+/* Polished modern styling for scraped CTA banners across all content pages */
+.cta-banner {
+  background: linear-gradient(135deg, #0062e0 0%, #1d4ed8 100%) !important;
+  color: #ffffff !important;
+  border-radius: 24px !important;
+  padding: 3rem 2rem !important;
+  text-align: center !important;
+  margin: 3.5rem auto !important;
+  box-shadow: 0 20px 45px -10px rgba(0, 98, 224, 0.35) !important;
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+}
+
+.cta-banner h2 {
+  font-size: clamp(1.6rem, 3.5vw, 2.3rem) !important;
+  font-weight: 900 !important;
+  color: #ffffff !important;
+  margin-bottom: 0.75rem !important;
+  letter-spacing: -0.5px !important;
+}
+
+.cta-banner p {
+  font-size: 1.05rem !important;
+  color: #dbeafe !important;
+  margin-bottom: 1.75rem !important;
+}
+
+.cta-banner .btn-white {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.65rem !important;
+  background: #ffffff !important;
+  color: #0062e0 !important;
+  font-weight: 900 !important;
+  font-size: 1rem !important;
+  padding: 1rem 2rem !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+}
+
+.cta-banner .btn-white:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+  background: #f8fafc !important;
+}
+
+.cta-banner .trust {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 1.25rem !important;
+  margin-top: 1.75rem !important;
+  color: #dbeafe !important;
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+}
+
+.cta-banner .trust-item {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.35rem !important;
+}
+
+.dt-hotel-card {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(8px) !important;
+  border-radius: 16px !important;
+  padding: 1.25rem 1.75rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1.25rem !important;
+  margin-top: 2rem !important;
+  text-decoration: none !important;
+  color: #ffffff !important;
+  transition: all 0.25s ease !important;
+}
+
+.dt-hotel-card:hover {
+  background: rgba(255, 255, 255, 0.28) !important;
+  border-color: #ffffff !important;
+  transform: translateY(-2px) !important;
+}
+
 
 
 

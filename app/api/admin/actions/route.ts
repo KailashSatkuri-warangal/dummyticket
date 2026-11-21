@@ -55,6 +55,8 @@ export async function POST(request: Request) {
     bookingReference?: string;
     providerBookingRef?: string;
     airlinePnr?: string;
+    status?: string;
+    notes?: string;
     refundId?: string;
     userId?: string;
     role?: string;
@@ -62,6 +64,10 @@ export async function POST(request: Request) {
     entity?: string;
     record?: Record<string, unknown> & { id?: string };
     id?: string;
+    settingKey?: string;
+    settingValue?: unknown;
+    reply?: string;
+    supportId?: string;
   };
 
   if (body.action === 'ASSIGN_ROLE' && body.userId && body.role) {
@@ -260,6 +266,96 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, emailLog: persisted, audit });
+  }
+
+  if (body.action === 'UPDATE_BOOKING_STATUS' && body.bookingReference && body.status) {
+    const booking = await getBookingByIdOrReference(body.bookingReference);
+    if (!booking) {
+      return NextResponse.json({ error: 'Booking not found.' }, { status: 404 });
+    }
+
+    const updated = await updateBookingRecord(booking.id, {
+      status: body.status as any,
+      ...(body.notes ? { notes: body.notes } : {}),
+    });
+
+    const audit = await recordAuditLog({
+      actorId: user.id,
+      actorEmail: user.email,
+      action: 'ADMIN_UPDATED_BOOKING_STATUS',
+      resourceType: 'booking',
+      resourceId: updated.bookingReference,
+      afterState: { status: updated.status, notes: body.notes },
+    });
+
+    return NextResponse.json({ success: true, booking: updated, audit });
+  }
+
+  if (body.action === 'UPDATE_PNR_RECORD' && body.bookingReference) {
+    const booking = await getBookingByIdOrReference(body.bookingReference);
+    if (!booking) {
+      return NextResponse.json({ error: 'Booking not found.' }, { status: 404 });
+    }
+
+    // Never fabricate airline PNRs — validate non-empty string when provided
+    const cleanPnr = body.airlinePnr?.trim().toUpperCase();
+    const updated = await updateBookingRecord(booking.id, {
+      airlinePnr: cleanPnr || undefined,
+      providerBookingRef: body.providerBookingRef?.trim() || booking.providerBookingRef,
+      status: cleanPnr ? 'confirmed' : booking.status,
+    });
+
+    const audit = await recordAuditLog({
+      actorId: user.id,
+      actorEmail: user.email,
+      action: 'ADMIN_UPDATED_AIRLINE_PNR',
+      resourceType: 'booking',
+      resourceId: updated.bookingReference,
+      afterState: {
+        airlinePnr: updated.airlinePnr,
+        providerBookingRef: updated.providerBookingRef,
+        status: updated.status,
+      },
+    });
+
+    return NextResponse.json({ success: true, booking: updated, audit });
+  }
+
+  if (body.action === 'UPDATE_CMS_SETTING' && (body as any).settingKey) {
+    const key = (body as any).settingKey;
+    const value = (body as any).settingValue;
+    await upsertCatalogRecord('site_setting', { key, value });
+
+    const audit = await recordAuditLog({
+      actorId: user.id,
+      actorEmail: user.email,
+      action: 'ADMIN_UPDATED_CMS_CONTENT',
+      resourceType: 'cms',
+      resourceId: key,
+      afterState: { key, value },
+    });
+
+    return NextResponse.json({ success: true, key, value, audit });
+  }
+
+  if (body.action === 'UPDATE_SUPPORT_STATUS' && (body as any).supportId && (body as any).status) {
+    const { updateSupportRequestStatus } = await import('@/lib/booking/store');
+    const updated = await updateSupportRequestStatus(
+      (body as any).supportId,
+      (body as any).status,
+      (body as any).reply
+    );
+
+    const audit = await recordAuditLog({
+      actorId: user.id,
+      actorEmail: user.email,
+      action: 'ADMIN_UPDATED_SUPPORT_TICKET',
+      resourceType: 'support_ticket',
+      resourceId: (body as any).supportId,
+      afterState: { status: (body as any).status, reply: (body as any).reply },
+    });
+
+    return NextResponse.json({ success: true, supportRequest: updated, audit });
   }
 
   return NextResponse.json({ error: 'Unsupported admin action.' }, { status: 400 });

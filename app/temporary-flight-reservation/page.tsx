@@ -75,7 +75,7 @@ export default function TemporaryFlightReservationPage() {
   return (
     <div className="bg-slate-50 min-h-screen text-gray-900 overflow-x-hidden w-full max-w-full">
       {/* 1. HERO SECTION */}
-      <section className="relative bg-gradient-to-br from-[#0c1a30] via-[#102a54] to-[#0a182e] text-white pt-16 pb-20 px-4 sm:px-6 lg:px-8 border-b border-blue-900/40">
+      <section className="relative bg-gradient-to-br from-[#0c1a30] via-[#102a54] to-[#0a182e] text-white pt-24 sm:pt-28 pb-20 px-4 sm:px-6 lg:px-8 border-b border-blue-900/40">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Copy */}

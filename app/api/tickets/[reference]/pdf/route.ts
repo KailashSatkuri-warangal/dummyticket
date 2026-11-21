@@ -24,7 +24,7 @@ export async function GET(
 
   if (docType === 'receipt') {
     const receiptBytes = await generatePaymentReceiptPdfBytes(booking);
-    const receiptFilename = `DUMMYTICKET-RECEIPT-${booking.bookingReference}.pdf`;
+    const receiptFilename = `Receipt-${booking.bookingReference}.pdf`;
     return new NextResponse(Buffer.from(receiptBytes), {
       status: 200,
       headers: {
@@ -36,7 +36,8 @@ export async function GET(
   }
 
   const pdfBytes = await generateItineraryPdfBytes(booking);
-  const filename = `DUMMYTICKET-ITINERARY-${booking.bookingReference}.pdf`;
+  const pnr = booking.airlinePnr || booking.bookingReference;
+  const filename = `ETicket-Itinerary-${pnr}.pdf`;
 
   return new NextResponse(Buffer.from(pdfBytes), {
     status: 200,

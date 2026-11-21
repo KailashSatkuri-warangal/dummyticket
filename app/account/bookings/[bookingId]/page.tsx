@@ -3,8 +3,7 @@ import Link from 'next/link';
 import { getBookingByIdOrReference } from '@/lib/booking/store';
 import { getSessionUser } from '@/lib/auth/session';
 import { formatInr } from '@/lib/config/brand';
-import { CancelBookingButton } from '@/components/booking/CancelBookingButton';
-import { Download, ExternalLink } from 'lucide-react';
+import { Download, ExternalLink, ShieldCheck } from 'lucide-react';
 type Passenger = {
   id: string;
   firstName: string;
@@ -128,13 +127,15 @@ export default async function AccountSingleBookingPage(props: {
         </div>
 
         <div className="border-t border-slate-100 pt-4">
-          <CancelBookingButton
-            bookingReference={booking.bookingReference}
-            disabled={
-              booking.status === 'cancelled' ||
-              booking.status === 'cancel_requested'
-            }
-          />
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5 space-y-1">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
+              <ShieldCheck className="h-4 w-4 text-emerald-600" />
+              <span>Strict No-Refund & No-Cancellation Policy</span>
+            </div>
+            <p className="text-[11px] text-slate-500 leading-normal">
+              All flight itinerary reservations, onward tickets, and travel documents are final and strictly non-refundable once requested.
+            </p>
+          </div>
         </div>
       </div>
     </div>

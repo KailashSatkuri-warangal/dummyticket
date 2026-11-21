@@ -45,7 +45,7 @@ export default async function TicketPage(props: {
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
+    <div className="mx-auto max-w-6xl px-4 pt-24 sm:pt-28 pb-12 sm:px-6 lg:px-8 space-y-6">
       <BookingStepper currentStep="confirmation" />
 
       <div className="flex flex-wrap items-center justify-between gap-3">

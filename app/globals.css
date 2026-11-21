@@ -566,6 +566,13 @@
   /* Universal suppression for legacy video guide bands, phone mockups, and video embeds */
   .oc-video-band,
   .oc-video-inner,
+  .oc-video-copy,
+  .oc-video-eyebrow,
+  .oc-video-h2,
+  .oc-video-desc,
+  .oc-video-meta,
+  .oc-video-cta,
+  .oc-glass-cta,
   .oc-video-player,
   .oc-phone-scale,
   .oc-mac-stage,
@@ -578,7 +585,8 @@
   .yt-facade-pill,
   [class*="yt-facade"],
   [data-yt-id],
-  [class*="oc-video"] {
+  [class*="oc-video"],
+  [class*="marvel-device"] {
     display: none !important;
     visibility: hidden !important;
     height: 0 !important;

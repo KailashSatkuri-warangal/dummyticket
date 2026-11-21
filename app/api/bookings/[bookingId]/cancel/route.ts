@@ -25,10 +25,15 @@ export async function POST(
   if (!booking) {
     return NextResponse.json({ error: 'Booking not found.' }, { status: 404 });
   }
-  if (!user || (booking.userId && booking.userId !== user.id && user.role !== 'admin')) {
+
+  // Enforce company policy: Cancellations and refunds are disabled for customer self-service
+  if (user?.role !== 'admin') {
     return NextResponse.json(
-      { error: 'You do not have permission to cancel this booking.' },
-      { status: 403 }
+      {
+        error:
+          'Under company policy, all issued flight reservations and travel documents are strictly final, non-cancellable, and non-refundable.',
+      },
+      { status: 400 }
     );
   }
 
@@ -112,7 +117,7 @@ export async function POST(
     booking: updated,
     message:
       targetStatus === 'cancel_requested'
-        ? 'Cancellation request submitted and refund calculation initiated.'
+        ? 'Reservation cancellation processed. As per company policy, digital document fees are non-refundable.'
         : 'Booking cancelled.',
   });
 }

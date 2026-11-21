@@ -105,14 +105,14 @@ export default function HomePage() {
   return (
     <div className="bg-white text-[#0B1120] font-sans antialiased overflow-x-hidden">
       {/* 1. HERO SECTION - BLUE & WHITE THEME */}
-      <section className="relative pt-12 pb-20 bg-gradient-to-b from-[#f0f7ff] via-[#f8fbff] to-white border-b border-blue-100">
+      <section className="relative pt-24 sm:pt-28 pb-16 sm:pb-20 bg-gradient-to-b from-[#f0f7ff] via-[#f8fbff] to-white border-b border-blue-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Hero Text */}
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100 text-[#0062e0] text-xs font-black uppercase tracking-wider border border-blue-200">
-                <ShieldCheck className="w-4 h-4 text-[#0062e0]" />
-                100% Free • No Credit Card • No Login Required
+              <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-blue-100 text-[#0062e0] text-[11px] sm:text-xs font-black uppercase tracking-wider border border-blue-200 text-center max-w-full">
+                <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0062e0] shrink-0" />
+                <span>100% Free • No Credit Card • No Login Required</span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] text-gray-900">
